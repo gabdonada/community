@@ -1,0 +1,47 @@
+.blueLight{
+    background: #014A67;
+    width: 100%;
+    height: 1.3rem;
+    filter: drop-shadow(0 0 0.6rem #014A67);
+}   
+.contentFooter{
+    background: #002838;
+    height: 12rem;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    flex-direction: column;
+
+    a{
+        text-decoration: none;
+    }
+    
+    .icons{
+        display: flex;
+        gap: 3rem;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .links{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1rem;
+
+        a{
+            color: #FFFF;
+        }
+    }
+
+    .copyRight{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #A7A7A7;
+        margin-top: 1rem;
+    }
+   
+}   

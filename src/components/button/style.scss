@@ -1,0 +1,24 @@
+.button { 
+    height: 4rem;
+    width: 2rem;
+    padding: 0 2rem;
+
+    background: #f8f8f8;
+    color: #002838;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 0;   
+    cursor: pointer;
+
+    &:not(:disabled):hover{
+        filter: brightness(0.9);
+    }
+
+    &:disabled{
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}

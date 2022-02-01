@@ -1,0 +1,28 @@
+.body{
+    height: 100vh;
+
+    .content{
+        margin: 2rem 0 2rem 0;
+    }
+
+    .cartoes{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4rem;
+
+        .organizaCards{
+            display: flex;
+            justify-content: center;
+            
+            width: 20rem;
+            height: 21.25rem;
+            padding: 1rem;
+            box-shadow: 2px 1px 3px 0.1px black;
+
+            h1{
+                color: #002838;
+            }
+        }
+    }
+}
