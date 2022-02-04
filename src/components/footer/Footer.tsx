@@ -18,7 +18,7 @@ export function Footer(){
 
                 <div className='links'>
                     <a href="#">Termos de Uso</a>
-                    <a href="#">FAQ</a>
+                    <a href="/FAQ/Novo">FAQ</a>
                     <a href="#">Sobre a Iniciativa</a>
                 </div>
 

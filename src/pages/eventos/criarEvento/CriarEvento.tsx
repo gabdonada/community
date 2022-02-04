@@ -1,10 +1,34 @@
-import { useState } from "react";
+import moment from "moment";
+import { FormEvent, useState } from "react";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 
 
 
 export function CriarEvento(){
+
+    const [ titulo, setTitulo ] = useState('');
+    const [ categoria, setCategoria ] = useState('');
+    const [dateS, setDateS] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
+    const [dateE, setDateE] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
+    const [ descricao, setDescricao ] = useState('');
+    const [ localizacao, setLocalizacao ] = useState('');
+
+    async function handleCreateEvent(event: FormEvent) {
+        event.preventDefault();
+
+        if(titulo.length < 5){
+            alert("Titulo deve conter mais de 5 caracteries.");
+        }else if(categoria === ''){
+            alert("Você deve selecionar uma categoria valida.")
+        }else if( dateS < dateE){
+            alert("Data inicial deve ser menor que a final")
+        }else if(descricao.length < 15){
+            alert("Descrição deve conter mais de 15 caracteries");
+        }else{
+            alert("Registro");
+        }   
+    }
 
     
     return(
@@ -13,40 +37,53 @@ export function CriarEvento(){
                 <div className="card m-5 d-flex flex-column min-vh-100">
                     <div className="card-body">
                         <div className="m-3">
-                            <label className="form-label">Título do Evento</label>
-                                <input type="text" className="form-control" placeholder="Digite o título do evento..."/>
-                            
-                            <label className="form-label mt-4">Categoria</label>
-                                <select name="" id="" className="form-select">
-                                    <option value="">Selecione...</option>
-                                    <option value="Acadêmico | Educacional">Acadêmico | Educacional</option>
-                                    <option value="Entretenimento">Entretenimento</option>
-                                    <option value="Esportivo">Esportivo</option>
-                                    <option value="Religioso">Religioso</option>
-                                    <option value="Social">Social</option>
-                                </select>
-
-                            <label className="form-label mt-4">Selecione Datas e Horario</label>
-
-                            
-                                <div >
+                            <form onSubmit={handleCreateEvent}>
+                                <label className="form-label">Título do Evento</label>
                                     <input 
-                                        type="datetime-local" 
-                                        name="dateTime" 
-                                        className="form-control"
-                                        // onChange={e => handleDateChange(i, e)}
-                                        />
+                                        type="text" 
+                                        className="form-control" 
+                                        placeholder="Digite o título do evento..."
+                                        onChange={event => setTitulo(event.target.value)}
+                                        value={titulo}/>
+                                
+                                <label className="form-label mt-4">Categoria</label>
+                                    <select 
+                                        className="form-select"
+                                        onChange={event => setCategoria(event.target.value)}
+                                        value={categoria}>
+                                        <option value="">Selecione...</option>
+                                        <option value="Acadêmico | Educacional">Acadêmico | Educacional</option>
+                                        <option value="Entretenimento">Entretenimento</option>
+                                        <option value="Esportivo">Esportivo</option>
+                                        <option value="Religioso">Religioso</option>
+                                        <option value="Social">Social</option>
+                                    </select>
 
-                                    <button> Remove date</button>
-                                </div>
-                           
-                            <button> Add Date </button>
+                                <label className="form-label mt-4">Selecione Datas e Horario</label>
 
-                            <label className="form-label mt-4">Descrição</label>
-                            <textarea className="form-control" name="" id=""></textarea>
+                                
+                                    <div >
+                                        <input 
+                                            type="datetime-local" 
+                                            className="form-control"
+                                            onChange={event => setDateS(event.target.value)}
+                                            value={dateS}/>
 
-                            <label className="form-label mt-4">Localização</label>
+                                        <button> Remove date</button>
+                                    </div>
+                            
+                                <button> Add Date </button>
 
+                                <label className="form-label mt-4">Descrição</label>
+                                <textarea className="form-control" 
+                                    onChange={event => setDescricao(event.target.value)}
+                                    value={descricao}></textarea>
+
+                                <label className="form-label mt-4">Localização</label>
+
+                                <button type="submit">Submit</button>
+                            
+                            </form>
                         </div>
                     </div>
                 </div>
