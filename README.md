@@ -8,3 +8,25 @@ You may run `npm start` the the project /
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 You may create a .env.local file with your RealTime DB
+
+
+
+# Realtime Database roles v1:
+{
+  "rules": {
+    
+    "eventos": {
+      ".read": false,
+      ".write": "auth!=null",
+        "$eventoId":{
+          ".read": true,
+          ".write": "auth!=null && data.child('authorId').val() == auth.id",
+          "presenca":{
+            ".read": true,
+            ".write":"auth!=null && (!data.exists() || data.child('authorId').val() == auth.id)"
+          }
+        }
+    }
+  }
+}
+}

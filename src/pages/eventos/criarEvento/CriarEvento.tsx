@@ -1,11 +1,18 @@
+import { useNavigate } from 'react-router-dom'
 import moment from "moment";
 import { FormEvent, useState } from "react";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
+import { useAuth } from "../../../hooks/useAuth";
+import { database } from "../../../services/firebase";
 
 
 
 export function CriarEvento(){
+
+    const { user } = useAuth()
+
+    const navigate = useNavigate(); //use to navigate to other pages
 
     const [ titulo, setTitulo ] = useState('');
     const [ categoria, setCategoria ] = useState('');
@@ -17,7 +24,7 @@ export function CriarEvento(){
     async function handleCreateEvent(event: FormEvent) {
         event.preventDefault();
 
-        if(titulo.length < 5){
+        if(titulo.trim().length < 5){
             alert("Titulo deve conter mais de 5 caracteries.");
         }else if(categoria === ''){
             alert("Você deve selecionar uma categoria valida.")
@@ -26,9 +33,23 @@ export function CriarEvento(){
         }else if(descricao.length < 15){
             alert("Descrição deve conter mais de 15 caracteries");
         }else{
-            alert("Registro");
+
+            const eventRef = database.ref('eventos'); //fiding eventos reference in DB.
+
+            const firebaseEvent = await eventRef.push({
+                authorID: user?.id,
+                title: titulo,
+                category: categoria,
+                startDate: dateS,
+                //endDate: dateE,
+                description: descricao,
+                //localization: localizacao
+            });
+
+            navigate(`/Evento/${firebaseEvent.key}`)
         }   
     }
+
 
     
     return(

@@ -6,10 +6,14 @@ import illustrationImg from './images/illustration.svg'
 import googleLogo from './images/appleLogo.svg'
 import appleLogo from './images/googleLogo.svg'
 import './styleLogin.scss'
+import { FormEvent, useState } from 'react'
+import { database } from '../../services/firebase'
 
 export function Login(){
 
     const navigate = useNavigate(); //use to navigate to other pages
+
+    const [ eventCode, setEventCode ] = useState('');
 
     const { user, singIngWithGoogle} = useAuth();
 
@@ -23,8 +27,20 @@ export function Login(){
         
     }
 
-    function navigateToEntity(){
-        navigate('/entidade');
+    async function handleJoinEvent(event: FormEvent){
+        event.preventDefault();
+
+        if(eventCode.trim() === ''){
+            alert("Você deve digitar um codigo de evento para acessar a pagina de eventos");
+        }else{
+            const eventRef = await database.ref(`eventos/${eventCode}`).get(); //checking if the eventkey exists under eventos list in json; get returns all data from the event if exists
+
+            if(!eventRef.exists()){
+                alert("Código do evento inválido, digite um código válido");
+            }else{
+                navigate(`/evento/${eventCode}`);
+            }
+        }
     }
 
 
@@ -50,11 +66,12 @@ export function Login(){
                     </button>
 
                     <div className="separator"> ou </div>
-                    <form action="">
+                    <form onSubmit={handleJoinEvent}>
                         <input 
                             type="text" 
                             placeholder='Digite o Código do Evento'
-                            
+                            onChange={event => setEventCode(event.target.value)}
+                            value={eventCode}
                         />
                         <button type="submit"><strong>&rarr;</strong></button>
                     </form>
