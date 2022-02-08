@@ -29,4 +29,3 @@ You may create a .env.local file with your RealTime DB
     }
   }
 }
-}
