@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import moment from "moment";
+
 import { FormEvent, useState } from "react";
+
+import moment from "moment";
+
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
@@ -29,9 +32,11 @@ export function CriarEvento(){
         }else if(categoria === ''){
             alert("Você deve selecionar uma categoria valida.")
         }else if( dateS < dateE){
-            alert("Data inicial deve ser menor que a final")
+            alert("Data inicial deve ser menor que a final.");
         }else if(descricao.length < 15){
-            alert("Descrição deve conter mais de 15 caracteries");
+            alert("Descrição deve conter mais de 15 caracteries.");
+        }else if(!user){
+            alert("Você deve estar logado para executar a tarefa.");
         }else{
 
             const eventRef = database.ref('eventos'); //fiding eventos reference in DB.
