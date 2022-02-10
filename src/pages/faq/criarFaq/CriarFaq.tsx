@@ -1,7 +1,48 @@
+import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
+import { useAuth } from "../../../hooks/useAuth";
+import { database } from '../../../services/firebase';
 
 export function CriarFaq(){
+
+    const { user } = useAuth();
+
+    const navigate = useNavigate();
+
+    const [ titulo, setTitulo ] = useState('');
+    const [ email, setEmail ] = useState(user?.userEmail)
+    const [ categoria, setCategoria ] = useState('')
+    const [ descricao, setDescricao ] = useState('')
+
+    async function handleFAQCreation(event: FormEvent){
+        event.preventDefault();
+
+        if(titulo.trim().length < 5){
+            alert("Titulo deve conter mais de 5 caracteries.");
+        }else if(categoria === ''){
+            alert("Você deve selecionar uma categoria valida.");
+        }else if(email === ''){
+            alert("Digite um email valido");
+        }else if(descricao.length < 15){
+            alert("Descrição deve conter mais de 15 caracteries.");
+        }else{
+            const faqRef = database.ref('faq'); //fiding FAQ reference in DB.
+
+            const firebaseFaq = await faqRef.push({
+                status: "Aberto",
+                title: titulo,
+                email: email,
+                category: categoria,
+                description: descricao
+            });
+
+
+            alert("Registrado FAQ com sucesso")
+            //navigate(`/Evento/${firebaseEvent.key}`)
+        }
+    }
 
     return(
         <div>
@@ -10,17 +51,33 @@ export function CriarFaq(){
             <div className="card m-5 d-flex flex-column min-vh-100">
                     <div className="card-body">
                         <div className="m-3">
-                            <form action="">
+                            <form onSubmit={handleFAQCreation}>
                                 <label className="form-label">Título do FAQ</label>
-                                    <input type="text" className="form-control" placeholder="Digite o título do FAQ..." required/>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        placeholder="Digite o título do FAQ..." 
+                                        value={titulo} 
+                                        onChange={event => setTitulo(event.target.value)}
+                                        required/>
                                 
                                 <label className="form-label mt-4">Email para contato</label>
-                                    <input type="email" className="form-control" placeholder="examplo@gmail.com" required/>
+                                    <input 
+                                        type="email" 
+                                        className="form-control" 
+                                        placeholder="examplo@gmail.com" 
+                                        value={email} 
+                                        onChange={event => setEmail(event.target.value)}
+                                        required/>
 
                                     
                                 
                                 <label className="form-label mt-4">Categoria</label>
-                                    <select name="" id="" className="form-select" required>
+                                    <select className="form-select" 
+                                        value={categoria} 
+                                        onChange={event => setCategoria(event.target.value)}
+                                        required>
+                                        
                                         <option value="">Selecione...</option>
                                         <option value="Agradecimento">Agradecimento</option>
                                         <option value="Contato">Contato</option>
@@ -31,7 +88,12 @@ export function CriarFaq(){
                                     </select>
 
                                 <label className="form-label mt-4">Descrição</label>
-                                <textarea className="form-control" name="" id="" placeholder="Adicione todos os detalhes possíveis para nos auxiliar (links, caminhos, etc...)" required></textarea>
+                                <textarea 
+                                    className="form-control" 
+                                    placeholder="Adicione todos os detalhes possíveis para nos auxiliar (links, caminhos, etc...)" 
+                                    onChange={event => setDescricao(event.target.value)}
+                                    required 
+                                    defaultValue={descricao}></textarea>
                             
                                 <button>Submit</button>
                             </form>

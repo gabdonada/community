@@ -6,6 +6,7 @@ type User = {
     id: string;
     name: string;
     avatar: string;
+    userEmail: string;
 }
   
 type AuthContextType = {
@@ -28,8 +29,10 @@ export function AuthContextProvider(props: AuthContextProviderProps){
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user =>{
       
+        //console.log(user)
+
         if(user){
-          const { displayName, photoURL, uid } = user;
+          const { displayName, photoURL, uid, email} = user;
           
           if( !displayName || !photoURL ){
             throw new Error('Seu usuário Google não possui nome ou foto.');
@@ -38,7 +41,8 @@ export function AuthContextProvider(props: AuthContextProviderProps){
           setUser({
             id: uid,
             name: displayName,
-            avatar: photoURL
+            avatar: photoURL,
+            userEmail: email ?? ''
           })
 
         }
@@ -56,7 +60,7 @@ export function AuthContextProvider(props: AuthContextProviderProps){
     const loginResult = await auth.signInWithPopup(provider);
       
         if(loginResult.user){
-          const { displayName, photoURL, uid } = loginResult.user;
+          const { displayName, photoURL, uid, email } = loginResult.user;
           
           if( !displayName || !photoURL ){
             throw new Error('Seu usuário Google não possui nome ou foto.');
@@ -65,7 +69,8 @@ export function AuthContextProvider(props: AuthContextProviderProps){
           setUser({
             id: uid,
             name: displayName,
-            avatar: photoURL
+            avatar: photoURL,
+            userEmail: email ?? ''
           })
 
         }
