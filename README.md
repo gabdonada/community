@@ -11,7 +11,7 @@ You may create a .env.local file with your RealTime DB
 
 
 
-# Realtime Database roles v2:
+# Realtime Database roles v2.1.0:
 {
   "rules": {
     
@@ -29,8 +29,8 @@ You may create a .env.local file with your RealTime DB
     },
     
     "faq":{
-      ".read": false,
-      ".write" : true
+      ".write" : true,
+      ".read" : "auth!=null && (data.child('authorId').val() == auth.id || auth.id=='123')"
     }
   }
 }
