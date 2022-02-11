@@ -12,7 +12,8 @@ export function CriarFaq(){
     const navigate = useNavigate();
 
     const [ titulo, setTitulo ] = useState('');
-    const [ email, setEmail ] = useState(user?.userEmail)
+    const [ nome, setNome ] = useState('');
+    const [ email, setEmail ] = useState(user?.userEmail ?? '')
     const [ categoria, setCategoria ] = useState('')
     const [ descricao, setDescricao ] = useState('')
 
@@ -27,10 +28,14 @@ export function CriarFaq(){
             alert("Digite um email valido");
         }else if(descricao.length < 15){
             alert("Descrição deve conter mais de 15 caracteries.");
+        }else if(!user){
+            alert("Você deve estar autenticado para enviar mensagens via FAQ")
         }else{
-            const faqRef = database.ref('faq'); //fiding FAQ reference in DB.
+            const faqRef = database.ref(`faq/${user?.id}`); //fiding FAQ reference in DB.
 
             const firebaseFaq = await faqRef.push({
+                authorId: user.id,
+                name: user.name,
                 status: "Aberto",
                 title: titulo,
                 email: email,
@@ -38,9 +43,7 @@ export function CriarFaq(){
                 description: descricao
             });
 
-
-            alert("Registrado FAQ com sucesso")
-            //navigate(`/Evento/${firebaseEvent.key}`)
+            navigate(`/faq/${firebaseFaq.key}`)
         }
     }
 
