@@ -1,11 +1,25 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { Button } from '../button/Button';
 
 import menuIcon from './img/menuIcon.svg'
 
 export function NavBar(){
-    const { user } = useAuth();
+    const { user, singIngWithGoogle } = useAuth();
+
+    const navigate = useNavigate();
+
+    async function handleAuthGoogle(){
+        
+        if(!user){
+            await singIngWithGoogle();
+        }
+        
+        navigate('/home');      
+        
+    }
 
     return(
         <nav className="navbar navbar-expand-lg pt-4 pb-4 navbar-light primaryColor w-100">
@@ -69,8 +83,10 @@ export function NavBar(){
             ):(
                 <div className="container-fluid">
                     <a className="navbar-brand text-white" href="/">LOGO</a>
-                        
-                    <button>Faça Login</button>
+                    
+                    
+                    <Button onClick={handleAuthGoogle}>Faça Login</Button>
+                    
                 </div>
             )}
         </nav>

@@ -32,7 +32,7 @@ export function CriarEvento(){
         }else if(categoria === ''){
             alert("Você deve selecionar uma categoria valida.")
         }else if( dateS < dateE){
-            alert("Data inicial deve ser menor que a final.");
+            alert("Data inicial deve ser menor que a final.")
         }else if(descricao.length < 15){
             alert("Descrição deve conter mais de 15 caracteries.");
         }else if(!user){

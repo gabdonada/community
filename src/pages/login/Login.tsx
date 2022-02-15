@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 
 import illustrationImg from './images/illustration.svg'
-import googleLogo from './images/appleLogo.svg'
 import appleLogo from './images/googleLogo.svg'
 import './styleLogin.scss'
 import { FormEvent, useState } from 'react'
@@ -17,7 +16,8 @@ export function Login(){
 
     const { user, singIngWithGoogle} = useAuth();
 
-    async function handleAuthGoogle(){
+    async function handleAuthGoogle(event: FormEvent) {
+        event.preventDefault();
         
         if(!user){
             await singIngWithGoogle();
@@ -60,10 +60,7 @@ export function Login(){
                         <img src={appleLogo} alt="Clique para acessar usando conta Google" />
                         Acesse com o Google
                     </button>
-                    <button className="appleButton" disabled>
-                        <img src={googleLogo} alt="Clique para acessar usando conta Apple" />
-                        Acesse com a Apple
-                    </button>
+
 
                     <div className="separator"> ou </div>
                     <form onSubmit={handleJoinEvent}>

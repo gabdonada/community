@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { Button } from '../../../components/button/Button';
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
@@ -98,7 +99,7 @@ export function CriarFaq(){
                                     required 
                                     defaultValue={descricao}></textarea>
                             
-                                <button>Submit</button>
+                                <Button type='submit'>Enviar</Button>
                             </form>
                         </div>
                     </div>
