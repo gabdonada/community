@@ -8,6 +8,7 @@ import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
 import { database } from "../../../services/firebase";
+import { Button } from '../../../components/button/Button';
 
 
 
@@ -22,7 +23,8 @@ export function CriarEvento(){
     const [dateS, setDateS] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [dateE, setDateE] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [ descricao, setDescricao ] = useState('');
-    const [ localizacao, setLocalizacao ] = useState('');
+    const [ longitude, setLongitude ] = useState(0);
+    const [ latitude, setLatitude ] = useState(0);
 
     async function handleCreateEvent(event: FormEvent) {
         event.preventDefault();
@@ -107,7 +109,9 @@ export function CriarEvento(){
 
                                 <label className="form-label mt-4">Localização</label>
 
-                                <button type="submit">Submit</button>
+                                <div className='d-flex justify-content-end'>
+                                    <Button type="submit">Submit</Button>
+                                </div>
                             
                             </form>
                         </div>

@@ -8,6 +8,7 @@ import { CriarEvento } from './pages/eventos/criarEvento/CriarEvento';
 import { CriarFaq } from './pages/faq/criarFaq/CriarFaq';
 import { EventoIndex } from './pages/eventos/eventoPage/EventoIndex';
 import { VisualizaFaq } from './pages/faq/visualizarFaq/VisualizaFaq';
+import { PageNotFount } from './pages/errors/404/pageNotFount';
 
 
 
@@ -28,7 +29,10 @@ function App() {
 
           <Route path="/FAQ/Novo" element={<CriarFaq/>}/>
           <Route path="/FAQ/:id" element={<VisualizaFaq/>}/>
-        
+ 
+
+          <Route path='*' element={<PageNotFount/>} />
+
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>

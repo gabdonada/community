@@ -31,7 +31,7 @@ export function NavBar(){
                         <span className="navbar-toggler-light"><img src={menuIcon} alt="" /></span>
                     </button>
                     <div className="collapse navbar-collapse w-100" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto ms-5 mb-2 mb-lg-0">
+                        <ul className="d-flex d-flex align-items-center navbar-nav me-auto ms-5 mb-2 mb-lg-0">
                             <li className="nav-item">
                                 <a className="nav-link active text-white text-uppercase" aria-current="page" href="/home">Home</a>
                             </li>
@@ -62,11 +62,12 @@ export function NavBar(){
                                     </ul>
                                 </li>
                             </ul>
-                            <div className="d-flex">
-                                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li className="nav-item dropdown">
-                                        <a className="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            User Login Image
+                            <div className="d-flex container-fluid">
+                                <ul className="navbar-nav me-auto mb-2 mb-lg-0  ">
+                                    <li className="nav-item dropdown ">
+                                    
+                                        <a className="nav-link justify-content-end" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img className='rounded-circle w-75' src={user.avatar} alt={user.name} />
                                         </a>
                                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li><a className="dropdown-item" href="#">Visualizar Perfil</a></li>
