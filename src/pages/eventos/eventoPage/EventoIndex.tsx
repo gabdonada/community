@@ -1,3 +1,4 @@
+import { GoogleMap } from 'react-google-maps';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyCode } from "../../../components/copyCodeIcon/copyCode";
@@ -71,6 +72,10 @@ export function EventoIndex(){
                     <h3>Categoria: {categoria}</h3>
                     <h3>Data de Inicio: {dateS}</h3>
                     <h3>Descrição: {descricao}</h3>
+                    <h3>Localização:</h3><br />
+                    <div>
+                        
+                    </div>
 
                 </div>
 

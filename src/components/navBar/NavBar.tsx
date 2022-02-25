@@ -22,7 +22,7 @@ export function NavBar(){
     }
 
     return(
-        <nav className="navbar navbar-expand-lg pt-4 pb-4 navbar-light primaryColor w-100">
+        <nav className="navbar navbar-expand-lg navbar-light primaryColor w-100">
             
             {user ? (
                 <div className="container-fluid">
@@ -31,11 +31,11 @@ export function NavBar(){
                         <span className="navbar-toggler-light"><img src={menuIcon} alt="" /></span>
                     </button>
                     <div className="collapse navbar-collapse w-100" id="navbarSupportedContent">
-                        <ul className="d-flex d-flex align-items-center navbar-nav me-auto ms-5 mb-2 mb-lg-0">
+                        <ul className="d-flex d-flex align-items-center navbar-nav me-auto ms-5  mb-lg-0 container-fluid">
                             <li className="nav-item">
                                 <a className="nav-link active text-white text-uppercase" aria-current="page" href="/home">Home</a>
                             </li>
-                            <ul className="navbar-nav me-auto ms-5 mb-2 mb-lg-0 ">
+                            <ul className="navbar-nav me-auto  mb-2 mb-lg-0 ">
                                 <li className="nav-item">
                                     <a className="nav-link text-white text-uppercase" href="#">Entidades</a>
                                 </li>
@@ -62,11 +62,11 @@ export function NavBar(){
                                     </ul>
                                 </li>
                             </ul>
-                            <div className="d-flex container-fluid">
-                                <ul className="navbar-nav me-auto mb-2 mb-lg-0  ">
+                            <div className="d-flex me-5">
+                                <ul className="navbar-nav mb-lg-0  ">
                                     <li className="nav-item dropdown ">
                                     
-                                        <a className="nav-link justify-content-end" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a className="nav-link " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <img className='rounded-circle w-75' src={user.avatar} alt={user.name} />
                                         </a>
                                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
