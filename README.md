@@ -11,12 +11,12 @@ You may create a .env.local file with your RealTime DB
 
 
 
-# Realtime Database roles v2.1.0:
+# Realtime Database roles v2.1.1:
 {
   "rules": {
     
     "eventos": {
-      ".read": false,
+      ".read": "auth!=null",
       ".write": "auth!=null",
         "$eventoId":{
           ".read": true,

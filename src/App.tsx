@@ -9,6 +9,7 @@ import { CriarFaq } from './pages/faq/criarFaq/CriarFaq';
 import { EventoIndex } from './pages/eventos/eventoPage/EventoIndex';
 import { VisualizaFaq } from './pages/faq/visualizarFaq/VisualizaFaq';
 import { PageNotFount } from './pages/errors/404/pageNotFount';
+import { BuscarEvento } from './pages/eventos/buscarEvento/BuscarEvento';
 
 
 
@@ -26,6 +27,7 @@ function App() {
 
           <Route path="/Evento/Novo" element={<CriarEvento/>}/>
           <Route path="/Evento/:id" element={<EventoIndex/>}/>
+          <Route path="/Evento/Buscar" element={<BuscarEvento/>}/>
 
           <Route path="/FAQ/Novo" element={<CriarFaq/>}/>
           <Route path="/FAQ/:id" element={<VisualizaFaq/>}/>

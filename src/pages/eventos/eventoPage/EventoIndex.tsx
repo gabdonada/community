@@ -6,6 +6,9 @@ import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from '../../../hooks/useAuth';
 import { database } from '../../../services/firebase';
+import withScriptjs from 'react-google-maps/lib/withScriptjs';
+import withGoogleMap from 'react-google-maps/lib/withGoogleMap';
+import { Location } from '../../../components/googleMaps/Location';
 
 type EventParms = {
     id: string;
@@ -42,6 +45,12 @@ export function EventoIndex(){
     },[params.id]) //in case that the user changes the event, the number will be updated
 
 
+    
+
+
+
+
+
 
     async function handleContMe() {
         if(!user){
@@ -54,6 +63,8 @@ export function EventoIndex(){
 
         await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
     }
+
+
 
 
     
@@ -74,7 +85,7 @@ export function EventoIndex(){
                     <h3>Descrição: {descricao}</h3>
                     <h3>Localização:</h3><br />
                     <div>
-                        
+                        <Location/>
                     </div>
 
                 </div>
