@@ -1,17 +1,48 @@
 import { useEffect, useState } from "react"
-import { Value } from "sass";
+import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { database } from "../../../services/firebase"
 
+import filter from './filter.svg'
+
+type FirebaseEventos = Record<string, {
+    id: string,
+    category: string,
+    startDate: string,
+    title: string
+}>
+
+type Evento = {
+    id: string,
+    categoria: string,
+    dataInicio: string,
+    titulo: string
+}
+
 export function BuscarEvento(){
-    const [eventValues ,setEventValues] = useState([]);
+    const [eventValues, setEventValues] = useState<Evento[]>([]);
 
     useEffect(() =>{
         const eventRef = database.ref(`eventos`);
 
         eventRef.once('value', evento => {
+            //console.log(evento.val())
+            const databaseEventos = evento.val();
+
+            const firebaseEvent: FirebaseEventos = databaseEventos ?? {};
+
+            const parsedEventos = Object.entries(firebaseEvent).map(([key, value])=>{
+                return{
+                    id: key,
+                    categoria: value.category,
+                    dataInicio: value.startDate,
+                    titulo: value.title
+
+                }
+            }) 
             
+            setEventValues(parsedEventos);
         })
 
     }, [])
@@ -19,9 +50,28 @@ export function BuscarEvento(){
     return(
         <div>
             <NavBar/>
-
-            <div className="min-vh-100">
-
+            <div className="m-5 min-vh-100 "> 
+                <div className="d-flex m-3 w-100 justify-content-between">
+                    <div className="rounded-pill p-3" style={{color: "white", backgroundColor:"#002838"}}>
+                        {eventValues.length} Evento(s)
+                    </div>
+                    <div className="">
+                        <img className="w-75" src={filter} alt="filtrar eventos" />
+                    </div>
+                </div>
+                <div className="d-flex flex-column card-body ">
+                    {eventValues.length > 0 ?
+                    (
+                        eventValues.map((eventoInfo)=>
+                            <EventCard props={eventoInfo}/>
+                        )
+                    ) : (
+                        <div>
+                            Não há eventos
+                        </div>
+                    )}
+                    
+                </div>
             </div>
 
             <Footer/>
