@@ -23,6 +23,7 @@ export function CriarEvento(){
     const [dateS, setDateS] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [dateE, setDateE] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [ descricao, setDescricao ] = useState('');
+
     const [ longitude, setLongitude ] = useState(0);
     const [ latitude, setLatitude ] = useState(0);
 
@@ -33,7 +34,7 @@ export function CriarEvento(){
             alert("Titulo deve conter mais de 5 caracteries.");
         }else if(categoria === ''){
             alert("Você deve selecionar uma categoria valida.")
-        }else if( dateS < dateE){
+        }else if(moment(dateS).isAfter(dateE)){ 
             alert("Data inicial deve ser menor que a final.")
         }else if(descricao.length < 15){
             alert("Descrição deve conter mais de 15 caracteries.");
@@ -48,7 +49,7 @@ export function CriarEvento(){
                 title: titulo,
                 category: categoria,
                 startDate: dateS,
-                //endDate: dateE,
+                endDate: dateE,
                 description: descricao,
                 //localization: localizacao
             });
@@ -87,20 +88,21 @@ export function CriarEvento(){
                                         <option value="Social">Social</option>
                                     </select>
 
-                                <label className="form-label mt-4">Selecione Datas e Horario</label>
+                                <label className="form-label mt-4">Selecione Data e Horario de Início</label>
 
-                                
-                                    <div >
-                                        <input 
-                                            type="datetime-local" 
-                                            className="form-control"
-                                            onChange={event => setDateS(event.target.value)}
-                                            value={dateS}/>
+                                    <input 
+                                        type="datetime-local" 
+                                        className="form-control"
+                                        onChange={event => setDateS(event.target.value)}
+                                        value={dateS}/>
 
-                                        <button> Remove date</button>
-                                    </div>
-                            
-                                <button> Add Date </button>
+                                <label className="form-label mt-4">Selecione Data e Horario do Final</label>
+
+                                    <input 
+                                        type="datetime-local" 
+                                        className="form-control"
+                                        onChange={event => setDateE(event.target.value)}
+                                        value={dateE}/>
 
                                 <label className="form-label mt-4">Descrição</label>
                                 <textarea className="form-control" 
