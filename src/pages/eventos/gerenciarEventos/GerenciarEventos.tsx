@@ -5,7 +5,6 @@ import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { database } from "../../../services/firebase"
 
-import filter from './filter.svg'
 
 type FirebaseEventos = Record<string, {
     id: string,
@@ -25,7 +24,7 @@ type Evento = {
     cancelado: string
 }
 
-export function BuscarEvento(){
+export function GerenciarEventos(){
     const [eventValues, setEventValues] = useState<Evento[]>([]);
 
     useEffect(() =>{
@@ -63,7 +62,7 @@ export function BuscarEvento(){
                         {eventValues.length} Evento(s)
                     </div>
                     <div className="">
-                        <img className="w-75" src={filter} alt="filtrar eventos" />
+                        <p>Filtro</p>
                     </div>
                 </div>
                 <div className="d-flex flex-column card-body ">

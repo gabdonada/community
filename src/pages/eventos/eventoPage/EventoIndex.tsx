@@ -7,6 +7,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { database } from '../../../services/firebase';
 import { Location } from '../../../components/googleMaps/Location';
 import moment from 'moment';
+import { Button } from '../../../components/button/Button';
+import { ButtonDanger } from '../../../components/button/ButtonDanger';
 
 type EventParms = {
     id: string;
@@ -16,6 +18,7 @@ export function EventoIndex(){
 
     const { user } = useAuth()
 
+    const [ author, setAuthor] = useState('');
     const [ titulo , setTitulo ] = useState('');
     const [ categoria , setCategoria ] = useState('');
     const [ dateS , setDateS ] = useState('');
@@ -28,13 +31,15 @@ export function EventoIndex(){
 
     useEffect(()=>{
         //console.log(params.id)
+
         const eventRef = database.ref(`eventos/${params.id}`)
 
         eventRef.once('value', evento =>{
             //console.log(evento.val());
 
             const eventValue = evento.val();
-
+            
+            setAuthor(eventValue.authorID)
             setTitulo(eventValue.title)
             setCategoria(eventValue.category)
             setDateS(eventValue.startDate)
@@ -65,39 +70,36 @@ export function EventoIndex(){
             <NavBar/>
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
-                <header className='d-flex justify-content-between'>
-                <div className="dropdown">
-                    <button type="button" className="btn border-dark rounded-circle" data-bs-toggle="dropdown">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                    </button>
-                    <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" href="#">Denunciar ou Relatar Problema</a></li>
-                    <li><a className="dropdown-item" href="#">Link 2</a></li>
-                    <li><a className="dropdown-item" href="#">Link 3</a></li>
-                    </ul>
-                </div>
+                <header className='d-flex justify-content-center'>
                     <h1>{titulo}</h1>
-                    <CopyCode id={params.id || 'No Code'} /> {/** Testar */}
                 </header>
 
-                <div className='card-body'>
+                <div className="card-body d-flex flex-column gap-3">
+                    
                     <h3>Categoria: {categoria}</h3>
                     <h3>Data de Inicio: {moment(dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Data Final: {moment(dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Descrição: {descricao}</h3>
-                    <h3>Localização:</h3><br />
+                    <h3>Localização:</h3><br/>
                     <div>
                         <Location/>
                     </div>
 
                 </div>
 
-                { user ?  ( 
-                    <div>
-                        <button> Confirmar Presença</button>
-                    </div>
+                { user ?  (
+                    <div className='d-flex gap-4'>
+                        { user.id === author ? (
+                            <div> <ButtonDanger>Cancelar Evento</ButtonDanger></div>
+                        ):(
+                            <div> </div>
+                        )}
+                            <Button onClick={handleContMe}> Confirmar Presença</Button> {/**Atualizar funcionalidade */}
+                            <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
+                            <Button>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
+                        </div>
+                    
+                    
                 ) : (
                     <span>Para confirmar prenença, <button>faça seu login</button>.</span>
                 )}

@@ -46,7 +46,7 @@ export function NavBar(){
                                     <ul className="dropdown-menu " aria-labelledby="navbarDropdown">
                                         <li><a className="dropdown-item" href="/Evento/Novo">Criar Evento</a></li>
                                         <li><a className="dropdown-item" href="/Evento/Buscar">Buscar Eventos</a></li>
-                                        <li><a className="dropdown-item" href="#">Gerenciar Eventos</a></li>
+                                        <li><a className="dropdown-item" href="/Evento/Gerenciar">Gerenciar Eventos</a></li>
 
                                     </ul>
                                 </li>

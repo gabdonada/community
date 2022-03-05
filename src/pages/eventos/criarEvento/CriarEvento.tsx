@@ -51,6 +51,7 @@ export function CriarEvento(){
                 startDate: dateS,
                 endDate: dateE,
                 description: descricao,
+                canceled: 'N'
                 //localization: localizacao
             });
 

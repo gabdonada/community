@@ -1,9 +1,8 @@
-import copy from './img/copy.svg'
-import './style.scss'
-
+import { Button } from "../button/Button";
 
 type Code = {
     id: string;
+    textBut: string;
 }
 
 export function CopyCode(props: Code){
@@ -12,11 +11,8 @@ export function CopyCode(props: Code){
     }
 
     return(
-        <button className="room-Code" onClick={copyCodeToClipboard}>
-            <div>
-                <img src={copy} alt="Copiar código" />
-            </div>
-            <span>Evento: {props.id}</span>
-        </button>
+        <Button onClick={copyCodeToClipboard}>
+            <span>{props.textBut}: {props.id}</span>
+        </Button>
     )
 }
