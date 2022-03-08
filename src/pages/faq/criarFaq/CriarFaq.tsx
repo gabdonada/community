@@ -13,7 +13,6 @@ export function CriarFaq(){
     const navigate = useNavigate();
 
     const [ titulo, setTitulo ] = useState('');
-    const [ nome, setNome ] = useState('');
     const [ email, setEmail ] = useState(user?.userEmail ?? '')
     const [ categoria, setCategoria ] = useState('')
     const [ descricao, setDescricao ] = useState('')
@@ -91,9 +90,10 @@ export function CriarFaq(){
                                         <option value="Sugestao">Sugestão</option>
                                     </select>
 
+                                
                                 <label className="form-label mt-4">Descrição</label>
                                 <textarea 
-                                    className="form-control" 
+                                    className="form-control mb-4" 
                                     placeholder="Adicione todos os detalhes possíveis para nos auxiliar (links, caminhos, etc...)" 
                                     onChange={event => setDescricao(event.target.value)}
                                     required 

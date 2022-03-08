@@ -26,6 +26,23 @@ export function EventoIndex(){
     const [ descricao , setDescricao ] = useState('');
     //const [ localizacao , setLocalizacao ] = useState('');
 
+    async function handleDenounce(){
+
+        const faqRef = database.ref(`faq/${user?.id}`); //fiding FAQ reference in DB.
+
+        const firebaseFaq = await faqRef.push({
+            authorId: user?.id,
+            name: user?.name,
+            status: "Aberto",
+            title: "Denuncia Evento - "+titulo+" - ID "+params.id,
+            email: user?.userEmail,
+            category: "Denuncia",
+            description: "Denúncia do Evento '"+titulo+"' ID do evento: "+params.id
+        });
+
+        alert("Denúncia criada com sucesso.")
+    }
+
 
     const params = useParams<EventParms>();
 
@@ -96,7 +113,7 @@ export function EventoIndex(){
                         )}
                             <Button onClick={handleContMe}> Confirmar Presença</Button> {/**Atualizar funcionalidade */}
                             <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
-                            <Button>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
+                            <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
                         </div>
                     
                     
