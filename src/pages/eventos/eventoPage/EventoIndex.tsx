@@ -19,6 +19,7 @@ export function EventoIndex(){
     const { user } = useAuth()
 
     const [ author, setAuthor] = useState('');
+    const [ authorName, setAuthorName] = useState('');
     const [ titulo , setTitulo ] = useState('');
     const [ categoria , setCategoria ] = useState('');
     const [ dateS , setDateS ] = useState('');
@@ -57,6 +58,7 @@ export function EventoIndex(){
             const eventValue = evento.val();
             
             setAuthor(eventValue.authorID)
+            setAuthorName(eventValue.authorName)
             setTitulo(eventValue.title)
             setCategoria(eventValue.category)
             setDateS(eventValue.startDate)
@@ -101,6 +103,8 @@ export function EventoIndex(){
                     <div>
                         <Location/>
                     </div>
+
+                    <p>Criado por: {authorName}</p>
 
                 </div>
 

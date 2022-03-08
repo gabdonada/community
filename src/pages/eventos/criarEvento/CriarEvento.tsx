@@ -46,6 +46,7 @@ export function CriarEvento(){
 
             const firebaseEvent = await eventRef.push({
                 authorID: user?.id,
+                authorName: user.name,
                 title: titulo,
                 category: categoria,
                 startDate: dateS,
