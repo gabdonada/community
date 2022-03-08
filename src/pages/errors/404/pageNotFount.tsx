@@ -1,10 +1,13 @@
+import giphy from './giphy.gif'
+
 export function PageNotFount(){
 
     return(
-        <div className="container d-flex justify-content-center align-items-center vh-100">
+        <div className="container d-flex justify-content-center ">
             <div className="row ">
                 <div className="col-md-12">
                     <div className="error-template d-flex flex-column align-items-center">
+                        <img src={giphy} alt="Página não encontrada" />
                         <h1 className="mb-3">Oops!</h1>
                         <h2 className="mb-3">404 Página não econtrada</h2>
                         <div className="error-details mb-3">
