@@ -1,28 +1,22 @@
-.body{
-    height: 100vh;
+//mobile
+.sizingt{
+    height: 100%;
+}
 
-    .content{
-        margin: 2rem 0 2rem 0;
+.gap{
+    gap: 1rem;
+}
+
+
+
+@media only screen and (min-width: 768px) {
+    .sizingt{
+        height: 21rem;
     }
+}
 
-    .cartoes{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4rem;
-
-        .organizaCards{
-            display: flex;
-            justify-content: center;
-            
-            width: 20rem;
-            height: 21.25rem;
-            padding: 1rem;
-            box-shadow: 2px 1px 3px 0.1px black;
-
-            h1{
-                color: #002838;
-            }
-        }
+@media only screen and (min-width: 1800px) {
+    .sizingt{
+        height: 35rem;
     }
 }

@@ -10,7 +10,7 @@ import moment from "moment";
 import { BlueCard } from "../../components/blueCards/BlueCard";
 
 
-//import './homestyle.scss'
+import './homestyle.scss'
 
 type FirebaseEventos = Record<string, {
     id: string,
@@ -68,10 +68,10 @@ export function Home(){
             <NavBar/>
                 
                 <div className="container">
-                    <div className="row mt-4">
+                    <div className="row mt-4 gap">
                         <div className="col-md">
                             <div className="card">
-                                <div className="d-flex card-body flex-column align-items-center">
+                                <div className="sizingt d-flex card-body flex-column align-items-center sizingt">
                                     <h1>TOP Eventos</h1>
                                     {eventValues.map((eventoInfo)=>
                                         moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
@@ -88,7 +88,7 @@ export function Home(){
 
                         <div className="col-md">
                             <div className="card">
-                                <div className="card-body d-flex justify-content-center">
+                                <div className="sizingt card-body d-flex justify-content-center">
                                     <h1>TOP Recursos</h1>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@ export function Home(){
 
                         <div className="col-md">
                             <div className="card">
-                                <div className="card-body d-flex justify-content-center">
+                                <div className="sizingt card-body d-flex justify-content-center">
                                     <h1> Sua Agenda</h1>
                                 </div>
                             </div>
