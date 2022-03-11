@@ -36,8 +36,7 @@ function App() {
  
 
           <Route path='*' element={<PageNotFount/>} />
-          <Route path='/IdInvalido' element={<PageNotFount/>} />
-
+          
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>

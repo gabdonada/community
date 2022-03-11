@@ -7,7 +7,7 @@ import { Button } from '../button/Button';
 import menuIcon from './img/menuIcon.svg'
 
 export function NavBar(){
-    const { user, singIngWithGoogle } = useAuth();
+    const { user, singIngWithGoogle, singOutWithGoogle } = useAuth();
 
     const navigate = useNavigate();
 
@@ -19,6 +19,15 @@ export function NavBar(){
         
         navigate('/home');      
         
+    }
+
+    async function handleSingOutGoogle() {
+        if(user){
+            await singOutWithGoogle();
+            navigate('/');
+        }else{
+            alert("Não há usuário logado")
+        }
     }
 
     return(
@@ -73,7 +82,7 @@ export function NavBar(){
                                             <li><a className="dropdown-item" href="#">Visualizar Perfil</a></li>
                                             <li><a className="dropdown-item" href="#">Personalizar Perfil</a></li>
                                             <li><hr className="dropdown-divider"/></li>
-                                            <li><a className="dropdown-item" href="#">Logout</a></li>
+                                            <li><a className="dropdown-item" onClick={handleSingOutGoogle}>Logout</a></li>
                                         </ul>
                                     </li>
                                 </ul>

@@ -12,6 +12,7 @@ type User = {
 type AuthContextType = {
     user: User | undefined;
     singIngWithGoogle: () => Promise<void>;
+    singOutWithGoogle: () => Promise<void>
   
 }
 
@@ -76,12 +77,22 @@ export function AuthContextProvider(props: AuthContextProviderProps){
         }
   }
 
+  async function singOutWithGoogle() {
+    if(!user){
+      throw new Error('Não há usuário logado para realizar o SingOut')
+    }
+    
+    await auth.signOut();
+  }
+
     return(
-      <AuthContext.Provider value={{user, singIngWithGoogle}}>
+      <AuthContext.Provider value={{user, singIngWithGoogle, singOutWithGoogle}}>
           {props.children}
       </AuthContext.Provider>
 
     );
+
+
 }
 
   
