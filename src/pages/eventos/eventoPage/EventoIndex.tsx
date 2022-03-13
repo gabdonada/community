@@ -9,6 +9,7 @@ import { Location } from '../../../components/googleMaps/Location';
 import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
+import { useEvent } from '../../../hooks/useEvent';
 
 type EventParms = {
     id: string;
@@ -17,15 +18,12 @@ type EventParms = {
 export function EventoIndex(){
 
     const { user } = useAuth()
+    const params = useParams<EventParms>();
 
-    const [ author, setAuthor] = useState('');
-    const [ authorName, setAuthorName] = useState('');
-    const [ titulo , setTitulo ] = useState('');
-    const [ categoria , setCategoria ] = useState('');
-    const [ dateS , setDateS ] = useState('');
-    const [ dateE , setDateE ] = useState('');
-    const [ descricao , setDescricao ] = useState('');
-    //const [ localizacao , setLocalizacao ] = useState('');
+    const eventID = params.id;
+    const { evento } = useEvent(eventID || "");
+
+    
 
     async function handleDenounce(){
 
@@ -35,37 +33,16 @@ export function EventoIndex(){
             authorId: user?.id,
             name: user?.name,
             status: "Aberto",
-            title: "Denuncia Evento - "+titulo+" - ID "+params.id,
+            title: "Denuncia Evento - "+evento?.titulo+" - ID "+params.id,
             email: user?.userEmail,
             category: "Denuncia",
-            description: "Denúncia do Evento '"+titulo+"' ID do evento: "+params.id
+            description: "Denúncia do Evento '"+evento?.titulo+"' ID do evento: "+params.id 
         });
 
         alert("Denúncia criada com sucesso.")
     }
 
 
-    const params = useParams<EventParms>();
-
-    useEffect(()=>{
-        //console.log(params.id)
-
-        const eventRef = database.ref(`eventos/${params.id}`)
-
-        eventRef.once('value', evento =>{
-            //console.log(evento.val());
-
-            const eventValue = evento.val();
-            
-            setAuthor(eventValue.authorID)
-            setAuthorName(eventValue.authorName)
-            setTitulo(eventValue.title)
-            setCategoria(eventValue.category)
-            setDateS(eventValue.startDate)
-            setDateE(eventValue.endDate)
-            setDescricao(eventValue.description)
-        })
-    },[params.id]) //in case that the user changes the event, the number will be updated
 
 
     async function handleContMe() {
@@ -74,10 +51,14 @@ export function EventoIndex(){
         }
 
         const userConfirmation = {
-            confirmedBy: user.id
+            confirmedByUserID: user.id,
+            confirmedByUserName: user.name,
+            confirmedByUserAvatar: user.avatar
         }
 
         await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
+
+        alert("Presença confirmada")
     }
 
 
@@ -90,32 +71,32 @@ export function EventoIndex(){
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
                 <header className='d-flex justify-content-center'>
-                    <h1>{titulo}</h1>
+                    <h1>{evento?.titulo} - {evento?.confirmCount} Confirmado(s)</h1>
                 </header>
 
                 <div className="card-body d-flex flex-column gap-3">
                     
-                    <h3>Categoria: {categoria}</h3>
-                    <h3>Data de Inicio: {moment(dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Data Final: {moment(dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Descrição: {descricao}</h3>
-                    <h3>Localização:</h3><br/>
+                    <h3>Categoria: {evento?.categoria}</h3>
+                    <h3>Data de Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Data Final: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Descrição: {evento?.descricao}</h3>
+                    <h3>Localização: {evento?.confirmadosList.confirmedByUserID}</h3><br/>
                     <div>
                         <Location/>
                     </div>
 
-                    <p>Criado por: {authorName}</p>
+                    <p>Criado por: {evento?.autorNome}</p>
 
                 </div>
 
                 { user ?  (
                     <div className='d-flex gap-4'>
-                        { user.id === author ? (
+                        { user.id === evento?.autorID ? (
                             <div> <ButtonDanger>Cancelar Evento</ButtonDanger></div>
                         ):(
                             <div> </div>
                         )}
-                            <Button onClick={handleContMe}> Confirmar Presença</Button> {/**Atualizar funcionalidade */}
+                            <Button onClick={handleContMe}> Confirmar Presença</Button>
                             <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
                             <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
                         </div>
