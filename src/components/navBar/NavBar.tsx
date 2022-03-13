@@ -82,7 +82,7 @@ export function NavBar(){
                                             <li><a className="dropdown-item" href="#">Visualizar Perfil</a></li>
                                             <li><a className="dropdown-item" href="#">Personalizar Perfil</a></li>
                                             <li><hr className="dropdown-divider"/></li>
-                                            <li><a className="dropdown-item" onClick={handleSingOutGoogle}>Logout</a></li>
+                                            <li><a className="dropdown-item" href="#" onClick={handleSingOutGoogle}>Logout</a></li>
                                         </ul>
                                     </li>
                                 </ul>
