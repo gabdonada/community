@@ -68,7 +68,7 @@ export function Home(){
             <NavBar/>
                 
                 <div className="container">
-                    <div className="row mt-4 gap">
+                    <div className="row mt-4 mb-4 gap">
                         <div className="col-md">
                             <div className="card">
                                 <div className="sizingt d-flex card-body flex-column align-items-center sizingt">

@@ -73,6 +73,7 @@ export function GerenciarEventos(){
                                 (
                                     console.log()
                                 ):(
+                                    
                                     <EventCard props={eventoInfo}/>
                                 )
                             

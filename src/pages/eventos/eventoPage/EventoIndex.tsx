@@ -71,7 +71,7 @@ export function EventoIndex(){
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
                 <header className='d-flex justify-content-center'>
-                    <h1>{evento?.titulo} - {evento?.confirmCount} Confirmado(s)</h1>
+                    <h1>{evento?.titulo} - {0} Confirmado(s)</h1>
                 </header>
 
                 <div className="card-body d-flex flex-column gap-3">
@@ -79,8 +79,8 @@ export function EventoIndex(){
                     <h3>Categoria: {evento?.categoria}</h3>
                     <h3>Data de Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Data Final: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Descrição: {evento?.descricao}</h3>
-                    <h3>Localização: {evento?.confirmadosList.confirmedByUserID}</h3><br/>
+                    <h3>Descrição: {evento?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
+                    <h3>Localização: </h3><br/>
                     <div>
                         <Location/>
                     </div>
