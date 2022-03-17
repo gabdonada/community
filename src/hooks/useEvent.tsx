@@ -15,12 +15,18 @@ type EventType = {
     cancelado: string,
 }
 
-type Confirmados = Record<string, {
-    id: string,
+type ConfirmadosFirebase = Record<string, {
     confirmedByUserID: string,
     confirmedByUserName: string,
     confirmedByUserAvatar: string
 }>
+
+type Confirmados = {
+    id: string,
+    confirmedByUserID: string,
+    confirmedByUserName: string,
+    confirmedByUserAvatar: string
+}
 
 export function useEvent(eventID: string){
 
@@ -32,14 +38,14 @@ export function useEvent(eventID: string){
 
     useEffect(()=>{
         const eventRef = database.ref(`eventos/${eventID}`)
+        
 
-        eventRef.once('value', evento =>{
-            //console.log(evento.val());
-            const eventValue = evento.val();
-            const firebaseConfirmados:Confirmados = eventValue.confirmados ?? {}
+        eventRef.once('value', eventDetails =>{
+            const databaseEvent = eventDetails.val();
+            const datebaseEventConfirm:ConfirmadosFirebase = databaseEvent.confirmados ?? {}
 
-            const parsedConfirmados = Object.entries(firebaseConfirmados).map( ([key, value])=>{
-                return {
+            const parsedConfirm = Object.entries(datebaseEventConfirm).map( ([key, value])=>{
+                return{
                     id: key,
                     confirmedByUserID: value.confirmedByUserID,
                     confirmedByUserName: value.confirmedByUserName,
@@ -47,23 +53,19 @@ export function useEvent(eventID: string){
                 }
             })
 
-            //setConfirmados(parsedConfirmados);
-
             const vari:EventType = {
-                id: eventValue.key,
-                autorID: eventValue.authorID,
-                autorNome: eventValue.authorName,
-                titulo: eventValue.title,
-                categoria: eventValue.category,
-                dateS: eventValue.startDate,
-                dateE: eventValue.endDate,
-                descricao: eventValue.description,
-                cancelado: eventValue.canceled,
+                id: databaseEvent.key,
+                autorID: databaseEvent.authorID,
+                autorNome: databaseEvent.authorName,
+                titulo: databaseEvent.title,
+                categoria: databaseEvent.category,
+                dateS: databaseEvent.startDate,
+                dateE: databaseEvent.endDate,
+                descricao: databaseEvent.description,
+                cancelado: databaseEvent.canceled,
             }
             setEvento(vari)
-            
-            //setCountConfirm(Object.values(eventValue.confirmados ?? {}).length)
-            //setHasConfirm(Object.values(eventValue.confirmados ?? {}).some(confirmado => confirmado.confirmedByUserID === user?.id))
+            setConfirmados(parsedConfirm)
         })
 
         return () =>{
