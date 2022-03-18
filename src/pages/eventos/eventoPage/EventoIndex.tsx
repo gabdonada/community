@@ -21,7 +21,7 @@ export function EventoIndex(){
     const params = useParams<EventParms>();
 
     const eventID = params.id;
-    const { evento } = useEvent(eventID || "");
+    const { evento, confirmados } = useEvent(eventID || "");
 
     
 
@@ -56,9 +56,14 @@ export function EventoIndex(){
             confirmedByUserAvatar: user.avatar
         }
 
-        await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
+        if(evento?.likeIDfromCurrentUser === undefined){
+            await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
+            alert("Presença confirmada")
+        }else{
+            await database.ref(`/eventos/${params.id}/confirmados/${evento?.likeIDfromCurrentUser.id}`).remove()
+            alert("Presença removida")
+        }
 
-        alert("Presença confirmada")
     }
 
 
@@ -71,7 +76,7 @@ export function EventoIndex(){
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
                 <header className='d-flex justify-content-center'>
-                    <h1>{evento?.titulo} - {0} Confirmado(s)</h1>
+                    <h1>{evento?.titulo} - {evento?.confirmadosN} Confirmado(s)</h1>
                 </header>
 
                 <div className="card-body d-flex flex-column gap-3">
@@ -96,7 +101,14 @@ export function EventoIndex(){
                         ):(
                             <div> </div>
                         )}
-                            <Button onClick={handleContMe}> Confirmar Presença</Button>
+                            {moment(evento?.dateE).isAfter() ? (
+                                evento?.likeIDfromCurrentUser === undefined ? 
+                                <Button onClick={handleContMe}> Confirmar Presença</Button>
+                                : <Button onClick={handleContMe}> Remover Presença</Button>
+                                
+                            ):(
+                                <div></div>
+                            )}
                             <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
                             <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
                         </div>

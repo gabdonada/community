@@ -13,6 +13,8 @@ type EventType = {
     dateE: string,
     descricao: string,
     cancelado: string,
+    likeIDfromCurrentUser: Confirmados | undefined,
+    confirmadosN: number
 }
 
 type ConfirmadosFirebase = Record<string, {
@@ -63,7 +65,10 @@ export function useEvent(eventID: string){
                 dateE: databaseEvent.endDate,
                 descricao: databaseEvent.description,
                 cancelado: databaseEvent.canceled,
+                likeIDfromCurrentUser: parsedConfirm.find(element => element.confirmedByUserID === user?.id),
+                confirmadosN: Object.entries(databaseEvent.confirmados ?? {}).length
             }
+            
             setEvento(vari)
             setConfirmados(parsedConfirm)
         })
