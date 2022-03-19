@@ -2,6 +2,8 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { auth, firebase } from "../services/firebase";
 
+import noUserImg from '../assets/images/noUserImg.png'
+
 type User = {
     id: string;
     name: string;
@@ -70,7 +72,7 @@ export function AuthContextProvider(props: AuthContextProviderProps){
           setUser({
             id: uid,
             name: displayName,
-            avatar: photoURL,
+            avatar: photoURL ?? {noUserImg},
             userEmail: email ?? ''
           })
 

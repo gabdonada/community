@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyCode } from "../../../components/copyCodeIcon/copyCode";
 import { Footer } from "../../../components/footer/Footer";
@@ -10,6 +10,7 @@ import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { useEvent } from '../../../hooks/useEvent';
+import { preventDefault } from 'ol/events/Event';
 
 type EventParms = {
     id: string;
@@ -45,7 +46,8 @@ export function EventoIndex(){
 
 
 
-    async function handleContMe() {
+    async function handleContMe(){
+
         if(!user){
             throw new Error("Você deve estar logado para confirmar presença");
         }
@@ -63,7 +65,7 @@ export function EventoIndex(){
             await database.ref(`/eventos/${params.id}/confirmados/${evento?.likeIDfromCurrentUser.id}`).remove()
             alert("Presença removida")
         }
-
+        
     }
 
 
@@ -101,14 +103,18 @@ export function EventoIndex(){
                         ):(
                             <div> </div>
                         )}
+                        <form onSubmit={handleContMe}>
+
+                        
                             {moment(evento?.dateE).isAfter() ? (
                                 evento?.likeIDfromCurrentUser === undefined ? 
-                                <Button onClick={handleContMe}> Confirmar Presença</Button>
-                                : <Button onClick={handleContMe}> Remover Presença</Button>
+                                <Button type={'submit'}> Confirmar Presença</Button>
+                                : <Button type={'submit'}> Remover Presença</Button>
                                 
                             ):(
                                 <div></div>
                             )}
+                        </form>
                             <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
                             <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
                         </div>
