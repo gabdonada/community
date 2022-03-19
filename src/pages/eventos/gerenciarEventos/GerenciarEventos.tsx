@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
+import { useAuth } from "../../../hooks/useAuth";
+import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
 import { database } from "../../../services/firebase"
 
 
@@ -25,33 +27,10 @@ type Evento = {
 }
 
 export function GerenciarEventos(){
-    const [eventValues, setEventValues] = useState<Evento[]>([]);
+    const {user} = useAuth();
 
-    useEffect(() =>{
-        const eventRef = database.ref(`eventos`);
+    const {eventValues} = useGetAllEvents();
 
-        eventRef.once('value', evento => {
-            //console.log(evento.val())
-            const databaseEventos = evento.val();
-
-            const firebaseEvent: FirebaseEventos = databaseEventos ?? {};
-
-            const parsedEventos = Object.entries(firebaseEvent).map(([key, value])=>{
-                return{
-                    id: key,
-                    categoria: value.category,
-                    dataInicio: value.startDate,
-                    dataFinal: value.endDate,
-                    titulo: value.title,
-                    cancelado: value.canceled
-
-                }
-            }) 
-            
-            setEventValues(parsedEventos);
-        })
-
-    }, [])
 
     return(
         <div>
@@ -69,12 +48,11 @@ export function GerenciarEventos(){
                     {eventValues.length > 0 ?
                     (
                         eventValues.map((eventoInfo)=>
-                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
-                                (
-                                    console.log()
+                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ?(
+                                    <div></div>
                                 ):(
-                                    
-                                    <EventCard props={eventoInfo}/>
+                                    eventoInfo.autorID === user?.id ? <EventCard props={eventoInfo}/>
+                                    : <div></div>
                                 )
                             
                         )
