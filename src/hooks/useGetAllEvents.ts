@@ -58,7 +58,7 @@ export function useGetAllEvents(){
                 }
             }) 
             
-            console.log(parsedEventos)
+            //console.log(parsedEventos)
             setEventValues(parsedEventos);
         })
 
