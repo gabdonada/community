@@ -24,13 +24,20 @@ export function EventoIndex(){
     const eventID = params.id;
     const { evento, confirmados } = useEvent(eventID || "");
 
+    async function handleEventCancelation() {
+        const eventRef = database.ref(`evento/${eventID}`);
+
+        await eventRef.child(eventID || '').update({
+            canceled: 'Y'
+        })
+    }
     
 
     async function handleDenounce(){
 
         const faqRef = database.ref(`faq/${user?.id}`); //fiding FAQ reference in DB.
 
-        const firebaseFaq = await faqRef.push({
+        await faqRef.push({
             authorId: user?.id,
             name: user?.name,
             status: "Aberto",
@@ -99,7 +106,7 @@ export function EventoIndex(){
                 { user ?  (
                     <div className='d-flex gap-4'>
                         { user.id === evento?.autorID ? (
-                            <div> <ButtonDanger>Cancelar Evento</ButtonDanger></div>
+                            <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
                         ):(
                             <div> </div>
                         )}
