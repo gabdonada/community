@@ -10,7 +10,9 @@ import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { useEvent } from '../../../hooks/useEvent';
-import { preventDefault } from 'ol/events/Event';
+import { navigate } from '@reach/router';
+
+import './eventoIndexStyle.scss'
 
 type EventParms = {
     id: string;
@@ -25,13 +27,21 @@ export function EventoIndex(){
     const { evento, confirmados } = useEvent(eventID || "");
 
     async function handleEventCancelation() {
-        const eventRef = database.ref(`evento/${eventID}`);
-
-        await eventRef.child(eventID || '').update({
-            canceled: 'Y'
+        await database.ref(`eventos/${eventID}`).update({
+            canceled:'Y'
         })
+        alert("Cancelado com sucesso")
     }
     
+    async function handleNoEvent() {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        if(evento?.id === undefined){
+            //navigate('/404')
+            console.log(evento?.id)
+        }
+    }
+    
+
 
     async function handleDenounce(){
 
@@ -85,7 +95,14 @@ export function EventoIndex(){
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
                 <header className='d-flex justify-content-center'>
-                    <h1>{evento?.titulo} - {evento?.confirmadosN} Confirmado(s)</h1>
+                    <h1>{evento?.titulo} - </h1>
+
+                    {evento?.cancelado==='Y' ? (
+                        <h1 className='canceladoDiv'>Cancelado</h1>
+                    ):(
+                        <h1>{evento?.confirmadosN} Confirmado(s)</h1>
+                    )}
+                    
                 </header>
 
                 <div className="card-body d-flex flex-column gap-3">
@@ -106,17 +123,20 @@ export function EventoIndex(){
                 { user ?  (
                     <div className='d-flex gap-4'>
                         { user.id === evento?.autorID ? (
-                            <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
+                            evento?.cancelado === 'N' ? <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
+                            : <div></div>
                         ):(
                             <div> </div>
                         )}
                         <form onSubmit={handleContMe}>
 
                         
-                            {moment(evento?.dateE).isAfter() ? (
-                                evento?.likeIDfromCurrentUser === undefined ? 
-                                <Button type={'submit'}> Confirmar Presença</Button>
-                                : <Button type={'submit'}> Remover Presença</Button>
+                            {moment(evento?.dateE).isBefore() && evento?.cancelado === 'Y' ?(
+                                 
+                                    evento?.likeIDfromCurrentUser === undefined ? (
+                                    <Button type={'submit'}> Confirmar Presença</Button>
+                                    ):( <Button type={'submit'}> Remover Presença</Button>)
+                                
                                 
                             ):(
                                 <div></div>

@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import { Settings } from "http2";
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
@@ -36,7 +37,7 @@ export function useEvent(eventID: string){
     const [ evento, setEvento ] = useState<EventType>();
     const [ confirmados, setConfirmados ] = useState<Confirmados[]>([]);
 
-
+    
 
     useEffect(()=>{
         const eventRef = database.ref(`eventos/${eventID}`)
@@ -46,6 +47,7 @@ export function useEvent(eventID: string){
             const databaseEvent = eventDetails.val();
             const datebaseEventConfirm:ConfirmadosFirebase = databaseEvent.confirmados ?? {}
 
+        
             const parsedConfirm = Object.entries(datebaseEventConfirm).map( ([key, value])=>{
                 return{
                     id: key,
@@ -71,6 +73,8 @@ export function useEvent(eventID: string){
             
             setEvento(vari)
             setConfirmados(parsedConfirm)
+           
+            
         })
 
         return () =>{

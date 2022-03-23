@@ -62,6 +62,8 @@ export function useGetAllEvents(){
             setEventValues(parsedEventos);
         })
 
+        
+
     }, [])
 
 
