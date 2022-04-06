@@ -9,7 +9,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 You may create a .env.local file with your RealTime DB
 
-
+You can also take a look on the documentation based on UWE on community-docs repo
 
 # Realtime Database roles v2.1.1:
 {
