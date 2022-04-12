@@ -11,6 +11,7 @@ import { VisualizaFaq } from './pages/faq/visualizarFaq/VisualizaFaq';
 import { PageNotFount } from './pages/errors/404/pageNotFount';
 import { BuscarEvento } from './pages/eventos/buscarEvento/BuscarEvento';
 import { GerenciarEventos } from './pages/eventos/gerenciarEventos/GerenciarEventos';
+import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
 
 
 
@@ -31,9 +32,11 @@ function App() {
           <Route path="/Evento/Buscar" element={<BuscarEvento/>}/>
           <Route path="/Evento/Gerenciar" element={<GerenciarEventos/>}/>
 
+          <Route path="/Evento/NaoLocalizado" element={<NoEvent/>}/>
+
           <Route path="/FAQ/Novo" element={<CriarFaq/>}/>
           <Route path="/FAQ/:id" element={<VisualizaFaq/>}/>
- 
+  
 
           <Route path='*' element={<PageNotFount/>} />
           

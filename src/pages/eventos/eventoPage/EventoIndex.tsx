@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { useEvent } from '../../../hooks/useEvent';
-import { navigate } from '@reach/router';
+import { navigate, redirectTo } from '@reach/router';
 
 import './eventoIndexStyle.scss'
 
@@ -34,11 +34,11 @@ export function EventoIndex(){
     }
     
     async function handleNoEvent() {
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        if(evento?.id === undefined){
-            //navigate('/404')
-            console.log(evento?.id)
-        }
+        const eventRef = await database.ref(`eventos/${eventID}`).get(); //checking if the eventkey exists under eventos list in json; get returns all data from the event if exists
+
+            if(!eventRef.exists()){
+                navigate('/Evento/NaoLocalizado')
+            }
     }
     
 
@@ -90,7 +90,7 @@ export function EventoIndex(){
 
     
     return(
-        <div>
+        <div onLoad={handleNoEvent}>
             <NavBar/>
 
             <div className="card m-5 d-flex flex-column min-vh-100 p-4">
