@@ -131,7 +131,7 @@ export function EventoIndex(){
                         <form onSubmit={handleContMe}>
 
                         
-                            {moment(evento?.dateE).isBefore() && evento?.cancelado === 'Y' ?(
+                            {moment(evento?.dateE).isAfter() && evento?.cancelado === 'N' ?(
                                  
                                     evento?.likeIDfromCurrentUser === undefined ? (
                                     <Button type={'submit'}> Confirmar Presença</Button>

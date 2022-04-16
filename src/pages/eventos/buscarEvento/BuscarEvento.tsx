@@ -3,56 +3,16 @@ import { useEffect, useState } from "react"
 import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
+import { useEvent } from "../../../hooks/useEvent";
+import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
 import { database } from "../../../services/firebase"
 
 import filter from './filter.svg'
 
-type FirebaseEventos = Record<string, {
-    id: string,
-    category: string,
-    startDate: string,
-    endDate: string,
-    title: string,
-    canceled: string
-}>
-
-type Evento = {
-    id: string,
-    categoria: string,
-    dataInicio: string,
-    dataFinal: string,
-    titulo: string,
-    cancelado: string
-}
 
 export function BuscarEvento(){
-    const [eventValues, setEventValues] = useState<Evento[]>([]);
+    const {eventValues} = useGetAllEvents();
 
-    useEffect(() =>{
-        const eventRef = database.ref(`eventos`);
-
-        eventRef.once('value', evento => {
-            //console.log(evento.val())
-            const databaseEventos = evento.val();
-
-            const firebaseEvent: FirebaseEventos = databaseEventos ?? {};
-
-            const parsedEventos = Object.entries(firebaseEvent).map(([key, value])=>{
-                return{
-                    id: key,
-                    categoria: value.category,
-                    dataInicio: value.startDate,
-                    dataFinal: value.endDate,
-                    titulo: value.title,
-                    cancelado: value.canceled
-
-                }
-            }) 
-            
-            setEventValues(parsedEventos);
-        })
-
-    }, [])
 
     return(
         <div>

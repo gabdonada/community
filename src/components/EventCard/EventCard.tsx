@@ -4,7 +4,8 @@ type Card = {
     id: string,
     titulo: string,
     categoria: string,
-    dataInicio: string
+    dataInicio: string,
+    confirmNumb: number
 }
 
 export function EventCard(props: {props: Card}){
@@ -27,8 +28,8 @@ export function EventCard(props: {props: Card}){
                         </h1>
                     </div>
 
-                    <div className="d-flex flex-column justify-content-center w-25">
-                        <div></div>
+                    <div className="d-flex flex-column  align-items-center w-25">
+                        <h1>{props.props.confirmNumb}</h1>
                         <h1>
                             Confirmados
                         </h1>
