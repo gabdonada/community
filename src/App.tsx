@@ -12,6 +12,7 @@ import { PageNotFount } from './pages/errors/404/pageNotFount';
 import { BuscarEvento } from './pages/eventos/buscarEvento/BuscarEvento';
 import { GerenciarEventos } from './pages/eventos/gerenciarEventos/GerenciarEventos';
 import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
+import { VisualizarProfile } from './pages/userProfile/visualizarProfile/VisualizarProfile';
 
 
 
@@ -37,6 +38,8 @@ function App() {
           <Route path="/FAQ/Novo" element={<CriarFaq/>}/>
           <Route path="/FAQ/:id" element={<VisualizaFaq/>}/>
   
+
+          <Route path="/Perfil/:id" element={<VisualizarProfile/>}/>
 
           <Route path='*' element={<PageNotFount/>} />
           

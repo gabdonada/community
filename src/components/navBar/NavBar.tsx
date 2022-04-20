@@ -79,7 +79,7 @@ export function NavBar(){
                                             <img className='rounded-circle w-75' src={user.avatar} alt={user.name} />
                                         </a>
                                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li><a className="dropdown-item" href="#">Visualizar Perfil</a></li>
+                                            <li><a className="dropdown-item" href={'/Perfil/'+user.id}>Visualizar Perfil</a></li>
                                             <li><a className="dropdown-item" href="#">Personalizar Perfil</a></li>
                                             <li><hr className="dropdown-divider"/></li>
                                             <li><a className="dropdown-item" href="#" onClick={handleSingOutGoogle}>Logout</a></li>
