@@ -23,12 +23,18 @@ export function CriarEvento(){
     const [dateS, setDateS] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [dateE, setDateE] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
     const [ descricao, setDescricao ] = useState('');
+    const [ estado, setEstado ] = useState('');
+    const [ cidade, setCidade ] = useState('');
+    const [ bairro, setBairro ] = useState('');
+    const [ rua, setRua ] = useState('');
+    const [ online, setOnline] = useState(false);
+    const [ presencial, setPresencial] = useState(false);
 
-    const [ longitude, setLongitude ] = useState(0);
-    const [ latitude, setLatitude ] = useState(0);
 
     async function handleCreateEvent(event: FormEvent) {
-        event.preventDefault();
+        event.preventDefault()
+
+        alert(presencial)
 
         if(titulo.trim().length < 5){
             alert("Titulo deve conter mais de 5 caracteries.");
@@ -106,13 +112,66 @@ export function CriarEvento(){
                                         onChange={event => setDateE(event.target.value)}
                                         value={dateE}/>
 
+                                
+                                <label className="form-label mt-4">Localização</label>
+                                <div className="opacity-50"><p>Permita localização para auto preenchimento</p></div>
+
+                                    <input 
+                                        type="checkbox" 
+                                        className=""
+                                        onChange={event => setOnline(event.target.checked)}
+                                        checked={online}/>
+                                    <label className="form-label m-1">Online</label> <br />
+                                    
+                                    <input 
+                                        type="checkbox" 
+                                        className=""
+                                        onChange={event => setPresencial(event.target.checked)}
+                                        checked={presencial}/>
+                                    <label className="form-label m-1">Presencial</label> <br />
+                                    
+                                {presencial === true ?
+                                (
+                                    <div>
+                                        <label className="form-label mt-4">Estado</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                onChange={event => setEstado(event.target.value)}
+                                                value={estado}/>
+
+                                        <label className="form-label mt-4">Cidade</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                onChange={event => setCidade(event.target.value)}
+                                                value={cidade}/>
+
+                                        <label className="form-label mt-4">Bairro</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                onChange={event => setBairro(event.target.value)}
+                                                value={bairro}/>
+
+                                        <label className="form-label mt-4">Rua</label>
+                                            <input 
+                                                type="text" 
+                                                className="form-control"
+                                                onChange={event => setRua(event.target.value)}
+                                                value={rua}/>
+                                    </div>
+                                ):(
+                                    <div></div>
+                                )}
+                                
+
                                 <label className="form-label mt-4">Descrição</label>
                                 <textarea className="form-control" 
                                     onChange={event => setDescricao(event.target.value)}
                                     value={descricao}></textarea>
 
-                                <label className="form-label mt-4">Localização</label>
-
+                                <br />
                                 <div className='d-flex justify-content-end'>
                                     <Button type="submit">Submit</Button>
                                 </div>

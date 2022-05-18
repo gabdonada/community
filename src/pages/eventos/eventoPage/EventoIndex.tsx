@@ -5,7 +5,6 @@ import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from '../../../hooks/useAuth';
 import { database } from '../../../services/firebase';
-import { Location } from '../../../components/googleMaps/Location';
 import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
@@ -113,7 +112,7 @@ export function EventoIndex(){
                     <h3>Descrição: {evento?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
                     <h3>Localização: </h3><br/>
                     <div>
-                        <Location/>
+                        
                     </div>
 
                     <p>Criado por: {evento?.autorNome}</p>

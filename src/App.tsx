@@ -13,6 +13,7 @@ import { BuscarEvento } from './pages/eventos/buscarEvento/BuscarEvento';
 import { GerenciarEventos } from './pages/eventos/gerenciarEventos/GerenciarEventos';
 import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
 import { VisualizarProfile } from './pages/userProfile/visualizarProfile/VisualizarProfile';
+import { Start } from './pages/start/Start';
 
 
 
@@ -25,7 +26,8 @@ function App() {
     <BrowserRouter>
       <AuthContextProvider>
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          {/* <Route path="/" element={<Login/>}/> */}
+          <Route path="/" element={<Start/>}/>
           <Route path="/Home" element={<Home/>}/>
 
           <Route path="/Evento/Novo" element={<CriarEvento/>}/>
