@@ -15,7 +15,14 @@ type EventType = {
     descricao: string,
     cancelado: string,
     likeIDfromCurrentUser: Confirmados | undefined,
-    confirmadosN: number
+    confirmadosN: number,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    rua: string,
+    url:string,
+    online: boolean,
+    presencial: boolean
 }
 
 type ConfirmadosFirebase = Record<string, {
@@ -35,7 +42,6 @@ export function useEvent(eventID: string){
 
     const { user } = useAuth();
     const [ evento, setEvento ] = useState<EventType>();
-    const [ confirmados, setConfirmados ] = useState<Confirmados[]>([]);
 
     
 
@@ -67,12 +73,18 @@ export function useEvent(eventID: string){
                 dateE: databaseEvent.endDate,
                 descricao: databaseEvent.description,
                 cancelado: databaseEvent.canceled,
+                estado: databaseEvent.state,
+                cidade: databaseEvent.city,
+                bairro: databaseEvent.district,
+                rua: databaseEvent.street,
+                presencial: databaseEvent.presencial,
+                online: databaseEvent.online,
+                url: databaseEvent.url,
                 likeIDfromCurrentUser: parsedConfirm.find(element => element.confirmedByUserID === user?.id),
                 confirmadosN: Object.entries(databaseEvent.confirmados ?? {}).length
             }
             
             setEvento(vari)
-            setConfirmados(parsedConfirm)
            
             
         })
@@ -83,5 +95,5 @@ export function useEvent(eventID: string){
 
     },[eventID, user?.id]) //in case that the user changes the event, the number will be updated
 
-    return{evento, confirmados}
+    return{evento}
 }

@@ -29,12 +29,11 @@ export function CriarEvento(){
     const [ rua, setRua ] = useState('');
     const [ online, setOnline] = useState(false);
     const [ presencial, setPresencial] = useState(false);
+    const [ link, setLink] = useState('');
 
 
     async function handleCreateEvent(event: FormEvent) {
         event.preventDefault()
-
-        alert(presencial)
 
         if(titulo.trim().length < 5){
             alert("Titulo deve conter mais de 5 caracteries.");
@@ -46,6 +45,17 @@ export function CriarEvento(){
             alert("Descrição deve conter mais de 15 caracteries.");
         }else if(!user){
             alert("Você deve estar logado para executar a tarefa.");
+
+        }else if(presencial === true && estado){
+            alert("Você deve informar o estado");
+        }else if(presencial === true && cidade === ''){
+            alert("Você deve informar a cidade");
+        }else if(presencial === true && bairro === ''){
+            alert("Você deve informar o bairro");
+        }else if(presencial === true && rua === ''){
+            alert("Você deve informar a rua");
+        }else if(online === true && link === ''){
+            alert("Você deve informar o link");
         }else{
 
             const eventRef = database.ref('eventos'); //fiding eventos reference in DB.
@@ -58,8 +68,14 @@ export function CriarEvento(){
                 startDate: dateS,
                 endDate: dateE,
                 description: descricao,
-                canceled: 'N'
-                //localization: localizacao
+                canceled: 'N',
+                online: online,
+                presencial: presencial,
+                state: estado,
+                city: cidade,
+                district: bairro,
+                street: rua,
+                url: link
             });
 
             navigate(`/Evento/${firebaseEvent.key}`)
@@ -160,6 +176,21 @@ export function CriarEvento(){
                                                 className="form-control"
                                                 onChange={event => setRua(event.target.value)}
                                                 value={rua}/>
+                                    </div>
+                                ):(
+                                    <div></div>
+                                )}
+
+                                {online === true ?
+                                (
+                                    <div>
+                                        <label className="form-label mt-4">Link</label>
+                                        <input 
+                                                type="url" 
+                                                placeholder="https://exemplo.com.br"
+                                                className="form-control"
+                                                onChange={event => setLink(event.target.value)}
+                                                value={link}/>
                                     </div>
                                 ):(
                                     <div></div>

@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { useEvent } from '../../../hooks/useEvent';
-import { navigate, redirectTo } from '@reach/router';
+import { navigate } from '@reach/router';
 
 import './eventoIndexStyle.scss'
 
@@ -23,7 +23,7 @@ export function EventoIndex(){
     const params = useParams<EventParms>();
 
     const eventID = params.id;
-    const { evento, confirmados } = useEvent(eventID || "");
+    const { evento } = useEvent(eventID || "");
 
     async function handleEventCancelation() {
         await database.ref(`eventos/${eventID}`).update({
@@ -110,12 +110,30 @@ export function EventoIndex(){
                     <h3>Data de Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Data Final: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Descrição: {evento?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
-                    <h3>Localização: </h3><br/>
+                    
                     <div>
-                        
-                    </div>
+                        <h3>Onde? </h3>
+                            {evento?.online === true ?
+                            (
+                                <div>
+                                    <h3> Link Online: <a href={evento.url}>{evento.url}</a></h3>
+                                    
+                                </div>
+                            ):(<div></div>)}
 
-                    <p>Criado por: {evento?.autorNome}</p>
+                            {evento?.presencial === true ?
+                            (
+                                <div>
+                                    <h3>Estado: {evento.estado}</h3>
+                                    <h3>Cidade: {evento.cidade}</h3>
+                                    <h3>Bairro: {evento.bairro}</h3>
+                                    <h3>Rua: {evento.rua}</h3>
+                                </div>
+                            ):(<div></div>)}
+                    </div>
+                    
+
+                    <p className="opacity-50">Criado por: {evento?.autorNome}</p>
 
                 </div>
 
