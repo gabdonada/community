@@ -4,23 +4,20 @@ import { useAuth } from "../../hooks/useAuth";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import { useEffect, useState } from "react";
-import { database } from "../../services/firebase";
 import moment from "moment";
 import { BlueCard } from "../../components/blueCards/BlueCard";
 
 
 import './homestyle.scss'
-import { useGetAllEvents } from "../../hooks/useGetAllEvents";
+import { useGetTopEvents } from "../../hooks/useGetTopEvents";
 
 
 
 
 export function Home(){
 
-    const { user } = useAuth();
 
-    const { eventValues } = useGetAllEvents();
+    const { loading, topEventsSelected } = useGetTopEvents(3);
 
     
 
@@ -34,14 +31,18 @@ export function Home(){
                             <div className="card">
                                 <div className="sizingt d-flex card-body flex-column align-items-center sizingt">
                                     <h1>TOP Eventos</h1>
-                                    {eventValues.map((eventoInfo)=>
-                                        moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
+                                    {loading ?
+                                    (   
+                                        <h1>Loading...</h1>
+                                    ):(
+                                        topEventsSelected.map((eventoInfo)=>
+                                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
                                             (
                                                 console.log()
                                             ):(
                                                 <BlueCard props={eventoInfo}/>
                                             )
-                                        
+                                        )
                                     )}
                                 </div>
                             </div>

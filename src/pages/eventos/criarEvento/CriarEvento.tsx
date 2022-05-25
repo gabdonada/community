@@ -46,7 +46,7 @@ export function CriarEvento(){
         }else if(!user){
             alert("Você deve estar logado para executar a tarefa.");
 
-        }else if(presencial === true && estado){
+        }else if(presencial === true && estado === ''){
             alert("Você deve informar o estado");
         }else if(presencial === true && cidade === ''){
             alert("Você deve informar a cidade");

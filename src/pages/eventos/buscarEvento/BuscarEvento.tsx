@@ -1,11 +1,8 @@
 import moment from "moment";
-import { useEffect, useState } from "react"
 import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
-import { useEvent } from "../../../hooks/useEvent";
 import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
-import { database } from "../../../services/firebase"
 
 import filter from './filter.svg'
 
