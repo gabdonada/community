@@ -204,7 +204,7 @@ export function CriarEvento(){
 
                                 <br />
                                 <div className='d-flex justify-content-end'>
-                                    <Button type="submit">Submit</Button>
+                                    <Button type="submit">Compartilhar</Button>
                                 </div>
                             
                             </form>

@@ -45,20 +45,25 @@ export function Home(){
                                         )
                                     )}
 
-                                    {topEventsSelected.length > 0 ?
-                                        (
-                                            <form onSubmit={openTopEvents}>
-                                                <div className="mt-3">
-                                                    <Button type="submit">Ver Mais</Button>
-                                                </div>
-                                            </form>
-                                        ):(
+                                    {topEventsSelected.length <= 0 && loading===false?
+                                        (  
                                             <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
                                                 <h3>Não há TOP eventos</h3>
                                                 <p>Busque por <a href="/Evento/Buscar">Eventos</a></p>
                                             </div>
+                                            
+                                        ):(
+                                            loading === false ?
+                                                (
+                                                    <form onSubmit={openTopEvents}>
+                                                        <div className="mt-3">
+                                                            <Button type="submit">Ver Mais</Button>
+                                                        </div>
+                                                    </form>
+                                                ):(
+                                                    <div></div>
+                                                )       
                                         )
-
                                     }
                                 </div>
                             </div>
