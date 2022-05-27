@@ -1,7 +1,7 @@
 import { Footer } from "../../components/footer/Footer";
 import { NavBar } from "../../components/navBar/NavBar";
-import { useAuth } from "../../hooks/useAuth";
-
+import { FormEvent } from "react";
+import { Button } from "../../components/button/Button";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import moment from "moment";
@@ -15,11 +15,11 @@ import { useGetTopEvents } from "../../hooks/useGetTopEvents";
 
 
 export function Home(){
+    const { loading, topEventsSelected } = useGetTopEvents(4);
 
-
-    const { loading, topEventsSelected } = useGetTopEvents(3);
-
-    
+    function openTopEvents(event: FormEvent) {
+        
+    }
 
     return(
         <div className="d-flex flex-column min-vh-100">
@@ -44,6 +44,22 @@ export function Home(){
                                             )
                                         )
                                     )}
+
+                                    {topEventsSelected.length > 0 ?
+                                        (
+                                            <form onSubmit={openTopEvents}>
+                                                <div className="mt-3">
+                                                    <Button type="submit">Ver Mais</Button>
+                                                </div>
+                                            </form>
+                                        ):(
+                                            <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
+                                                <h3>Não há TOP eventos</h3>
+                                                <p>Busque por <a href="/Evento/Buscar">Eventos</a></p>
+                                            </div>
+                                        )
+
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -51,7 +67,7 @@ export function Home(){
                         <div className="col-md">
                             <div className="card">
                                 <div className="sizingt card-body d-flex justify-content-center">
-                                    <h1>TOP Recursos</h1>
+                                    <h1>Deu Match</h1>
                                 </div>
                             </div>
                         </div>

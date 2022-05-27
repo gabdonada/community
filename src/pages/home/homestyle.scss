@@ -7,11 +7,16 @@
     gap: 1rem;
 }
 
+a {
+    text-decoration: none;
+    color: #002838;
+}
+
 
 
 @media only screen and (min-width: 768px) {
     .sizingt{
-        height: 21rem;
+        height: 33rem;
     }
 }
 

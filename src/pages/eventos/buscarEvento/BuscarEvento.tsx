@@ -9,8 +9,7 @@ import filter from './filter.svg'
 
 export function BuscarEvento(){
     const {eventValues} = useGetAllEvents();
-
-
+  
     return(
         <div>
             <NavBar/>
@@ -34,13 +33,13 @@ export function BuscarEvento(){
                                     <EventCard props={eventoInfo}/>
                                 )
                             
-                        )
+                        )                           
                     ) : (
                         <div>
                             Não há eventos
                         </div>
                     )}
-                    
+                
                 </div>
             </div>
 

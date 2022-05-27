@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
+import moment from "moment";
+
 
 
 type FirebaseEventos = Record<string, {
@@ -46,7 +48,7 @@ export function useGetTopEvents(quant: number){
         let topAllEvents:Evento[] = <Evento[]>[];
 
         await eventValues.forEach(element =>{
-            if(element.confirmNumb > 0){
+            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter()){
                 topAllEvents.push(element)
             }
         })
