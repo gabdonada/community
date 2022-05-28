@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
@@ -21,19 +21,19 @@ type Evento = {
     cancelado: string,
     confirmNumb: number
 }
-
 export function BuscarEvento(){
-    const {eventValues} = useGetAllEvents();
-
     const [ dateFilter, setDateFilter ] = useState("")
-    const [categoria, setCategoria ] = useState("");
+    const [ categoria, setCategoria ] = useState("");
     const [ estado, setEstado ] = useState("");
     const [ cidade, setCidade ] = useState("");
+    const [ eventtype ] = useState("all")
+
+    const {eventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, eventtype);
 
     const [ todaysMoment ] = useState(moment().format("DD-MM-YYYY"))
-    
-    function filterData(){
 
+    function filterData() {
+        
     }
 
     return(
@@ -70,6 +70,7 @@ export function BuscarEvento(){
                                         >
                                         
                                         <option value="">Selecione</option>
+                                        <option value="Religioso">Religioso</option>
                                     </select>
                                     
                                 </div>

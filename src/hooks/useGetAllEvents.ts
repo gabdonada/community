@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
+import { useAuth } from "./useAuth";
+import moment from "moment";
+
+
 
 type FirebaseEventos = Record<string, {
     id: string,
@@ -32,8 +36,36 @@ type Evento = {
     confirmNumb: number
 }
 
-export function useGetAllEvents(){
+//eventType is the guy that will tell us if we should return all events or just mine
+export function useGetAllEvents(date: string, categoria: string, estado: string, cidade: string, eventType: string){
     const [eventValues, setEventValues] = useState<Evento[]>([]);
+
+    const { user } = useAuth();
+
+    async function processFilters(results: Evento[]) {
+        if(date === "" && categoria === "" && estado === "" && cidade === "" && eventType === "all"){
+            let takeToShare:Evento[] = []
+            await results.forEach(element => {
+                if(moment(element.dataFinal).isAfter() && element.cancelado !="Y"){
+                    takeToShare.push(element)
+                }
+            });
+            
+            await setEventValues(takeToShare)
+        }
+
+        if(date === "" && categoria === "" && estado === "" && cidade === "" && eventType === "mine"){
+            let takeToShare:Evento[] = []
+            await results.forEach(element => {
+                if(element.autorID === user?.id){    
+                    takeToShare.push(element)
+                }
+            });
+            
+            await setEventValues(takeToShare)
+        }
+    }
+    
 
     useEffect(() =>{
         const eventRef = database.ref(`eventos`);
@@ -59,12 +91,12 @@ export function useGetAllEvents(){
             }) 
             
             //console.log(parsedEventos)
-            setEventValues(parsedEventos);
+            processFilters(parsedEventos);
         })
 
         
 
-    }, [])
+    }, [user])
 
 
     return{eventValues}

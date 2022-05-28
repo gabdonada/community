@@ -29,7 +29,13 @@ type Evento = {
 export function GerenciarEventos(){
     const {user} = useAuth();
 
-    const {eventValues} = useGetAllEvents();
+    const [ dateFilter, setDateFilter ] = useState("")
+    const [ categoria, setCategoria ] = useState("");
+    const [ estado, setEstado ] = useState("");
+    const [ cidade, setCidade ] = useState("");
+    const [ eventtype ] = useState("mine")
+
+    const {eventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, eventtype);
 
 
     return(
