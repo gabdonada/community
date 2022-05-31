@@ -26,9 +26,9 @@ export function BuscarEvento(){
     const [ categoria, setCategoria ] = useState("");
     const [ estado, setEstado ] = useState("");
     const [ cidade, setCidade ] = useState("");
-    const [ eventtype ] = useState("all")
+    const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, eventtype);
+    const {eventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, cancelado);
 
     const [ todaysMoment ] = useState(moment().format("DD-MM-YYYY"))
 
@@ -105,13 +105,7 @@ export function BuscarEvento(){
                     {eventValues.length > 0 ?
                     (
                         eventValues.map((eventoInfo)=>
-                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
-                                (
-                                    console.log()
-                                ):(
-                                    <EventCard props={eventoInfo}/>
-                                )
-                            
+                            <EventCard props={eventoInfo}/>
                         )                           
                     ) : (
                         <div>

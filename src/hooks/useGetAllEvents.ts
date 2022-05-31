@@ -37,35 +37,24 @@ type Evento = {
 }
 
 //eventType is the guy that will tell us if we should return all events or just mine
-export function useGetAllEvents(date: string, categoria: string, estado: string, cidade: string, eventType: string){
+export function useGetAllEvents(date: string, categoria: string, estado: string, cidade: string, cancelado: boolean){
     const [eventValues, setEventValues] = useState<Evento[]>([]);
+    const [ loading, segLoading ] = useState(true)
 
     const { user } = useAuth();
 
     async function processFilters(results: Evento[]) {
-        if(date === "" && categoria === "" && estado === "" && cidade === "" && eventType === "all"){
-            let takeToShare:Evento[] = []
-            await results.forEach(element => {
-                if(moment(element.dataFinal).isAfter() && element.cancelado !="Y"){
-                    takeToShare.push(element)
-                }
-            });
-            
-            await setEventValues(takeToShare)
-        }
+        let takeToShare:Evento[] = []
+        await results.forEach(element => {
+            if(moment(element.dataFinal).isAfter() ){
+                takeToShare.push(element)
+            }
+        });
 
-        if(date === "" && categoria === "" && estado === "" && cidade === "" && eventType === "mine"){
-            let takeToShare:Evento[] = []
-            await results.forEach(element => {
-                if(element.autorID === user?.id){    
-                    takeToShare.push(element)
-                }
-            });
-            
-            await setEventValues(takeToShare)
-        }
+        await setEventValues(takeToShare)
+        await segLoading(false)
     }
-    
+
 
     useEffect(() =>{
         const eventRef = database.ref(`eventos`);
@@ -92,12 +81,14 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
             
             //console.log(parsedEventos)
             processFilters(parsedEventos);
+
+            
         })
 
         
 
-    }, [user])
+    }, [user, date, categoria, estado, cidade, cancelado])
 
 
-    return{eventValues}
+    return{eventValues, loading}
 }
