@@ -22,18 +22,36 @@ type Evento = {
     confirmNumb: number
 }
 export function GerenciarEventos(){
-    const [ dateFilter, setDateFilter ] = useState("")
+    const [ dateFilter, setDateFilter ] = useState(moment().format("DD/MM/YYYY"))
     const [ categoria, setCategoria ] = useState("");
     const [ estado, setEstado ] = useState("");
     const [ cidade, setCidade ] = useState("");
     const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues} = useGetMyEvents(dateFilter, categoria, estado, cidade, cancelado);
+    const {eventValues, setEventValues, loading} = useGetMyEvents(dateFilter, categoria, estado, cidade, cancelado );
 
-    const [ todaysMoment ] = useState(moment().format("DD-MM-YYYY"))
+    async function filterData(event: FormEvent) {
+        event.preventDefault();
 
-    function filterData() {
+        let takeToShare:Evento[] = []
+
+        if(dateFilter.length > 0){
+            var dateObj = new Date(dateFilter);
+            var momentObj = moment(dateObj);
+            var momentString = momentObj.format('DD/MM/YYYY')
+            var compareDate = moment(momentString, 'DD/MM/YYYY');
+
+            await eventValues.forEach(element =>{
+                if(compareDate.isBetween(element.dataInicio, element.dataFinal)){
+                    takeToShare.push(element)
+                }    
+            });
+        }
+
         
+        if(takeToShare.length > 0){
+            setEventValues(takeToShare)
+        }
     }
 
     return(
@@ -48,6 +66,7 @@ export function GerenciarEventos(){
                         <button className="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img className="w-75" src={filter} alt="filtrar eventos" /></button>
 
                         <div className="offcanvas offcanvas-end" tabIndex={-1} id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                            
                         <div className="offcanvas-header">
                             <h5 id="offcanvasRightLabel">Selecione Filtros</h5>
                             <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -93,7 +112,7 @@ export function GerenciarEventos(){
                                 </div>
                                 <div className="d-flex align-items-center justify-content-center gap-5">
                                     <form onSubmit={filterData}>
-                                        <Button type="submit">Filtrar</Button>
+                                        <Button type="submit" data-bs-dismiss="offcanvas">Filtrar</Button>
                                     </form>
                                 </div>
                             </div>

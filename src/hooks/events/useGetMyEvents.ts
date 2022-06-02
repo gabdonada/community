@@ -55,7 +55,6 @@ export function useGetMyEvents(date: string, categoria: string, estado: string, 
         await segLoading(false)
     }
 
-
     useEffect(() =>{
         if(user != undefined){
             const eventRef = database.ref(`eventos`);
@@ -91,5 +90,5 @@ export function useGetMyEvents(date: string, categoria: string, estado: string, 
     }, [user, date, categoria, estado, cidade, cancelado])
 
 
-    return{eventValues, loading}
+    return{eventValues, setEventValues, loading}
 }
