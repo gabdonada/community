@@ -51,7 +51,7 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
     async function processFilters(results: Evento[]) {
         let takeToShare:Evento[] = []
         await results.forEach(element => {
-            if(moment(element.dataFinal).isAfter() ){
+            if(moment(element.dataFinal).isAfter() && element.cancelado === "N" ){
                 takeToShare.push(element)
             }
         });
