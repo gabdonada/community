@@ -4,7 +4,6 @@ import { useAuth } from "./useAuth";
 import moment from "moment";
 
 
-
 type FirebaseEventos = Record<string, {
     id: string,
     authorID: string,
@@ -14,6 +13,9 @@ type FirebaseEventos = Record<string, {
     endDate: string,
     title: string,
     canceled: string,
+    state: string,
+    street: string,
+    url: string,
     confirmados: object
 }>
 
@@ -33,6 +35,9 @@ type Evento = {
     dataFinal: string,
     titulo: string,
     cancelado: string,
+    estado: string,
+    cidade: string,
+    url: string,
     confirmNumb: number
 }
 
@@ -75,6 +80,9 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
                     dataFinal: value.endDate,
                     titulo: value.title,
                     cancelado: value.canceled,
+                    estado: value.state,
+                    cidade: value.street,
+                    url: value.url,
                     confirmNumb: Object.entries(value.confirmados ?? {}).length
                 }
             }) 
@@ -90,5 +98,5 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
     }, [user, date, categoria, estado, cidade, cancelado])
 
 
-    return{eventValues, loading}
+    return{eventValues, setEventValues, loading}
 }

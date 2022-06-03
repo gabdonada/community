@@ -19,6 +19,9 @@ type Evento = {
     dataFinal: string,
     titulo: string,
     cancelado: string,
+    estado: string,
+    cidade: string,
+    url: string,
     confirmNumb: number
 }
 export function BuscarEvento(){
@@ -28,11 +31,138 @@ export function BuscarEvento(){
     const [ cidade, setCidade ] = useState("");
     const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, cancelado);
+    const {eventValues, setEventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, cancelado);
 
-    const [ todaysMoment ] = useState(moment().format("DD-MM-YYYY"))
+    async function filterData(event: FormEvent) {
+        event.preventDefault();
 
-    function filterData() {
+        let takeToShare:Evento[] = []
+
+        if(dateFilter.length > 0){
+            var dateObj = new Date(dateFilter);
+            var momentObj = moment(dateObj);
+            var momentString = momentObj.format('DD/MM/YYYY')
+            var compareDate = moment(momentString, 'DD/MM/YYYY');
+
+            await eventValues.forEach(element =>{
+                if(compareDate.isBetween(element.dataInicio, element.dataFinal)){
+                    takeToShare.push(element)
+                }    
+            });
+        }
+
+        //In case there is a date filter
+        if(takeToShare.length > 0){
+            //in case that there is a category selected
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(estado !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.estado.includes(estado)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+
+            if(cidade !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.cidade.includes(cidade)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+        }else{
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await eventValues.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(takeToShare.length > 0){
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+
+            }else{
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+            }
+            
+        }
+
+        if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
+            setEventValues(takeToShare)
+        }else{
+            alert("Nenhum filtro foi selecionado")
+        }
         
     }
 

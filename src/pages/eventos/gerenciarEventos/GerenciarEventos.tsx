@@ -19,6 +19,9 @@ type Evento = {
     dataFinal: string,
     titulo: string,
     cancelado: string,
+    estado: string,
+    cidade: string,
+    url: string,
     confirmNumb: number
 }
 export function GerenciarEventos(){
@@ -48,10 +51,119 @@ export function GerenciarEventos(){
             });
         }
 
-        
+        //In case there is a date filter
         if(takeToShare.length > 0){
-            setEventValues(takeToShare)
+            //in case that there is a category selected
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(estado !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.estado.includes(estado)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+
+            if(cidade !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.cidade.includes(cidade)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+        }else{
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await eventValues.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(takeToShare.length > 0){
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+
+            }else{
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+            }
+            
         }
+
+        if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
+            setEventValues(takeToShare)
+        }else{
+            alert("Nenhum filtro foi selecionado")
+        }
+        
     }
 
     return(
@@ -115,6 +227,7 @@ export function GerenciarEventos(){
                                         <Button type="submit" data-bs-dismiss="offcanvas">Filtrar</Button>
                                     </form>
                                 </div>
+                                
                             </div>
                         </div>
                         
