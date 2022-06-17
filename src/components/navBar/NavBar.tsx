@@ -15,6 +15,7 @@ export function NavBar(){
         
         if(!user){
             await singIngWithGoogle();
+            
         }
         
         navigate('/home');      
@@ -26,7 +27,7 @@ export function NavBar(){
             await singOutWithGoogle();
             navigate('/');
         }else{
-            alert("Não há usuário logado")
+            alert("Não há usuário logado. Atualize sua página")
         }
     }
 

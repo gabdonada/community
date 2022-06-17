@@ -8,8 +8,12 @@ import { database } from '../../../services/firebase';
 import moment from 'moment';
 import { Button } from '../../../components/button/Button';
 import { ButtonDanger } from '../../../components/button/ButtonDanger';
+import { Comments } from '../../../components/commentsCard/comments';
 import { useEvent } from '../../../hooks/useEvent';
 import { navigate } from '@reach/router';
+
+import deleteImg from '../../../assets/images/deleteImg.svg'
+import checkImg from '../../../assets/images/check.svg'
 
 import './eventoIndexStyle.scss'
 
@@ -23,7 +27,9 @@ export function EventoIndex(){
     const params = useParams<EventParms>();
 
     const eventID = params.id;
-    const { evento } = useEvent(eventID || "");
+    const { evento, comments } = useEvent(eventID || "");
+
+    const [ newComment, setNewComment ] = useState('');
 
     async function handleEventCancelation() {
         await database.ref(`eventos/${eventID}`).update({
@@ -39,7 +45,43 @@ export function EventoIndex(){
                 navigate('/Evento/NaoLocalizado')
             }
     }
+
+    async function handleNewComment(event: FormEvent) {
+        event.preventDefault();
+
+        if(newComment.trim()===''){
+            alert("Você precisa adicionar palavras para comentar.")
+            return;
+        }
+
+        if(!user){
+            throw new Error("Você não está autenticado")
+        }
+
+        const comment = {
+            content: newComment,
+            author:{
+                name: user.name,
+                avatar: user.avatar,
+                userId: user.id
+            },
+            isHighlighted: false
+        };
+
+        await database.ref(`eventos/${eventID}/comentarios`).push(comment);
+
+        setNewComment('');
+    }
     
+    async function handleLikeComment(coomentId: string, likeId: string | undefined) {
+        if(likeId){
+            await database.ref(`eventos/${eventID}/comentarios/${coomentId}/likes/${likeId}`).remove();
+        }else{
+            await database.ref(`eventos/${eventID}/comentarios/${coomentId}/likes`).push({
+                authorId: user?.id
+            })
+        }
+    }
 
 
     async function handleDenounce(){
@@ -84,7 +126,23 @@ export function EventoIndex(){
         
     }
 
+    async function handleDeleteComment(commentId: string) {
+        if(window.confirm('Você deseja excluir este comentário?')){ //confirm returns a boolean 
+            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).remove();
+        }
+    }
 
+    async function handleHighlightComment(commentId: string, highlightStatus: boolean) {
+        if(highlightStatus === false){
+            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).update({
+                isHighlighted: true
+            }); 
+        }else{
+            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).update({
+                isHighlighted: false
+            }); 
+        }
+    }
 
 
     
@@ -168,6 +226,80 @@ export function EventoIndex(){
                     <span>Para confirmar prenença, <button>faça seu login</button>.</span>
                 )}
             </div>
+
+            <div>
+                <form onSubmit={handleNewComment}>
+                    <textarea 
+                        placeholder="Digite seu comentário"
+                        onChange={event => setNewComment(event.target.value)}
+                        value={newComment}                        
+                    />
+                
+                    <div className="form-footer">
+                        { user ? ( //this is an IF to check if the user is authenticated
+                            <div className="user-info">
+                                <img src={user.avatar} alt={user.name} />
+                                <span>{user.name}</span>
+                            </div> //in case that the user is logged
+                        ) : (
+                            <span>Para fazer um comentário, <button>Faça seu login</button>.</span> // In case that the user is not logged
+                        ) }
+                        <Button type="submit" disabled={!user}>Comentar</Button>
+                    </div>
+                </form>
+            </div>
+
+            <div className="question-list">
+                    {comments.map(comments =>{{/* just like for each */}
+                        return (
+                            <Comments
+                                key = {comments.id}
+                                content = {comments.content}
+                                author = {comments.author}
+                                isHighlighted = {comments.isHighlighted}
+                            >
+                                
+                                    <button
+                                    //className={`like-button ${question.hasLiked ? 'liked': ''}`}
+                                    className={`like-button ${comments.likeId ? 'liked': ''}`}
+                                    type="button"
+                                    aria-label="Marcar como gostei"
+                                    onClick={() => handleLikeComment(comments.id, comments.likeId)} //when using an onClicl you can't call the func like this 'handleLikeQuestion(question.id)'
+                                    >
+                                
+                                        { comments.likeCount > 0 && <span>{comments.likeCount}</span> } {/** it'll show just when there is a likeCount > 0 */}
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7 22H4C3.46957 22 2.96086 21.7893 2.58579 21.4142C2.21071 21.0391 2 20.5304 2 20V13C2 12.4696 2.21071 11.9609 2.58579 11.5858C2.96086 11.2107 3.46957 11 4 11H7M14 9V5C14 4.20435 13.6839 3.44129 13.1213 2.87868C12.5587 2.31607 11.7956 2 11 2L7 11V22H18.28C18.7623 22.0055 19.2304 21.8364 19.5979 21.524C19.9654 21.2116 20.2077 20.7769 20.28 20.3L21.66 11.3C21.7035 11.0134 21.6842 10.7207 21.6033 10.4423C21.5225 10.1638 21.3821 9.90629 21.1919 9.68751C21.0016 9.46873 20.7661 9.29393 20.5016 9.17522C20.2371 9.0565 19.9499 8.99672 19.66 9H14Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+
+                                    </button>
+
+                                    {evento?.autorID === user?.id ? (
+                                        <>
+                                            <button
+                                            type="button"
+                                            onClick={()=> handleDeleteComment(comments.id)}
+                                            >
+                                                <img src={deleteImg} alt="Remover Pergunta"/>
+                                            </button>
+
+                                            <button
+                                            type="button"
+                                            onClick={()=> handleHighlightComment(comments.id, comments.isHighlighted)}
+                                            >
+                                            <img src={checkImg} alt="Destacar pergunta"/>
+
+                                            </button>
+                                        </>
+                                    ):(
+                                        <></>
+                                    )}
+                                
+
+                            </Comments>
+                        );
+                    })}
+                </div>
 
             <Footer/>
         </div>
