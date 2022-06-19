@@ -31,6 +31,8 @@ export function EventoIndex(){
 
     const [ newComment, setNewComment ] = useState('');
 
+    const [ confirmMessage, setConfirmMessage ] = useState(evento?.confirmadosN+" - Confirmado(s)")
+
     async function handleEventCancelation() {
         await database.ref(`eventos/${eventID}`).update({
             canceled:'Y'
@@ -39,6 +41,7 @@ export function EventoIndex(){
     }
     
     async function handleNoEvent() {
+        setConfirmMessage(evento?.confirmadosN+" - Confirmado(s)")
         const eventRef = await database.ref(`eventos/${eventID}`).get(); //checking if the eventkey exists under eventos list in json; get returns all data from the event if exists
 
             if(!eventRef.exists()){
@@ -104,7 +107,8 @@ export function EventoIndex(){
 
 
 
-    async function handleContMe(){
+    async function handleContMe(event: FormEvent){
+        event.preventDefault();
 
         if(!user){
             throw new Error("Você deve estar logado para confirmar presença");
@@ -118,10 +122,8 @@ export function EventoIndex(){
 
         if(evento?.likeIDfromCurrentUser === undefined){
             await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
-            alert("Presença confirmada")
         }else{
             await database.ref(`/eventos/${params.id}/confirmados/${evento?.likeIDfromCurrentUser.id}`).remove()
-            alert("Presença removida")
         }
         
     }
@@ -150,14 +152,14 @@ export function EventoIndex(){
         <div onLoad={handleNoEvent}>
             <NavBar/>
 
-            <div className="card m-5 d-flex flex-column min-vh-100 p-4">
+            <div className="card m-5 d-flex flex-column p-4">
                 <header className='d-flex justify-content-center'>
-                    <h1>{evento?.titulo} - </h1>
+                    <h1>{evento?.titulo}</h1>
 
-                    {evento?.cancelado==='Y' ? (
-                        <h1 className='canceladoDiv'>Cancelado</h1>
+                    {evento?.cancelado ? (
+                        <h1 className='canceladoDiv'> - Cancelado</h1>
                     ):(
-                        <h1>{evento?.confirmadosN} Confirmado(s)</h1>
+                        <></>
                     )}
                     
                 </header>
@@ -182,41 +184,38 @@ export function EventoIndex(){
                             {evento?.presencial === true ?
                             (
                                 <div>
-                                    <h3>Estado: {evento.estado}</h3>
-                                    <h3>Cidade: {evento.cidade}</h3>
-                                    <h3>Bairro: {evento.bairro}</h3>
-                                    <h3>Rua: {evento.rua}</h3>
+                                    <h3>Local: {evento.estado}, {evento.cidade}, {evento.bairro}, {evento.rua}</h3>
                                 </div>
                             ):(<div></div>)}
                     </div>
                     
 
-                    <p className="opacity-50">Criado por: {evento?.autorNome}</p>
+                    <p className="opacity-50">Criado por: {evento?.author.authorName}</p>
 
                 </div>
 
                 { user ?  (
                     <div className='d-flex gap-4'>
-                        { user.id === evento?.autorID ? (
-                            evento?.cancelado === 'N' ? <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
-                            : <div></div>
+                        { user.id === evento?.author.authorId ? (
+                            evento?.cancelado === false ? <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
+                            : <></>
                         ):(
-                            <div> </div>
+                            <></>
                         )}
-                        <form onSubmit={handleContMe}>
-
                         
-                            {moment(evento?.dateE).isAfter() && evento?.cancelado === 'N' ?(
+                            {moment(evento?.dateE).isAfter() && evento?.cancelado === false ?(
                                  
                                     evento?.likeIDfromCurrentUser === undefined ? (
-                                    <Button type={'submit'}> Confirmar Presença</Button>
-                                    ):( <Button type={'submit'}> Remover Presença</Button>)
+                                        <Button onClick={handleContMe} type={'submit'}> Confirmar Presença</Button>
+                                    ):( 
+                                        <Button onClick={handleContMe} type={'submit'} onMouseEnter={() => setConfirmMessage("Remover Presença")} onMouseLeave={()=> setConfirmMessage(evento.confirmadosN+" - Confirmado(s)")}> {confirmMessage} </Button>
+                                    )
                                 
                                 
                             ):(
                                 <div></div>
                             )}
-                        </form>
+                        
                             <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
                             <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
                         </div>
@@ -274,7 +273,7 @@ export function EventoIndex(){
 
                                     </button>
 
-                                    {evento?.autorID === user?.id ? (
+                                    {evento?.author.authorId === user?.id ? (
                                         <>
                                             <button
                                             type="button"

@@ -12,8 +12,11 @@ import "../buscarEvento/buscarStyle.scss"
 
 type Evento = {
     id: string,
-    autorID: string,
-    autorNome: string,
+    author: {
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     categoria: string,
     dataInicio: string,
     dataFinal: string,
@@ -21,6 +24,8 @@ type Evento = {
     cancelado: string,
     estado: string,
     cidade: string,
+    bairro: string,
+    rua: string,
     url: string,
     confirmNumb: number
 }

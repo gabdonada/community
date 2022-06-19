@@ -12,13 +12,16 @@ import "./buscarStyle.scss"
 
 type Evento = {
     id: string,
-    autorID: string,
-    autorNome: string,
+    author:{
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     categoria: string,
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: string,
+    cancelado: boolean,
     estado: string,
     cidade: string,
     url: string,

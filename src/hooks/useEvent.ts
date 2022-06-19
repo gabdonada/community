@@ -6,14 +6,17 @@ import { useAuth } from "./useAuth";
 
 type EventType = {
     id: string,
-    autorID: string,
-    autorNome: string,
+    author:{
+        authorAvatar: string,
+        authorId: string,
+        authorName: string
+    },
     titulo: string,
     categoria: string,
     dateS: string,
     dateE: string,
     descricao: string,
-    cancelado: string,
+    cancelado: boolean,
     likeIDfromCurrentUser: Confirmados | undefined,
     confirmadosN: number,
     estado: string,
@@ -65,6 +68,7 @@ type Confirmados = {
     confirmedByUserAvatar: string
 }
 
+//used to return a specific event
 export function useEvent(eventID: string){
 
     const { user } = useAuth();
@@ -104,8 +108,7 @@ export function useEvent(eventID: string){
 
             const vari:EventType = {
                 id: databaseEvent.key,
-                autorID: databaseEvent.authorID,
-                autorNome: databaseEvent.authorName,
+                author: databaseEvent.author,
                 titulo: databaseEvent.title,
                 categoria: databaseEvent.category,
                 dateS: databaseEvent.startDate,

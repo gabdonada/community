@@ -58,17 +58,20 @@ export function CriarEvento(){
             alert("Você deve informar o link");
         }else{
 
-            const eventRef = database.ref('eventos'); //fiding eventos reference in DB.
+            const eventRef = database.ref('eventos'); //refering 'eventos' in DB.
 
             const firebaseEvent = await eventRef.push({
-                authorID: user?.id,
-                authorName: user.name,
+                author: {
+                    authorId: user?.id,
+                    authorName: user.name,
+                    authorAvatar: user.avatar 
+                },
                 title: titulo,
                 category: categoria,
                 startDate: dateS,
                 endDate: dateE,
                 description: descricao,
-                canceled: 'N',
+                canceled: false,
                 online: online,
                 presencial: presencial,
                 state: estado,
@@ -130,8 +133,8 @@ export function CriarEvento(){
 
                                 
                                 <label className="form-label mt-4">Localização</label>
-                                <div className="opacity-50"><p>Permita localização para auto preenchimento</p></div>
-
+                               {/** <div className="opacity-50"><p>Permita localização para auto preenchimento</p></div>*/} 
+                                <br />
                                     <input 
                                         type="checkbox" 
                                         className=""

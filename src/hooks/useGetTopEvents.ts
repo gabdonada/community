@@ -6,8 +6,11 @@ import moment from "moment";
 
 type FirebaseEventos = Record<string, {
     id: string,
-    authorID: string,
-    authorName: string,
+    author: {
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     category: string,
     startDate: string,
     endDate: string,
@@ -16,17 +19,13 @@ type FirebaseEventos = Record<string, {
     confirmados: object
 }>
 
-type ConfirmadosFirebase = Record<string, {
-    confirmedByUserID: string,
-    confirmedByUserName: string,
-    confirmedByUserAvatar: string
-}>
-
-
 type Evento = {
     id: string,
-    autorID: string,
-    autorNome: string,
+    author: {
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     categoria: string,
     dataInicio: string,
     dataFinal: string,
@@ -77,8 +76,7 @@ export function useGetTopEvents(quant: number){
             const parsedEventos = Object.entries(firebaseEvent).map(([key, value])=>{
                 return{
                     id: key,
-                    autorID: value.authorID,
-                    autorNome: value.authorName,
+                    author: value.author,
                     categoria: value.category,
                     dataInicio: value.startDate,
                     dataFinal: value.endDate,

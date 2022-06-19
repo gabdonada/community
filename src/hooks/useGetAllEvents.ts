@@ -2,39 +2,39 @@ import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
 import { useAuth } from "./useAuth";
 import moment from "moment";
+import { clearScreenDown } from "readline";
 
 
 type FirebaseEventos = Record<string, {
     id: string,
-    authorID: string,
-    authorName: string,
+    author:{
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     category: string,
     startDate: string,
     endDate: string,
     title: string,
-    canceled: string,
+    canceled: boolean,
     state: string,
     street: string,
     url: string,
     confirmados: object
 }>
 
-type ConfirmadosFirebase = Record<string, {
-    confirmedByUserID: string,
-    confirmedByUserName: string,
-    confirmedByUserAvatar: string
-}>
-
-
 type Evento = {
     id: string,
-    autorID: string,
-    autorNome: string,
+    author: {
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     categoria: string,
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: string,
+    cancelado: boolean,
     estado: string,
     cidade: string,
     url: string,
@@ -51,7 +51,7 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
     async function processFilters(results: Evento[]) {
         let takeToShare:Evento[] = []
         await results.forEach(element => {
-            if(moment(element.dataFinal).isAfter() && element.cancelado === "N" ){
+            if(moment(element.dataFinal).isAfter() && element.cancelado === false){
                 takeToShare.push(element)
             }
         });
@@ -64,7 +64,7 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
     useEffect(() =>{
         const eventRef = database.ref(`eventos`);
 
-        eventRef.once('value', evento => {
+        eventRef.on('value', evento => {
             //console.log(evento.val())
             const databaseEventos = evento.val();
 
@@ -73,8 +73,7 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
             const parsedEventos = Object.entries(firebaseEvent).map(([key, value])=>{
                 return{
                     id: key,
-                    autorID: value.authorID,
-                    autorNome: value.authorName,
+                    author: value.author,
                     categoria: value.category,
                     dataInicio: value.startDate,
                     dataFinal: value.endDate,
