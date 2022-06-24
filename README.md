@@ -3,11 +3,13 @@ This app was created to be a free app available for the community where everyone
 NGO are allowed.
 
 # How make it works locally
-You may run `npm start` the the project /
+- You may have Nodejs installed. 
+- In your local folder that contains the project, installs npm by typing "npm install"
+- You also will need to create a project in Realtime database on Google Cloud.
+- Create a .env.local file with the info that Google Cloud shared with you.
+- You may run `npm start` the the project /
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-You may create a .env.local file with your RealTime DB
 
 You can also take a look on the documentation based on UWE on community-docs repo
 
