@@ -34,10 +34,13 @@ export function EventoIndex(){
     const [ confirmMessage, setConfirmMessage ] = useState(evento?.confirmadosN+" - Confirmado(s)")
 
     async function handleEventCancelation() {
-        await database.ref(`eventos/${eventID}`).update({
-            canceled:'Y'
-        })
-        alert("Cancelado com sucesso")
+        let confirm = window.confirm("Clique em OK para cancelar");
+        if(confirm){
+            await database.ref(`eventos/${eventID}`).update({
+                canceled:'Y'
+            })
+            alert("Cancelado com sucesso")
+        }
     }
     
     async function handleNoEvent() {
@@ -193,37 +196,45 @@ export function EventoIndex(){
                     <p className="opacity-50">Criado por: <a href={`/Perfil/${evento?.author.authorId}`}>{evento?.author.authorName}</a></p>
 
                 </div>
-
-                { user ?  (
-                    <div className='d-flex gap-4'>
-                        { user.id === evento?.author.authorId ? (
-                            evento?.cancelado === false ? <div> <ButtonDanger onClick={handleEventCancelation}>Cancelar Evento</ButtonDanger></div>
-                            : <></>
-                        ):(
-                            <></>
-                        )}
-                        
+                
+                <div>
+                    { user ?  (
+                        <div className='d-flex align-items-center justify-content-between'>
                             {moment(evento?.dateE).isAfter() && evento?.cancelado === false ?(
-                                 
+                                
                                     evento?.likeIDfromCurrentUser === undefined ? (
                                         <Button onClick={handleContMe} type={'submit'}> Confirmar Presença</Button>
                                     ):( 
                                         <Button onClick={handleContMe} type={'submit'} onMouseEnter={() => setConfirmMessage("Remover Presença")} onMouseLeave={()=> setConfirmMessage(evento.confirmadosN+" - Confirmado(s)")}> {confirmMessage} </Button>
                                     )
-                                
-                                
                             ):(
-                                <div></div>
+                            <></>
                             )}
-                        
-                            <CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} />
-                            <Button onClick={handleDenounce}>Denunciar ou Relatar Problema</Button> {/**Atualizar funcionalidade */}
+                            <div className="dropdown">
+                                <button className="btn btn-light border border-3 rounded-circle border-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ...
+                                </button>
+                                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a className="dropdown-item" href="#"><CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} /></a></li>
+                                    <li><a className="dropdown-item" href="#" onClick={handleDenounce}>Denunciar ou Relatar Problema</a></li>
+                                    { user.id === evento?.author.authorId ? (
+                                        evento?.cancelado === false ?  <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Evento</a></li>
+                                        : <></>
+                                    ):(<></>)}
+                                    
+                                </ul>
+                            </div>
+                            
+                            
+                                
                         </div>
-                    
-                    
-                ) : (
-                    <span>Para confirmar prenença, <button>faça seu login</button>.</span>
-                )}
+                        
+                        
+                    ) : (
+                        <span>Para confirmar prenença, <button>faça seu login</button>.</span>
+                    )}
+                </div>
+                
             </div>
 
             <div>
