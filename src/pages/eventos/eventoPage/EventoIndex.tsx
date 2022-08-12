@@ -311,7 +311,6 @@ export function EventoIndex(){
                     })}
                 </div>
 
-            <Footer/>
         </div>
     )
 }

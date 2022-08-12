@@ -16,7 +16,13 @@ a {
 
 @media only screen and (min-width: 768px) {
     .sizingt{
-        height: 33rem;
+        height: 30rem;
+
+        button{
+            position: absolute;
+            bottom:0;
+            margin-bottom: 1rem;
+        }
     }
 
     .mtop{

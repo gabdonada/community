@@ -252,8 +252,6 @@ export function GerenciarEventos(){
                 
                 </div>
             </div>
-
-            <Footer/>
         </div>
     )
     

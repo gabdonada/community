@@ -51,8 +51,7 @@ export function CriarFaq(){
         <div>
             <NavBar/>
             
-            <div className="card m-5 d-flex flex-column min-vh-100">
-                    <div className="card-body">
+            <div className="card m-5 d-flex flex-column">
                         <div className="m-3">
                             <form onSubmit={handleFAQCreation}>
                                 <label className="form-label">Título do FAQ</label>
@@ -86,6 +85,7 @@ export function CriarFaq(){
                                         <option value="Contato">Contato</option>
                                         <option value="Denuncia">Denúncia</option>
                                         <option value="Duvida">Duvida</option>
+                                        <option value="Outros">Outros</option>
                                         <option value="Problema">Relatar Problema</option>
                                         <option value="Sugestao">Sugestão</option>
                                     </select>
@@ -102,10 +102,7 @@ export function CriarFaq(){
                                 <Button type='submit'>Enviar</Button>
                             </form>
                         </div>
-                    </div>
                 </div>
-
-            <Footer/>
         </div>
     )
 }

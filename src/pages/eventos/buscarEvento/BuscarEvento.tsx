@@ -249,7 +249,6 @@ export function BuscarEvento(){
                 </div>
             </div>
 
-            <Footer/>
         </div>
     )
     

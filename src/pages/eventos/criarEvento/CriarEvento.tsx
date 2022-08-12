@@ -210,7 +210,6 @@ export function CriarEvento(){
                             
                             </form>
                 </div>
-            <Footer/>
         </div>
     )
 }

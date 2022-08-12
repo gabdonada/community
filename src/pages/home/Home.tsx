@@ -32,8 +32,8 @@ export function Home(){
                 <div className="container">
                     <div className="row mt-4 mb-4 gap">
                         <div className="col-md">
-                            <div className="card">
-                                <div className="sizingt d-flex card-body flex-column align-items-center sizingt">
+                            <div className="card sizingt">
+                                <div className="sizingt d-flex card-body flex-column align-items-center">
                                     <h1>TOP Eventos</h1>
                                     {loading ?
                                     (   
@@ -41,9 +41,7 @@ export function Home(){
                                     ):(
                                         topEventsSelected.map((eventoInfo)=>
                                             moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
-                                            (
-                                                console.log()
-                                            ):(
+                                            (<></>):(
                                                 <BlueCard props={eventoInfo}/>
                                             )
                                         )
@@ -59,14 +57,8 @@ export function Home(){
                                         ):(
                                             loading === false ?
                                                 (
-                                                    <form onSubmit={openTopEvents}>
-                                                        <div className="mt-3">
-                                                            <Button type="submit">Ver Mais</Button>
-                                                        </div>
-                                                    </form>
-                                                ):(
-                                                    <div></div>
-                                                )       
+                                                    <Button onClick={openTopEvents} >Ver Mais</Button>
+                                                ):(<></>)       
                                         )
                                     }
                                 </div>
@@ -103,7 +95,6 @@ export function Home(){
                     </div>
                 </div>
 
-            <Footer/>
         </div>
 
     )
