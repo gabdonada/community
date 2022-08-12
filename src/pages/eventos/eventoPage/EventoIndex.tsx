@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyCode } from "../../../components/copyCodeIcon/copyCode";
 import { Footer } from "../../../components/footer/Footer";
@@ -189,8 +189,8 @@ export function EventoIndex(){
                             ):(<div></div>)}
                     </div>
                     
-
-                    <p className="opacity-50">Criado por: {evento?.author.authorName}</p>
+                    
+                    <p className="opacity-50">Criado por: <a href={`/Perfil/${evento?.author.authorId}`}>{evento?.author.authorName}</a></p>
 
                 </div>
 

@@ -10,12 +10,16 @@ import { BlueCard } from "../../components/blueCards/BlueCard";
 
 import './homestyle.scss'
 import { useGetTopEvents } from "../../hooks/useGetTopEvents";
+import { useGetUserProfile } from "../../hooks/user/useGetUserProfile";
+import { useAuth } from "../../hooks/useAuth";
 
 
 
 
 export function Home(){
+    const { user } = useAuth()
     const { loading, topEventsSelected } = useGetTopEvents(4);
+    const { loadingUser, userDef} = useGetUserProfile(user?.id);
 
     function openTopEvents(event: FormEvent) {
         
@@ -33,7 +37,7 @@ export function Home(){
                                     <h1>TOP Eventos</h1>
                                     {loading ?
                                     (   
-                                        <h1>Loading...</h1>
+                                        <h1>Carregando...</h1>
                                     ):(
                                         topEventsSelected.map((eventoInfo)=>
                                             moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
@@ -71,8 +75,20 @@ export function Home(){
 
                         <div className="col-md">
                             <div className="card">
-                                <div className="sizingt card-body d-flex justify-content-center">
+                                <div className="sizingt card-body d-flex flex-column align-items-center justify-content-center">
                                     <h1>Deu Match</h1>
+                                    {loadingUser === true ? (
+                                        <h1>Carregando...</h1>
+                                    ):(
+                                        userDef !== undefined ? 
+                                        (
+                                            <div></div>
+                                        ):(
+                                            <div className="matchRegister">
+                                                <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>

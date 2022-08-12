@@ -1,10 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useGetUserProfile } from '../../hooks/user/useGetUserProfile';
 import { Button } from '../button/Button';
 
 import menuIcon from './img/menuIcon.svg'
+import logo from '../../assets/images/logo.png'
+import './navBar.scss'
 
 export function NavBar(){
     const { user, singIngWithGoogle, singOutWithGoogle } = useAuth();
@@ -12,16 +16,12 @@ export function NavBar(){
     const navigate = useNavigate();
 
     async function handleAuthGoogle(){
-        
         if(!user){
-            await singIngWithGoogle();
-            
+            singIngWithGoogle();
         }
-        
-        navigate('/home');      
-        
     }
 
+    
     async function handleSingOutGoogle() {
         if(user){
             await singOutWithGoogle();
@@ -36,7 +36,7 @@ export function NavBar(){
             
             {user ? (
                 <div className="container-fluid">
-                    <a className="navbar-brand text-white" href="/home">LOGO</a>
+                    <a className="navbar-brand text-white" href="/home"> <img src={logo} className="img-fluid logo" alt="Quero Ajudar logo" /> </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-light"><img src={menuIcon} alt="" /></span>
                     </button>
@@ -81,7 +81,7 @@ export function NavBar(){
                                         </a>
                                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li><a className="dropdown-item" href={'/Perfil/'+user.id}>Visualizar Perfil</a></li>
-                                            <li><a className="dropdown-item" href="#">Personalizar Perfil</a></li>
+                                            <li><a className="dropdown-item" href={'/Perfil/Editar/'+user.id}>Personalizar Perfil</a></li>
                                             <li><hr className="dropdown-divider"/></li>
                                             <li><a className="dropdown-item" href="#" onClick={handleSingOutGoogle}>Logout</a></li>
                                         </ul>
@@ -93,7 +93,7 @@ export function NavBar(){
                 </div>
             ):(
                 <div className="container-fluid">
-                    <a className="navbar-brand text-white" href="/">LOGO</a>
+                    <a className="navbar-brand text-white" href="/"><img src={logo} className="img-fluid logo" alt="Quero Ajudar logo" /></a>
                     
                     
                     <Button onClick={handleAuthGoogle}>Faça Login</Button>

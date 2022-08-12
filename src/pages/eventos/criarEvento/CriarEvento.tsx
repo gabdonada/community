@@ -90,9 +90,7 @@ export function CriarEvento(){
     return(
         <div>
             <NavBar/>
-                <div className="card m-5 d-flex flex-column min-vh-100">
-                    <div className="card-body">
-                        <div className="m-3">
+                <div className="card m-5 d-flex flex-column">
                             <form onSubmit={handleCreateEvent}>
                                 <label className="form-label">Título do Evento</label>
                                     <input 
@@ -104,15 +102,15 @@ export function CriarEvento(){
                                 
                                 <label className="form-label mt-4">Categoria</label>
                                     <select 
+                                        required
                                         className="form-select"
                                         onChange={event => setCategoria(event.target.value)}
                                         value={categoria}>
                                         <option value="">Selecione...</option>
-                                        <option value="Acadêmico | Educacional">Acadêmico | Educacional</option>
-                                        <option value="Entretenimento">Entretenimento</option>
-                                        <option value="Esportivo">Esportivo</option>
-                                        <option value="Religioso">Religioso</option>
-                                        <option value="Social">Social</option>
+                                        <option value="Ação social racional com relação a fins">Ação social racional com relação a fins</option>
+                                        <option value="Ação social racional com relação a valores">Ação social racional com relação a valores</option>
+                                        <option value="Ação social afetiva">Ação social afetiva</option>
+                                        <option value="Ação social tradicional">Ação social tradicional</option>
                                     </select>
 
                                 <label className="form-label mt-4">Selecione Data e Horario de Início</label>
@@ -211,8 +209,6 @@ export function CriarEvento(){
                                 </div>
                             
                             </form>
-                        </div>
-                    </div>
                 </div>
             <Footer/>
         </div>

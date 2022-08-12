@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { AuthContextProvider } from './contexts/AuthContext'
 
-import { Login } from "./pages/login/Login";
+//import { Login } from "./pages/login/Login";
 import { Home } from './pages/home/Home';
 import { CriarEvento } from './pages/eventos/criarEvento/CriarEvento';
 import { CriarFaq } from './pages/faq/criarFaq/CriarFaq';
@@ -14,10 +14,7 @@ import { GerenciarEventos } from './pages/eventos/gerenciarEventos/GerenciarEven
 import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
 import { VisualizarProfile } from './pages/userProfile/visualizarProfile/VisualizarProfile';
 import { Start } from './pages/start/Start';
-
-
-
-
+import { EditUserProfile } from './pages/userProfile/visualizarProfile/EditUserProfile';
 
 
 function App() {
@@ -42,6 +39,7 @@ function App() {
   
 
           <Route path="/Perfil/:id" element={<VisualizarProfile/>}/>
+          <Route path="/Perfil/Editar/:id" element={<EditUserProfile/>}/>
 
           <Route path='*' element={<PageNotFount/>} />
           

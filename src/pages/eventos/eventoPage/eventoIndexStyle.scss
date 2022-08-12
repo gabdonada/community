@@ -19,6 +19,15 @@
     flex: 0;
 }
 
+.matchRegister{
+    display: flex;
+    gap: 3px;
+
+    >a{
+        color: #279152;
+    }
+}
+
 form{
 
     padding: 3rem;

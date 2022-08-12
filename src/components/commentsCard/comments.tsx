@@ -4,6 +4,7 @@ import './commentStyle.scss'
 type CommentProps = {
     content: string;
     author: {
+        userId: string,
         name: string;
         avatar: string;
     };
@@ -26,7 +27,7 @@ export function Comments({
             <footer>
                 <div className="user-info">
                     <img src={author.avatar} alt={author.avatar} />
-                    <span>{author.name}</span>
+                    <span><a href={`/Perfil/${author.userId}`}>{author.name}</a></span>
                 </div>
                 <div>
                     {children}
