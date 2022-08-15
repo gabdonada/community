@@ -12,6 +12,7 @@ import './homestyle.scss'
 import { useGetTopEvents } from "../../hooks/useGetTopEvents";
 import { useGetUserProfile } from "../../hooks/user/useGetUserProfile";
 import { useAuth } from "../../hooks/useAuth";
+import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
 
 
 
@@ -20,9 +21,14 @@ export function Home(){
     const { user } = useAuth()
     const { loading, topEventsSelected } = useGetTopEvents(4);
     const { loadingUser, userDef} = useGetUserProfile(user?.id);
+    const {eventsAgenda, loadingAgenda} = useGetMyAgenda();
 
     function openTopEvents(event: FormEvent) {
         
+    }
+
+    function openMyAgenda(event: FormEvent){
+
     }
 
     return(
@@ -74,7 +80,7 @@ export function Home(){
                                     ):(
                                         userDef !== undefined ? 
                                         (
-                                            <div></div>
+                                            <></>
                                         ):(
                                             <div className="matchRegister">
                                                 <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
@@ -86,9 +92,25 @@ export function Home(){
                         </div>
 
                         <div className="col-md">
-                            <div className="card">
-                                <div className="sizingt card-body d-flex justify-content-center">
-                                    <h1> Sua Agenda</h1>
+                            <div className="card sizingt">
+                                <div className="sizingt d-flex card-body flex-column align-items-center">
+                                    <h1>Sua Agenda</h1>
+                                    {loadingAgenda ? (
+                                        <h1>Carregando...</h1>
+                                    ):(
+                                        eventsAgenda !== undefined ? (                                            
+                                            eventsAgenda.map((agendaResult)=>
+                                                <BlueCard props={agendaResult}/>
+                                            )
+                                        ):(<></>)
+                                    )}
+                                    {eventsAgenda.length <= 0 ? (
+                                        <div className="matchRegister">
+                                            <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
+                                        </div>
+                                    ):(
+                                        <Button onClick={openMyAgenda}>Ver Mais</Button>
+                                    )}
                                 </div>
                             </div>
                         </div>
