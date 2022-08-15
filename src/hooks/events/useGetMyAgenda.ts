@@ -68,7 +68,7 @@ export function useGetMyAgenda(){
                 if(moment(element.dataFinal).isAfter()){
                     if(element.confirmados!==undefined){
                         await element.confirmados.forEach(confir =>{
-                            if(confir.confirmedByUserID === user?.id){
+                            if(confir.confirmedByUserID === user?.id || element.author.authorId === user?.id){
                                 takeToShare.push(element);
                                 console.log(element)
                             }
