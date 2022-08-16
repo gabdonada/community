@@ -1,0 +1,36 @@
+
+@media only screen and (max-width: 768px) {
+    .confirm{
+        display: none;
+    }
+
+    .wid-date{
+        width: 40%;
+    }
+
+    .wid-title{
+        width: 60%;
+    }
+
+    .wid-confir{
+        width: 0%;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+    .confirm{
+        display: block;
+    }
+
+    .wid-date{
+        width: 20%;
+    }
+
+    .wid-title{
+        width: 50%;
+    }
+
+    .wid-confir{
+        width: 35%;
+    }
+}

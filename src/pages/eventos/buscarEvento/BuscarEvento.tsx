@@ -201,9 +201,11 @@ export function BuscarEvento(){
                                         onChange={event => setCategoria(event.target.value)}
                                         value={categoria}
                                         >
-                                        
                                         <option value="">Selecione</option>
-                                        <option value="Religioso">Religioso</option>
+                                        <option value="Ação social racional com relação a fins">Ação social racional com relação a fins</option>
+                                        <option value="Ação social racional com relação a valores">Ação social racional com relação a valores</option>
+                                        <option value="Ação social afetiva">Ação social afetiva</option>
+                                        <option value="Ação social tradicional">Ação social tradicional</option>
                                     </select>
                                     
                                 </div>
@@ -234,7 +236,7 @@ export function BuscarEvento(){
                         
                     </div>
                 </div>
-                <div className="d-flex flex-column card-body ">
+                <div className="d-flex flex-column">
                     {eventValues.length > 0 ?
                     (
                         eventValues.map((eventoInfo)=>
