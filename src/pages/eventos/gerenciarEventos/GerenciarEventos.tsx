@@ -238,7 +238,7 @@ export function GerenciarEventos(){
                         
                     </div>
                 </div>
-                <div className="d-flex flex-column card-body ">
+                <div className="d-flex flex-column">
                     {eventValues.length > 0 ?
                     (
                         eventValues.map((eventoInfo)=>
