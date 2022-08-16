@@ -19,7 +19,7 @@ type FirebaseEventos = Record<string, {
     district: string,
     street: string,
     url: string,
-    canceled: string,
+    canceled: boolean,
     confirmados: Record<string, {
         id: string,
         confirmedByUserAvatar: string,
@@ -44,7 +44,7 @@ type Evento = {
     bairro: string,
     rua: string,
     url: string,
-    cancelado: string,
+    cancelado: boolean,
     confirmados: Array<{
         id: string,
         confirmedByUserAvatar: string,
@@ -65,15 +65,18 @@ export function useGetMyAgenda(){
         if(result !== undefined){
             await result.forEach(async element => {
                 // element.author.authorId === user?.id
-                if(moment(element.dataFinal).isAfter()){
-                    if(element.confirmados!==undefined){
-                        await element.confirmados.forEach(confir =>{
-                            if(confir.confirmedByUserID === user?.id || element.author.authorId === user?.id){
-                                takeToShare.push(element);
-                                console.log(element)
-                            }
-                        })
-                    }  
+                if(moment(element.dataFinal).isAfter() && !element.cancelado){
+                    if(element.author.authorId === user?.id){
+                        takeToShare.push(element);
+                    }else{
+                        if(element.confirmados!==undefined){
+                            await element.confirmados.forEach(confir =>{
+                                if(confir.confirmedByUserID === user?.id){
+                                    takeToShare.push(element);
+                                }
+                            })
+                        }  
+                    }
                 }          
             });
         }
