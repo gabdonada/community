@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/button/Button';
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
 import { database } from '../../../services/firebase';
@@ -31,7 +30,7 @@ export function CriarFaq(){
         }else if(!user){
             alert("Você deve estar autenticado para enviar mensagens via FAQ")
         }else{
-            const faqRef = database.ref(`faq/${user?.id}`); //fiding FAQ reference in DB.
+            const faqRef = database.ref(`faq/${user?.id}/`); //fiding FAQ reference in DB.
 
             const firebaseFaq = await faqRef.push({
                 authorId: user.id,

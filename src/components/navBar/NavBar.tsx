@@ -82,6 +82,7 @@ export function NavBar(){
                                         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li><a className="dropdown-item" href={'/Perfil/'+user.id}>Visualizar Perfil</a></li>
                                             <li><a className="dropdown-item" href={'/Perfil/Editar/'+user.id}>Personalizar Perfil</a></li>
+                                            <li><a className="dropdown-item" href={'/FAQ/listar'}>FAQ</a></li>
                                             <li><hr className="dropdown-divider"/></li>
                                             <li><a className="dropdown-item" href="#" onClick={handleSingOutGoogle}>Logout</a></li>
                                         </ul>

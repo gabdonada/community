@@ -6,7 +6,6 @@ export function Start(){
         <div className="d-flex flex-column min-vh-100">
             <NavBar/>
                 <h1>Site em construção</h1>
-            <Footer/>
         </div>
     )
 }

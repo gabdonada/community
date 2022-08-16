@@ -15,6 +15,7 @@ import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
 import { VisualizarProfile } from './pages/userProfile/visualizarProfile/VisualizarProfile';
 import { Start } from './pages/start/Start';
 import { EditUserProfile } from './pages/userProfile/visualizarProfile/EditUserProfile';
+import { ListFaq } from './pages/faq/listarFaq/ListFaq';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
 
           <Route path="/Evento/NaoLocalizado" element={<NoEvent/>}/>
 
+          <Route path="/FAQ/listar" element={<ListFaq/>}/>
           <Route path="/FAQ/Novo" element={<CriarFaq/>}/>
           <Route path="/FAQ/:id" element={<VisualizaFaq/>}/>
   
