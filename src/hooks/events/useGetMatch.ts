@@ -1,7 +1,8 @@
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { database } from "../../services/firebase";
-import { useAuth } from "../useAuth";
+import moment from "moment"
+import { useEffect, useState } from "react"
+import { database } from "../../services/firebase"
+import { useAuth } from "../useAuth"
+import { useGetUserProfile } from "../user/useGetUserProfile"
 
 type FirebaseEventos = Record<string, {
     id: string,
@@ -19,13 +20,7 @@ type FirebaseEventos = Record<string, {
     district: string,
     street: string,
     url: string,
-    canceled: boolean,
-    confirmados: Record<string, {
-        id: string,
-        confirmedByUserAvatar: string,
-        confirmedByUserID: string,
-        confirmedByUserName: string
-    }>
+    canceled: boolean
 }>
 
 type Evento = {
@@ -44,47 +39,39 @@ type Evento = {
     bairro: string,
     rua: string,
     url: string,
-    cancelado: boolean,
-    confirmados: Array<{
-        id: string,
-        confirmedByUserAvatar: string,
-        confirmedByUserID: string,
-        confirmedByUserName: string
-    }> | undefined
+    cancelado: boolean
 }
 
-export function useGetMyAgenda(){
+export function useGetMatch(){
 
     const { user } = useAuth();
-    const [ eventsAgenda, setEventsAgenda ] = useState<Evento[]>([])
-    const [ loadingAgenda, segLoadingAgenda ] = useState(true)
-
+    const { loadingUser, userDef} = useGetUserProfile(user?.id);
+    const [ eventsMatch, setEventsMatch ] = useState<Evento[]>([])
+    const [ loadingMatch, segLoadingMatch ] = useState(true)
 
     async function handleFilterProcess(result: Evento[]) {
         let takeToShare:Evento[] = []
         if(result !== undefined){
             await result.forEach(async element => {
-                if(moment(element.dataFinal).isAfter() && !element.cancelado){
-                    if(element.author.authorId === user?.id){
+                if(moment(element.dataFinal).isAfter() && !element.cancelado && element.author.authorId !== user?.id){
+                    if(element.categoria === "Ação social afetiva" && userDef?.userInterests.acAfetiva){
                         takeToShare.push(element);
-                    }else{
-                        if(element.confirmados!==undefined){
-                            await element.confirmados.forEach(confir =>{
-                                if(confir.confirmedByUserID === user?.id){
-                                    takeToShare.push(element);
-                                }
-                            })
-                        }  
+                    }else if(element.categoria === "Ação social racional com relação a fins" && userDef?.userInterests.acRelacaoFins){
+                        takeToShare.push(element);
+                    }else if(element.categoria === "Ação social racional com relação a valores" && userDef?.userInterests.acRelacaoValores){
+                        takeToShare.push(element);
+                    }else if(element.categoria === "Ação social tradicional" && userDef?.userInterests.acTradi){
+                        takeToShare.push(element);
                     }
                 }          
             });
         }
-        await setEventsAgenda(takeToShare)
-        await segLoadingAgenda(false)
+        await setEventsMatch(takeToShare)
+        await segLoadingMatch(false)
     }
-
+    
     useEffect(()=>{
-        if(user != undefined){
+        if(user != undefined && !loadingUser){
             const eventRef = database.ref(`eventos`);
             
             
@@ -106,20 +93,12 @@ export function useGetMyAgenda(){
                         rua: value.street,
                         url: value.url,
                         cancelado: value.canceled,
-                        confirmados: Object.entries(value.confirmados ?? {}).map(([key, value])=>{
-                            return{
-                                id: key,
-                                confirmedByUserAvatar: value.confirmedByUserAvatar,
-                                confirmedByUserID: value.confirmedByUserID,
-                                confirmedByUserName: value.confirmedByUserName
-                            }
-                        })
                     }
                 })
                 handleFilterProcess(parsedEvents);
             })
         }
-    },[user])
+    },[user, userDef])
 
-    return{eventsAgenda, loadingAgenda}
+    return{loadingMatch, eventsMatch}
 }

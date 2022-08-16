@@ -151,8 +151,6 @@ export function EditUserProfile(){
                     </div>
                 )}
             </div>
-            
-            <Footer/>
         </div>
     )
 }

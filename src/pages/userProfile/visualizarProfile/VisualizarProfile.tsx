@@ -125,10 +125,6 @@ export function VisualizarProfile(){
                 )
             )}
             
-            
-
-
-            <Footer/>
         </div>
     )
 }

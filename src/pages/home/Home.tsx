@@ -13,6 +13,7 @@ import { useGetTopEvents } from "../../hooks/useGetTopEvents";
 import { useGetUserProfile } from "../../hooks/user/useGetUserProfile";
 import { useAuth } from "../../hooks/useAuth";
 import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
+import { useGetMatch } from "../../hooks/events/useGetMatch";
 
 
 
@@ -21,13 +22,18 @@ export function Home(){
     const { user } = useAuth()
     const { loading, topEventsSelected } = useGetTopEvents(4);
     const { loadingUser, userDef} = useGetUserProfile(user?.id);
-    const {eventsAgenda, loadingAgenda} = useGetMyAgenda();
+    const { loadingMatch, eventsMatch} = useGetMatch();
+    const { eventsAgenda, loadingAgenda } = useGetMyAgenda();
 
     function openTopEvents(event: FormEvent) {
         
     }
 
     function openMyAgenda(event: FormEvent){
+
+    }
+
+    function openMatchs(event: FormEvent){
 
     }
 
@@ -57,7 +63,9 @@ export function Home(){
                                         (  
                                             <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
                                                 <h3>Não há TOP eventos</h3>
-                                                <p>Busque por <a href="/Evento/Buscar">Eventos</a></p>
+                                                <div className="matchRegister">
+                                                    <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>busque</a><p>por eventos</p>
+                                                </div>
                                             </div>
                                             
                                         ):(
@@ -72,20 +80,24 @@ export function Home(){
                         </div>
 
                         <div className="col-md">
-                            <div className="card">
+                            <div className="sizingt card">
                                 <div className="sizingt card-body d-flex flex-column align-items-center justify-content-center">
                                     <h1>Deu Match</h1>
-                                    {loadingUser === true ? (
+                                    {loadingMatch ? (
                                         <h1>Carregando...</h1>
                                     ):(
-                                        userDef !== undefined ? 
-                                        (
-                                            <></>
-                                        ):(
-                                            <div className="matchRegister">
-                                                <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
-                                            </div>
-                                        )
+                                        eventsMatch !== undefined ? (                                            
+                                            eventsMatch.map((matchResult)=>
+                                                <BlueCard props={matchResult}/>
+                                            )
+                                        ):(<></>)
+                                    )}
+                                    {eventsMatch.length <= 0 ? (
+                                        <div className="matchRegister">
+                                            <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
+                                        </div>
+                                    ):(
+                                        <Button onClick={openMatchs}>Ver Mais</Button>
                                     )}
                                 </div>
                             </div>
