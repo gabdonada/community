@@ -152,7 +152,7 @@ export function EventoIndex(){
 
     
     return(
-        <div onLoad={handleNoEvent}>
+        <div onLoad={handleNoEvent} className="eventIndex">
             <NavBar/>
 
             <div className="card m-5 d-flex flex-column p-4">

@@ -63,7 +63,7 @@ export function Login(){
 
 
                     <div className="separator"> ou </div>
-                    <form onSubmit={handleJoinEvent}>
+                    <form onSubmit={handleJoinEvent} className="d-flex">
                         <input 
                             type="text" 
                             placeholder='Digite o Código do Evento'
@@ -73,7 +73,7 @@ export function Login(){
                         <button type="submit"><strong>&rarr;</strong></button>
                     </form>
 
-                    <form action="">
+                    <form action="" className="d-flex">
                         <input 
                             type="text" 
                             placeholder='Digite o Código da Entidade/Pessoa'

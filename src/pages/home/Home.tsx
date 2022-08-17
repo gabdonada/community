@@ -81,7 +81,7 @@ export function Home(){
 
                         <div className="col-md">
                             <div className="sizingt card">
-                                <div className="sizingt card-body d-flex flex-column align-items-center justify-content-center">
+                                <div className="sizingt card-body d-flex flex-column align-items-center">
                                     <h1>Deu Match</h1>
                                     {loadingMatch ? (
                                         <h1>Carregando...</h1>
@@ -93,7 +93,7 @@ export function Home(){
                                         ):(<></>)
                                     )}
                                     {eventsMatch.length <= 0 ? (
-                                        <div className="matchRegister">
+                                        <div className="d-flex matchRegister gap-1">
                                             <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
                                         </div>
                                     ):(
