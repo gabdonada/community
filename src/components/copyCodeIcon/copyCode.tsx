@@ -11,8 +11,8 @@ export function CopyCode(props: Code){
     }
 
     return(
-        <Button onClick={copyCodeToClipboard}>
-            <span>{props.textBut}: {props.id}</span>
-        </Button>
+        // <Button onClick={copyCodeToClipboard}>
+            <span onClick={copyCodeToClipboard}>{props.textBut}: {props.id}</span>
+        // </Button>
     )
 }

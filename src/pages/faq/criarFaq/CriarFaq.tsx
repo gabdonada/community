@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/button/Button';
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
 import { database } from '../../../services/firebase';
@@ -31,7 +30,7 @@ export function CriarFaq(){
         }else if(!user){
             alert("Você deve estar autenticado para enviar mensagens via FAQ")
         }else{
-            const faqRef = database.ref(`faq/${user?.id}`); //fiding FAQ reference in DB.
+            const faqRef = database.ref(`faq/${user?.id}/`); //fiding FAQ reference in DB.
 
             const firebaseFaq = await faqRef.push({
                 authorId: user.id,
@@ -51,8 +50,7 @@ export function CriarFaq(){
         <div>
             <NavBar/>
             
-            <div className="card m-5 d-flex flex-column min-vh-100">
-                    <div className="card-body">
+            <div className="card m-5 d-flex flex-column">
                         <div className="m-3">
                             <form onSubmit={handleFAQCreation}>
                                 <label className="form-label">Título do FAQ</label>
@@ -86,6 +84,7 @@ export function CriarFaq(){
                                         <option value="Contato">Contato</option>
                                         <option value="Denuncia">Denúncia</option>
                                         <option value="Duvida">Duvida</option>
+                                        <option value="Outros">Outros</option>
                                         <option value="Problema">Relatar Problema</option>
                                         <option value="Sugestao">Sugestão</option>
                                     </select>
@@ -102,10 +101,7 @@ export function CriarFaq(){
                                 <Button type='submit'>Enviar</Button>
                             </form>
                         </div>
-                    </div>
                 </div>
-
-            <Footer/>
         </div>
     )
 }

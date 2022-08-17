@@ -7,11 +7,30 @@
     gap: 1rem;
 }
 
+a {
+    text-decoration: none;
+    color: #002838;
+}
+
+
+.container{
+    padding: 0;
+}
 
 
 @media only screen and (min-width: 768px) {
     .sizingt{
-        height: 21rem;
+        height: 30rem;
+
+        button{
+            position: absolute;
+            bottom:0;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .mtop{
+        margin-top: 100%;
     }
 }
 

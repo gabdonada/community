@@ -1,36 +1,175 @@
 import moment from "moment";
-import { useEffect, useState } from "react"
+import { FormEvent, useState } from "react";
 import { EventCard } from "../../../components/EventCard/EventCard";
 import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
-import { useAuth } from "../../../hooks/useAuth";
-import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
-import { database } from "../../../services/firebase"
+import { useGetMyEvents } from "../../../hooks/events/useGetMyEvents";
+import { Button } from "../../../components/button/Button";
 
+import filter from '../../../assets/images/filter.svg'
 
-type FirebaseEventos = Record<string, {
-    id: string,
-    category: string,
-    startDate: string,
-    endDate: string,
-    title: string,
-    canceled: string
-}>
+import "../buscarEvento/buscarStyle.scss"
 
 type Evento = {
     id: string,
+    author: {
+        authorId: string,
+        authorName: string,
+        authorAvatar: string
+    },
     categoria: string,
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: string
+    cancelado: string,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    rua: string,
+    url: string,
+    confirmNumb: number
 }
-
 export function GerenciarEventos(){
-    const {user} = useAuth();
+    const [ dateFilter, setDateFilter ] = useState(moment().format("DD/MM/YYYY"))
+    const [ categoria, setCategoria ] = useState("");
+    const [ estado, setEstado ] = useState("");
+    const [ cidade, setCidade ] = useState("");
+    const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues} = useGetAllEvents();
+    const {eventValues, setEventValues, loading} = useGetMyEvents(dateFilter, categoria, estado, cidade, cancelado );
 
+    async function filterData(event: FormEvent) {
+        event.preventDefault();
+
+        let takeToShare:Evento[] = []
+
+        if(dateFilter.length > 0){
+            var dateObj = new Date(dateFilter);
+            var momentObj = moment(dateObj);
+            var momentString = momentObj.format('DD/MM/YYYY')
+            var compareDate = moment(momentString, 'DD/MM/YYYY');
+
+            await eventValues.forEach(element =>{
+                if(compareDate.isBetween(element.dataInicio, element.dataFinal)){
+                    takeToShare.push(element)
+                }    
+            });
+        }
+
+        //In case there is a date filter
+        if(takeToShare.length > 0){
+            //in case that there is a category selected
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(estado !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.estado.includes(estado)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+
+            if(cidade !=""){
+                let takingDataFiltered:Evento[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.cidade.includes(cidade)){
+                        takingDataFiltered.push(element)
+                    }
+                })
+
+                if(takingDataFiltered.length > 0){
+                    takeToShare = takingDataFiltered
+                }
+            }
+        }else{
+            if(categoria!=""){
+                let takingDataFiltered:Evento[] = []
+                await eventValues.forEach(element=>{
+                    if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(takeToShare.length > 0){
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await takeToShare.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+
+            }else{
+
+                if(estado !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.estado.includes(estado)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+    
+                if(cidade !=""){
+                    let takingDataFiltered:Evento[] = []
+                    await eventValues.forEach(element=>{
+                        if(element.cidade.includes(cidade)){
+                            takingDataFiltered.push(element)
+                        }
+                    })
+    
+                    if(takingDataFiltered.length > 0){
+                        takeToShare = takingDataFiltered
+                    }
+                }
+            }
+            
+        }
+
+        if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
+            setEventValues(takeToShare)
+        }else{
+            alert("Nenhum filtro foi selecionado")
+        }
+        
+    }
 
     return(
         <div>
@@ -41,31 +180,78 @@ export function GerenciarEventos(){
                         {eventValues.length} Evento(s)
                     </div>
                     <div className="">
-                        <p>Filtro</p>
+                        <button className="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img className="w-75" src={filter} alt="filtrar eventos" /></button>
+
+                        <div className="offcanvas offcanvas-end" tabIndex={-1} id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                            
+                        <div className="offcanvas-header">
+                            <h5 id="offcanvasRightLabel">Selecione Filtros</h5>
+                            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                            <div className="offcanvas-body d-flex flex-column justify-content-center gap-4">
+                                <div className="d-flex align-items-center justify-content-center spgap">
+                                    <h3>Data</h3>
+                                    <input 
+                                        type="date"
+                                        className="form-control"
+                                        onChange={event => setDateFilter(event.target.value)}
+                                        value={dateFilter} />
+                                </div>
+                                <div className="d-flex align-items-center justify-content-center gap-2">
+                                    <h3>Categoria</h3>
+                                    <select 
+                                        className="form-select"
+                                        onChange={event => setCategoria(event.target.value)}
+                                        value={categoria}
+                                        >
+                                        
+                                        <option value="">Selecione</option>
+                                        <option value="Religioso">Religioso</option>
+                                    </select>
+                                    
+                                </div>
+                                
+                                <div className="d-flex align-items-center justify-content-center sptgap">
+                                    <h3>Estado</h3>
+                                    <input 
+                                        type="text"
+                                        className="form-control"
+                                        onChange={event => setEstado(event.target.value)}
+                                        value={estado} />
+                                </div>
+                                <div className="d-flex align-items-center justify-content-center sptgap">
+                                    <h3>Cidade</h3>
+                                    <input 
+                                        type="text"
+                                        className="form-control"
+                                        onChange={event => setCidade(event.target.value)}
+                                        value={cidade} />
+                                </div>
+                                <div className="d-flex align-items-center justify-content-center gap-5">
+                                    <form onSubmit={filterData}>
+                                        <Button type="submit" data-bs-dismiss="offcanvas">Filtrar</Button>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
-                <div className="d-flex flex-column card-body ">
+                <div className="d-flex flex-column">
                     {eventValues.length > 0 ?
                     (
                         eventValues.map((eventoInfo)=>
-                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ?(
-                                    <div></div>
-                                ):(
-                                    eventoInfo.autorID === user?.id ? <EventCard props={eventoInfo}/>
-                                    : <div></div>
-                                )
-                            
-                        )
+                            <EventCard props={eventoInfo}/>
+                        )                           
                     ) : (
                         <div>
                             Não há eventos
                         </div>
                     )}
-                    
+                
                 </div>
             </div>
-
-            <Footer/>
         </div>
     )
     

@@ -1,66 +1,57 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useAuth } from "../../../hooks/useAuth";
 import { database } from "../../../services/firebase";
 
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
+import { useGetFaqByID } from "../../../hooks/faq/useGetFaqByID";
+import { Button } from "../../../components/button/Button";
 
 type FaqParams = {
     id: string;
 }
 
 export function VisualizaFaq(){
-
-    const { user } = useAuth();
-
     const params = useParams<FaqParams>();
+    const faqid = params.id;
+    const { user } = useAuth();
+    const { faq } = useGetFaqByID(faqid)
 
-    const [ titulo, setTitulo ] = useState('');
-    const [ nome, setNome ] = useState('');
-    const [ status, setStatus ] = useState('');
-    const [ email, setEmail ] = useState('')
-    const [ categoria, setCategoria ] = useState('')
-    const [ descricao, setDescricao ] = useState('')
-
-    
-    useEffect(()=>{
-
-        // if(!user){
-        //     throw new Error("Você precisa estar autenticado para visualizar seu FAQ");   
-        // }
-        
-        const faqRef = database.ref(`faq/${user?.id}/${params.id}`)
-
-        faqRef.once('value', faq=>{
-            const faqValue = faq.val();
-
-            setTitulo(faqValue.title)
-            setEmail(faqValue.email)
-            setCategoria(faqValue.category)
-            setDescricao(faqValue.description)
-            setNome(faqValue.name)
-            setStatus(faqValue.status)
-        })
-    },[params.id])
 
     async function handleCloseCase() {
-        const faqRef = database.ref(`faq/${user?.id}/${params.id}`)
+        const faqRef = await database.ref(`faq/${user?.id}/${params.id}`).update({
+            status:'Finalizado'
+        })
+        alert("Finalizado com sucesso")
     }
 
     return(
         <div>
             <NavBar/>
-            <div className="card m-5 d-flex flex-column min-vh-100">
-                <h4>Nome: {nome}</h4>
-                <h4>Email: {email}</h4>
-                <h4>Categoria: {categoria}</h4>
-                <h4>Status: {status}</h4>
-                <h4>Titulo: {titulo}</h4>
-                <h4>Descrição: {descricao}</h4>
+            <div className="card m-5 p-5 d-flex flex-column">
+                { faq !== undefined ? (
+                    <div>
+                        <header className='d-flex justify-content-center mb-4'>
+                        <h1>{faq.titulo}</h1>
+                        </header>
+                        <input type="text" disabled value={faq.nome} className="form-control mb-3"/>
+                        <input type="text" disabled value={faq.email} className="form-control mb-3"/>
+                        <input type="text" disabled value={faq.categoria} className="form-control mb-3"/>
+                        <input type="text" disabled value={faq.status} className="form-control mb-3"/>
+                        <textarea disabled className="form-control mb-4">{faq.descricao}</textarea>
+
+                    </div>
+                    
+                ):(
+                    <header className='d-flex justify-content-center'>
+                        <h1>FAQ não encontrado</h1>
+                    </header>
+                )}
+                
+                { user?.userEmail === faq?.email ? (
+                    <Button onClick={handleCloseCase}>Finalizar FAQ</Button>
+                ):(<></>)}
             </div>
-            <Footer/>
         </div>
     )
 }

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
-import { useAuth } from "./useAuth";
 import moment from "moment";
-import { clearScreenDown } from "readline";
+
 
 
 type FirebaseEventos = Record<string, {
     id: string,
-    author:{
+    author: {
         authorId: string,
         authorName: string,
         authorAvatar: string
@@ -16,10 +15,7 @@ type FirebaseEventos = Record<string, {
     startDate: string,
     endDate: string,
     title: string,
-    canceled: boolean,
-    state: string,
-    street: string,
-    url: string,
+    canceled: string,
     confirmados: object
 }>
 
@@ -34,37 +30,44 @@ type Evento = {
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: boolean,
-    estado: string,
-    cidade: string,
-    url: string,
+    cancelado: string,
     confirmNumb: number
 }
 
-//eventType is the guy that will tell us if we should return all events or just mine
-export function useGetAllEvents(date: string, categoria: string, estado: string, cidade: string, cancelado: boolean){
-    const [eventValues, setEventValues] = useState<Evento[]>([]);
-    const [ loading, segLoading ] = useState(true)
+export function useGetTopEvents(quant: number){
+    
+    const [topEvents, setTopEvents] = useState<Evento[]>([]);
+    const [topEventsSelected, setTopEventsSelected] = useState<Evento[]>([]);
 
-    const { user } = useAuth();
+    const [loading, setLoading] = useState(true)
+    
+    async function organizeEvents(eventValues: Evento[]){
+        //organazing events by confirmed users
 
-    async function processFilters(results: Evento[]) {
-        let takeToShare:Evento[] = []
-        await results.forEach(element => {
-            if(moment(element.dataFinal).isAfter() && element.cancelado === false){
-                takeToShare.push(element)
+        let topAllEvents:Evento[] = <Evento[]>[];
+
+        await eventValues.forEach(element =>{
+            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter()){
+                topAllEvents.push(element)
             }
-        });
+        })
 
-        await setEventValues(takeToShare)
-        await segLoading(false)
+        await topAllEvents.sort((a,b) => b.confirmNumb - a.confirmNumb)
+        await setTopEvents(topAllEvents)
+
+        //organazing events by quantity selected
+        let topSelected = topAllEvents;
+        await topSelected.sort((a,b) => b.confirmNumb - a.confirmNumb).slice(0,3);
+        await setTopEventsSelected(topSelected);
+        
+        await setLoading(false)
+        
     }
-
 
     useEffect(() =>{
         const eventRef = database.ref(`eventos`);
 
-        eventRef.on('value', evento => {
+        eventRef.once('value', evento => {
             //console.log(evento.val())
             const databaseEventos = evento.val();
 
@@ -79,23 +82,17 @@ export function useGetAllEvents(date: string, categoria: string, estado: string,
                     dataFinal: value.endDate,
                     titulo: value.title,
                     cancelado: value.canceled,
-                    estado: value.state,
-                    cidade: value.street,
-                    url: value.url,
                     confirmNumb: Object.entries(value.confirmados ?? {}).length
                 }
             }) 
             
             //console.log(parsedEventos)
-            processFilters(parsedEventos);
-
+            
+            organizeEvents(parsedEventos);
             
         })
 
-        
+    }, [quant])
 
-    }, [user, date, categoria, estado, cidade, cancelado])
-
-
-    return{eventValues, setEventValues, loading}
+    return{topEvents, topEventsSelected, loading}
 }
