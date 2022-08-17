@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "eventos": {
+      ".read": "auth!=null",
+      ".write": "auth!=null",
+      "$eventoId": {
+        ".read": true,
+        ".write": "auth!=null && data.child('authorId').val() == auth.id",
+        "presenca": {
+          ".read": true,
+          ".write": "auth!=null && (!data.exists() || data.child('authorId').val() == auth.id)"
+        }
+      }
+    },
+    "faq": {
+      ".write": true,
+      ".read": "auth!=null && (data.child('authorId').val() == auth.id || auth.id=='123')"
+    },
+    "users":{
+      ".write":"auth!=null",
+      ".read": "auth!=null"
+    }
+  }
+}
