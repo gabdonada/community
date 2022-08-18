@@ -23,7 +23,7 @@ type EventParms = {
 
 export function EventoIndex(){
 
-    const { user } = useAuth()
+    const { user, singIngWithGoogle } = useAuth()
     const params = useParams<EventParms>();
 
     const eventID = params.id;
@@ -231,7 +231,7 @@ export function EventoIndex(){
                         
                         
                     ) : (
-                        <span>Para confirmar prenença, <button>faça seu login</button>.</span>
+                        <span>Para confirmar prenença, <button onClick={singIngWithGoogle}>faça seu login</button>.</span>
                     )}
                 </div>
                 
@@ -252,7 +252,7 @@ export function EventoIndex(){
                                 <span>{user.name}</span>
                             </div> //in case that the user is logged
                         ) : (
-                            <span>Para fazer um comentário, <button>Faça seu login</button>.</span> // In case that the user is not logged
+                            <span>Para fazer um comentário, <button onClick={singIngWithGoogle}>Faça seu login</button>.</span> // In case that the user is not logged
                         ) }
                         <Button type="submit" disabled={!user}>Comentar</Button>
                     </div>

@@ -46,9 +46,6 @@ export function NavBar(){
                                 <a className="nav-link active text-white text-uppercase" aria-current="page" href="/home">Home</a>
                             </li>
                             <ul className="navbar-nav me-auto  mb-2 mb-lg-0 ">
-                                <li className="nav-item">
-                                    <a className="nav-link text-white text-uppercase" href="#">Usuários</a>
-                                </li>
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle text-white text-uppercase" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Eventos
