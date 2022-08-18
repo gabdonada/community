@@ -117,7 +117,7 @@ export function Home(){
                                         ):(<></>)
                                     )}
                                     {eventsAgenda.length <= 0 ? (
-                                        <div className="matchRegister">
+                                        <div className="matchRegister d-flex gap-1">
                                             <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
                                         </div>
                                     ):(

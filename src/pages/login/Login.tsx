@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 
 import illustrationImg from './images/illustration.svg'
-import appleLogo from './images/googleLogo.svg'
+import googleLogo from './images/googleLogo.svg'
 import './styleLogin.scss'
 import { FormEvent, useState } from 'react'
 import { database } from '../../services/firebase'
+import logo from '../../assets/images/logoLogin.png'
 
 export function Login(){
 
@@ -54,10 +55,10 @@ export function Login(){
             </aside>
             <main>
                 <div className="main-content">
-                    <h1>LOGO VEM AQUI</h1>
+                    <img src={logo} alt="Quero Ajudar Logo" />
 
                     <button className="googleButton" onClick={handleAuthGoogle}>
-                        <img src={appleLogo} alt="Clique para acessar usando conta Google" />
+                        <img src={googleLogo} alt="Clique para acessar usando conta Google" />
                         Acesse com o Google
                     </button>
 
