@@ -15,7 +15,7 @@ type FirebaseEventos = Record<string, {
     startDate: string,
     endDate: string,
     title: string,
-    canceled: string,
+    canceled: boolean,
     confirmados: object
 }>
 
@@ -30,7 +30,7 @@ type Evento = {
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: string,
+    cancelado: boolean,
     confirmNumb: number
 }
 
@@ -47,7 +47,7 @@ export function useGetTopEvents(quant: number){
         let topAllEvents:Evento[] = <Evento[]>[];
 
         await eventValues.forEach(element =>{
-            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter()){
+            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter() && element.cancelado === false){
                 topAllEvents.push(element)
             }
         })

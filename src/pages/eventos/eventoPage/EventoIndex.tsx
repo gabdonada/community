@@ -155,23 +155,23 @@ export function EventoIndex(){
         <div onLoad={handleNoEvent} className="eventIndex">
             <NavBar/>
 
-            <div className="card m-5 d-flex flex-column p-4">
+            <div className="card d-flex flex-column cardElement">
                 <header className='d-flex justify-content-center'>
                     <h1>{evento?.titulo}</h1>
 
                     {evento?.cancelado ? (
-                        <h1 className='canceladoDiv'> - Cancelado</h1>
+                        <h1 className='canceladoDiv'> Cancelado</h1>
                     ):(
                         <></>
                     )}
                     
                 </header>
 
-                <div className="card-body d-flex flex-column gap-3">
+                <div className="d-flex flex-column gap-3 mt-4">
                     
                     <h3>Categoria: {evento?.categoria}</h3>
-                    <h3>Data de Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Data Final: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Fim: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
                     <h3>Descrição: {evento?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
                     
                     <div>

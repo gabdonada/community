@@ -90,7 +90,7 @@ export function CriarEvento(){
     return(
         <div>
             <NavBar/>
-                <div className="card m-5 d-flex flex-column">
+                <div className="m-5 d-flex flex-column">
                             <form onSubmit={handleCreateEvent}>
                                 <label className="form-label">Título do Evento</label>
                                     <input 

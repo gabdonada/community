@@ -52,27 +52,20 @@ export function Home(){
                                         <h1>Carregando...</h1>
                                     ):(
                                         topEventsSelected.map((eventoInfo)=>
-                                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
-                                            (<></>):(
-                                                <BlueCard props={eventoInfo}/>
-                                            )
+                                            <BlueCard props={eventoInfo}/>
                                         )
                                     )}
 
-                                    {topEventsSelected.length <= 0 && loading===false?
-                                        (  
+                                    {topEventsSelected.length <= 0 && !loading ? (  
                                             <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
                                                 <h3>Não há TOP eventos</h3>
-                                                <div className="matchRegister">
+                                                <div className="matchRegister d-flex gap-1">
                                                     <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>busque</a><p>por eventos</p>
                                                 </div>
                                             </div>
                                             
                                         ):(
-                                            loading === false ?
-                                                (
-                                                    <Button onClick={openTopEvents} >Ver Mais</Button>
-                                                ):(<></>)       
+                                            <Button onClick={openTopEvents} >Ver Mais</Button>
                                         )
                                     }
                                 </div>
