@@ -161,6 +161,10 @@ export function GerenciarEventos(){
                 }
             }
             
+            let t = document.getElementById('closeModalFilter')
+            await t?.click();           
+
+            
         }
 
         if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
@@ -174,7 +178,7 @@ export function GerenciarEventos(){
     return(
         <div>
             <NavBar/>
-            <div className="m-5 min-vh-100 "> 
+            <div className="m-2 min-vh-100 "> 
                 <div className="d-flex m-3 w-100 justify-content-between">
                     <div className="rounded-pill p-3" style={{color: "white", backgroundColor:"#002838"}}>
                         {eventValues.length} Evento(s)
@@ -186,7 +190,7 @@ export function GerenciarEventos(){
                             
                         <div className="offcanvas-header">
                             <h5 id="offcanvasRightLabel">Selecione Filtros</h5>
-                            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" id="closeModalFilter"></button>
                         </div>
                             <div className="offcanvas-body d-flex flex-column justify-content-center gap-4">
                                 <div className="d-flex align-items-center justify-content-center spgap">
@@ -206,7 +210,10 @@ export function GerenciarEventos(){
                                         >
                                         
                                         <option value="">Selecione</option>
-                                        <option value="Religioso">Religioso</option>
+                                        <option value="Ação social racional com relação a fins">Ação social racional com relação a fins</option>
+                                        <option value="Ação social racional com relação a valores">Ação social racional com relação a valores</option>
+                                        <option value="Ação social afetiva">Ação social afetiva</option>
+                                        <option value="Ação social tradicional">Ação social tradicional</option>
                                     </select>
                                     
                                 </div>

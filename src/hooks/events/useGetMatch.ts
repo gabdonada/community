@@ -17,10 +17,11 @@ type FirebaseEventos = Record<string, {
     title: string,
     state: string,
     city: string,
-    district: string,
-    street: string,
+
     url: string,
     canceled: boolean
+    confirmados: object
+
 }>
 
 type Evento = {
@@ -36,20 +37,22 @@ type Evento = {
     titulo: string,
     estado: string,
     cidade: string,
-    bairro: string,
-    rua: string,
     url: string,
     cancelado: boolean
+    confirmNumb: number
+
 }
 
-export function useGetMatch(){
+export function useGetMatch(date: string, categoria: string, estado: string, cidade: string, cancelado: boolean){
 
     const { user } = useAuth();
     const { loadingUser, userDef} = useGetUserProfile(user?.id);
     const [ eventsMatch, setEventsMatch ] = useState<Evento[]>([])
-    const [ loadingMatch, segLoadingMatch ] = useState(true)
+    const [ eventsMatchThree, setEventsMatchThree ] = useState<Evento[]>([])
+    const [ loadingMatch, segLoadingMatch ] = useState(true);
 
     async function handleFilterProcess(result: Evento[]) {
+
         let takeToShare:Evento[] = []
         if(result !== undefined){
             await result.forEach(async element => {
@@ -67,6 +70,7 @@ export function useGetMatch(){
             });
         }
         await setEventsMatch(takeToShare)
+        await setEventsMatchThree( await eventsMatch.sort((a,b) => b.confirmNumb - a.confirmNumb).slice(0,3));
         await segLoadingMatch(false)
     }
     
@@ -89,16 +93,15 @@ export function useGetMatch(){
                         titulo: value.title,
                         estado: value.state,
                         cidade: value.city,
-                        bairro: value.district,
-                        rua: value.street,
                         url: value.url,
                         cancelado: value.canceled,
+                        confirmNumb: Object.entries(value.confirmados ?? {}).length
                     }
                 })
                 handleFilterProcess(parsedEvents);
             })
         }
-    },[user, userDef])
+    },[user, userDef, date, categoria, estado, cidade, cancelado])
 
-    return{loadingMatch, eventsMatch}
+    return{loadingMatch, setEventsMatch, eventsMatch, eventsMatchThree}
 }

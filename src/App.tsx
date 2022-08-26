@@ -11,10 +11,12 @@ import { VisualizaFaq } from './pages/faq/visualizarFaq/VisualizaFaq';
 import { PageNotFount } from './pages/errors/404/pageNotFount';
 import { BuscarEvento } from './pages/eventos/buscarEvento/BuscarEvento';
 import { GerenciarEventos } from './pages/eventos/gerenciarEventos/GerenciarEventos';
+import { TopEvents } from './pages/eventos/topEvents/TopEvents';
 import { NoEvent } from './pages/errors/eventoNoExist/NoEvent';
 import { VisualizarProfile } from './pages/userProfile/visualizarProfile/VisualizarProfile';
 import { EditUserProfile } from './pages/userProfile/visualizarProfile/EditUserProfile';
 import { ListFaq } from './pages/faq/listarFaq/ListFaq';
+import { DeuMatch } from './pages/eventos/deuMatch/DeuMatch';
 
 
 function App() {
@@ -29,7 +31,10 @@ function App() {
           <Route path="/Evento/Novo" element={<CriarEvento/>}/>
           <Route path="/Evento/:id" element={<EventoIndex/>}/>
           <Route path="/Evento/Buscar" element={<BuscarEvento/>}/>
+          <Route path="/Evento/TopEventos" element={<TopEvents/>}/>
+          <Route path="/Evento/Match" element={<DeuMatch/>}/>
           <Route path="/Evento/Gerenciar" element={<GerenciarEventos/>}/>
+
 
           <Route path="/Evento/NaoLocalizado" element={<NoEvent/>}/>
 

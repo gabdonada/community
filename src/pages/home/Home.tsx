@@ -1,31 +1,35 @@
-import { Footer } from "../../components/footer/Footer";
-import { NavBar } from "../../components/navBar/NavBar";
+import { useGetTopEvents } from "../../hooks/useGetTopEvents";
+import { useAuth } from "../../hooks/useAuth";
+import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
+import { useGetMatch } from "../../hooks/events/useGetMatch";
+import { useNavigate } from 'react-router-dom'
 import { FormEvent } from "react";
-import { Button } from "../../components/button/Button";
+import moment from "moment";
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import moment from "moment";
+import { NavBar } from "../../components/navBar/NavBar";
+import { Button } from "../../components/button/Button";
 import { BlueCard } from "../../components/blueCards/BlueCard";
 
 
 import './homestyle.scss'
-import { useGetTopEvents } from "../../hooks/useGetTopEvents";
-import { useGetUserProfile } from "../../hooks/user/useGetUserProfile";
-import { useAuth } from "../../hooks/useAuth";
-import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
-import { useGetMatch } from "../../hooks/events/useGetMatch";
 
 
 
 
 export function Home(){
     const { user } = useAuth()
-    const { loading, topEventsSelected } = useGetTopEvents(4);
-    const { loadingUser, userDef} = useGetUserProfile(user?.id);
-    const { loadingMatch, eventsMatch} = useGetMatch();
+    const { loading, topEventsSelected } = useGetTopEvents(4, "","","","",false);
+    const { loadingMatch, eventsMatchThree} = useGetMatch("","","","",false);
     const { eventsAgenda, loadingAgenda } = useGetMyAgenda();
 
+    const navigate = useNavigate(); //use to navigate to other pages
+
+
     function openTopEvents(event: FormEvent) {
+        event.preventDefault();
+        navigate('/Evento/TopEventos');
         
     }
 
@@ -34,7 +38,8 @@ export function Home(){
     }
 
     function openMatchs(event: FormEvent){
-
+        event.preventDefault();
+        navigate('/Evento/Match');
     }
 
     return(
@@ -79,13 +84,13 @@ export function Home(){
                                     {loadingMatch ? (
                                         <h1>Carregando...</h1>
                                     ):(
-                                        eventsMatch !== undefined ? (                                            
-                                            eventsMatch.map((matchResult)=>
+                                        eventsMatchThree !== undefined ? (                                            
+                                            eventsMatchThree.map((matchResult)=>
                                                 <BlueCard props={matchResult}/>
                                             )
                                         ):(<></>)
                                     )}
-                                    {eventsMatch.length <= 0 ? (
+                                    {eventsMatchThree.length <= 0 ? (
                                         <div className="d-flex matchRegister gap-1">
                                             <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
                                         </div>

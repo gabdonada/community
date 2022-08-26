@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { FormEvent, useState } from "react";
 import { useGetUserProfile } from "../../../hooks/user/useGetUserProfile";
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { Button } from '../../../components/button/Button';
 import { useAuth } from '../../../hooks/useAuth';
@@ -21,35 +20,15 @@ export function EditUserProfile(){
     const { user } = useAuth()
     const { loadingUser, userDef } = useGetUserProfile(userID);
 
-    const [ description, setDescription ] = useState("")
-    const [ phone, setPhone ] = useState("")
-    const [ title, setTitle ] = useState("")
-    const [ city, setCity ] = useState("")
+    const [ description, setDescription ] = useState(userDef?.userDescription || "")
+    const [ phone, setPhone ] = useState(userDef?.userPhone)
+    const [ title, setTitle ] = useState(userDef?.userTitle)
+    const [ city, setCity ] = useState(userDef?.userCity)
 
-    const [ acRelacaoFins, setAcRelacaoFins ] = useState<boolean>(false)
-    const [ acRelacaoValores, setAcRelacaoValores ] = useState<boolean>(false)
-    const [ acAfetiva, setAcAfetiva ] = useState<boolean>(false)
-    const [ acTradi, setAcTradi ] = useState<boolean>(false)
-
-
-
-    async function load() {
-        await loadWait();
-    }
-
-    async function loadWait() {
-        if(userDef !== undefined){
-            await setDescription(userDef.userDescription)
-            await setPhone(userDef.userPhone)
-            await setTitle(userDef.userTitle)
-            await setCity(userDef.userCity)
-
-            await setAcRelacaoFins(userDef.userInterests.acRelacaoFins)
-            await setAcRelacaoValores(userDef.userInterests.acRelacaoValores)
-            await setAcAfetiva(userDef.userInterests.acAfetiva)
-            await setAcTradi(userDef.userInterests.acTradi)
-        }
-    }
+    const [ acRelacaoFins, setAcRelacaoFins ] = useState<boolean>(userDef?.userInterests.acRelacaoFins || false)
+    const [ acRelacaoValores, setAcRelacaoValores ] = useState<boolean>(userDef?.userInterests.acRelacaoValores || false)
+    const [ acAfetiva, setAcAfetiva ] = useState<boolean>(userDef?.userInterests.acAfetiva || false)
+    const [ acTradi, setAcTradi ] = useState<boolean>(userDef?.userInterests.acTradi || false)
 
     async function handleUserPreferences(event: FormEvent) {
         event.preventDefault();
@@ -81,14 +60,14 @@ export function EditUserProfile(){
 
 
     return(
-        <div onLoad={load}>
+        <div>
             <NavBar/>
 
             <div>
                 { loadingUser ? (
                     <h1>Carregando ...</h1>
                 ):(
-                    <div className="card m-4 d-flex flex-column ">
+                    <div className="card m-2 p-3 d-flex flex-column ">
                         <form onSubmit={handleUserPreferences}>
                             <label className="form-label">Título</label>
                             <input 
