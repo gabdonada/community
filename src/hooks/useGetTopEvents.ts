@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
 import moment from "moment";
+import { useAuth } from "./useAuth";
 
 
 
 type FirebaseEventos = Record<string, {
     id: string,
-    author: {
+    author:{
         authorId: string,
         authorName: string,
         authorAvatar: string
@@ -15,7 +16,10 @@ type FirebaseEventos = Record<string, {
     startDate: string,
     endDate: string,
     title: string,
-    canceled: string,
+    canceled: boolean,
+    state: string,
+    city: string,
+    url: string,
     confirmados: object
 }>
 
@@ -30,11 +34,16 @@ type Evento = {
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: string,
+    cancelado: boolean,
+    estado: string,
+    cidade: string,
+    url: string,
     confirmNumb: number
 }
 
-export function useGetTopEvents(quant: number){
+export function useGetTopEvents(quant: number, date: string, categoria: string, estado: string, cidade: string, cancelado: boolean){
+
+    const { user } = useAuth();
     
     const [topEvents, setTopEvents] = useState<Evento[]>([]);
     const [topEventsSelected, setTopEventsSelected] = useState<Evento[]>([]);
@@ -45,9 +54,10 @@ export function useGetTopEvents(quant: number){
         //organazing events by confirmed users
 
         let topAllEvents:Evento[] = <Evento[]>[];
+        
 
         await eventValues.forEach(element =>{
-            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter()){
+            if(element.confirmNumb > 0 && moment(element.dataFinal).isAfter() && element.cancelado === false){
                 topAllEvents.push(element)
             }
         })
@@ -82,6 +92,9 @@ export function useGetTopEvents(quant: number){
                     dataFinal: value.endDate,
                     titulo: value.title,
                     cancelado: value.canceled,
+                    estado: value.state,
+                    cidade: value.city,
+                    url: value.url,
                     confirmNumb: Object.entries(value.confirmados ?? {}).length
                 }
             }) 
@@ -92,7 +105,7 @@ export function useGetTopEvents(quant: number){
             
         })
 
-    }, [quant])
+    }, [quant, user, date, categoria, estado, cidade, cancelado])
 
-    return{topEvents, topEventsSelected, loading}
+    return{topEvents, setTopEvents, topEventsSelected, loading}
 }

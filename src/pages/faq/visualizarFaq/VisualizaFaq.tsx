@@ -28,7 +28,7 @@ export function VisualizaFaq(){
     return(
         <div>
             <NavBar/>
-            <div className="card m-5 p-5 d-flex flex-column">
+            <div className="card m-4 p-4 d-flex flex-column">
                 { faq !== undefined ? (
                     <div>
                         <header className='d-flex justify-content-center mb-4'>

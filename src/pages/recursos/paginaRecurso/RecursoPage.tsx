@@ -1,51 +1,46 @@
 import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyCode } from "../../../components/copyCodeIcon/copyCode";
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from '../../../hooks/useAuth';
 import { database } from '../../../services/firebase';
 import moment from 'moment';
 import { Button } from '../../../components/button/Button';
-import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { Comments } from '../../../components/commentsCard/comments';
-import { useEvent } from '../../../hooks/useEvent';
 import { navigate } from '@reach/router';
 
 import deleteImg from '../../../assets/images/deleteImg.svg'
 import checkImg from '../../../assets/images/check.svg'
 
 import './eventoIndexStyle.scss'
+import { useGetRecurso } from '../../../hooks/recursos/useGetRecurso';
 
 type EventParms = {
     id: string;
 }
 
-export function EventoIndex(){
+export function RecursoPage(){
 
     const { user, singIngWithGoogle } = useAuth()
     const params = useParams<EventParms>();
 
-    const eventID = params.id;
-    const { evento, comments } = useEvent(eventID || "");
+    const recursoId = params.id;
+    const { recurso, comments } = useGetRecurso(recursoId || "");
 
     const [ newComment, setNewComment ] = useState('');
-
-    const [ confirmMessage, setConfirmMessage ] = useState(evento?.confirmadosN+" - Confirmado(s)")
 
     async function handleEventCancelation() {
         let confirm = window.confirm("Clique em OK para cancelar");
         if(confirm){
-            await database.ref(`eventos/${eventID}`).update({
+            await database.ref(`recursos/${recursoId}`).update({
                 canceled:'Y'
             })
             alert("Cancelado com sucesso")
         }
     }
     
-    async function handleNoEvent() {
-        setConfirmMessage(evento?.confirmadosN+" - Confirmado(s)")
-        const eventRef = await database.ref(`eventos/${eventID}`).get(); //checking if the eventkey exists under eventos list in json; get returns all data from the event if exists
+    async function handleNoRecurso() {
+        const eventRef = await database.ref(`recursos/${recursoId}`).get(); //checking if the eventkey exists under recursos list in json; get returns all data from the event if exists
 
             if(!eventRef.exists()){
                 navigate('/Evento/NaoLocalizado')
@@ -74,16 +69,16 @@ export function EventoIndex(){
             isHighlighted: false
         };
 
-        await database.ref(`eventos/${eventID}/comentarios`).push(comment);
+        await database.ref(`recursos/${recursoId}/comentarios`).push(comment);
 
         setNewComment('');
     }
     
     async function handleLikeComment(coomentId: string, likeId: string | undefined) {
         if(likeId){
-            await database.ref(`eventos/${eventID}/comentarios/${coomentId}/likes/${likeId}`).remove();
+            await database.ref(`recursos/${recursoId}/comentarios/${coomentId}/likes/${likeId}`).remove();
         }else{
-            await database.ref(`eventos/${eventID}/comentarios/${coomentId}/likes`).push({
+            await database.ref(`recursos/${recursoId}/comentarios/${coomentId}/likes`).push({
                 authorId: user?.id
             })
         }
@@ -98,52 +93,29 @@ export function EventoIndex(){
             authorId: user?.id,
             name: user?.name,
             status: "Aberto",
-            title: "Denuncia Evento - "+evento?.titulo+" - ID "+params.id,
+            title: "Denuncia Recurso - "+recurso?.titulo+" - ID "+params.id,
             email: user?.userEmail,
             category: "Denuncia",
-            description: "Denúncia do Evento '"+evento?.titulo+"' ID do evento: "+params.id 
+            description: "Denúncia do Recurso '"+recurso?.titulo+"' ID do Recurso: "+params.id 
         });
 
         alert("Denúncia criada com sucesso.")
     }
 
 
-
-
-    async function handleContMe(event: FormEvent){
-        event.preventDefault();
-
-        if(!user){
-            throw new Error("Você deve estar logado para confirmar presença");
-        }
-
-        const userConfirmation = {
-            confirmedByUserID: user.id,
-            confirmedByUserName: user.name,
-            confirmedByUserAvatar: user.avatar
-        }
-
-        if(evento?.likeIDfromCurrentUser === undefined){
-            await database.ref(`/eventos/${params.id}/confirmados`).push(userConfirmation)
-        }else{
-            await database.ref(`/eventos/${params.id}/confirmados/${evento?.likeIDfromCurrentUser.id}`).remove()
-        }
-        
-    }
-
     async function handleDeleteComment(commentId: string) {
         if(window.confirm('Você deseja excluir este comentário?')){ //confirm returns a boolean 
-            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).remove();
+            await database.ref(`recursos/${recursoId}/comentarios/${commentId}`).remove();
         }
     }
 
     async function handleHighlightComment(commentId: string, highlightStatus: boolean) {
         if(highlightStatus === false){
-            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).update({
+            await database.ref(`recursos/${recursoId}/comentarios/${commentId}`).update({
                 isHighlighted: true
             }); 
         }else{
-            await database.ref(`eventos/${eventID}/comentarios/${commentId}`).update({
+            await database.ref(`recursos/${recursoId}/comentarios/${commentId}`).update({
                 isHighlighted: false
             }); 
         }
@@ -152,14 +124,14 @@ export function EventoIndex(){
 
     
     return(
-        <div onLoad={handleNoEvent} className="eventIndex">
+        <div onLoad={handleNoRecurso} className="eventIndex">
             <NavBar/>
 
             <div className="card d-flex flex-column cardElement">
                 <header className='d-flex justify-content-center'>
-                    <h1>{evento?.titulo}</h1>
+                    <h1>{recurso?.titulo}</h1>
 
-                    {evento?.cancelado ? (
+                    {recurso?.cancelado ? (
                         <h1 className='canceladoDiv'> Cancelado</h1>
                     ):(
                         <></>
@@ -169,47 +141,39 @@ export function EventoIndex(){
 
                 <div className="d-flex flex-column gap-3 mt-4">
                     
-                    <h3>Categoria: {evento?.categoria}</h3>
-                    <h3>Inicio: {moment(evento?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Fim: {moment(evento?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
-                    <h3>Descrição: {evento?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
+                    <h3>Categoria: {recurso?.categoria}</h3>
+                    <h3>Tipo: {recurso?.tipo}</h3>
+                    <h3>Inicio: {moment(recurso?.dateS).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Fim: {moment(recurso?.dateE).format("DD-MM-YYYY HH:mm:ss") }</h3>
+                    <h3>Descrição: {recurso?.descricao.split("\n").map(line=><div>{line}</div>)} </h3>
                     
                     <div>
                         <h3>Onde? </h3>
-                            {evento?.online === true ?
+                            {recurso?.online === true ?
                             (
                                 <div>
-                                    <h3> Link Online: <a href={evento.url}>{evento.url}</a></h3>
+                                    <h3> Link Online: <a href={recurso.url}>{recurso.url}</a></h3>
                                     
                                 </div>
                             ):(<div></div>)}
 
-                            {evento?.presencial === true ?
+                            {recurso?.presencial === true ?
                             (
                                 <div>
-                                    <h3>Local: {evento.estado}, {evento.cidade}, {evento.bairro}, {evento.rua}</h3>
+                                    <h3>Local: {recurso.estado}, {recurso.cidade}, {recurso.bairro}, {recurso.rua}</h3>
                                 </div>
                             ):(<div></div>)}
                     </div>
                     
                     
-                    <p className="opacity-50">Criado por: <a href={`/Perfil/${evento?.author.authorId}`}>{evento?.author.authorName}</a></p>
+                    <p className="opacity-50">Criado por: <a href={`/Perfil/${recurso?.author.authorId}`}>{recurso?.author.authorName}</a></p>
 
                 </div>
                 
                 <div>
                     { user ?  (
                         <div className='d-flex align-items-center justify-content-between'>
-                            {moment(evento?.dateE).isAfter() && evento?.cancelado === false ?(
-                                
-                                    evento?.likeIDfromCurrentUser === undefined ? (
-                                        <Button onClick={handleContMe} type={'submit'}> Confirmar Presença</Button>
-                                    ):( 
-                                        <Button onClick={handleContMe} type={'submit'} onMouseEnter={() => setConfirmMessage("Remover Presença")} onMouseLeave={()=> setConfirmMessage(evento.confirmadosN+" - Confirmado(s)")}> {confirmMessage} </Button>
-                                    )
-                            ):(
-                            <></>
-                            )}
+
                             <div className="dropdown">
                                 <button className="btn btn-light border border-3 rounded-circle border-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     ...
@@ -217,8 +181,8 @@ export function EventoIndex(){
                                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a className="dropdown-item" href="#"><CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} /></a></li>
                                     <li><a className="dropdown-item" href="#" onClick={handleDenounce}>Denunciar ou Relatar Problema</a></li>
-                                    { user.id === evento?.author.authorId ? (
-                                        evento?.cancelado === false ?  <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Evento</a></li>
+                                    { user.id === recurso?.author.authorId ? (
+                                        recurso?.cancelado === false ?  <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Recurso</a></li>
                                         : <></>
                                     ):(<></>)}
                                     
@@ -284,7 +248,7 @@ export function EventoIndex(){
 
                                     </button>
 
-                                    {evento?.author.authorId === user?.id ? (
+                                    {recurso?.author.authorId === user?.id ? (
                                         <>
                                             <button
                                             type="button"

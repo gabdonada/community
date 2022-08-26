@@ -51,12 +51,13 @@ type Evento = {
         confirmedByUserID: string,
         confirmedByUserName: string
     }> | undefined
-}
+} | undefined
 
 export function useGetMyAgenda(){
 
     const { user } = useAuth();
     const [ eventsAgenda, setEventsAgenda ] = useState<Evento[]>([])
+    const [ eventsAgendaTop, setEventsAgendaTop ] = useState<Evento[] | undefined>([])
     const [ loadingAgenda, segLoadingAgenda ] = useState(true)
 
 
@@ -64,12 +65,12 @@ export function useGetMyAgenda(){
         let takeToShare:Evento[] = []
         if(result !== undefined){
             await result.forEach(async element => {
-                if(moment(element.dataFinal).isAfter() && !element.cancelado){
-                    if(element.author.authorId === user?.id){
+                if(moment(element?.dataFinal).isAfter() && !element?.cancelado){
+                    if(element?.author.authorId === user?.id){
                         takeToShare.push(element);
                     }else{
-                        if(element.confirmados!==undefined){
-                            await element.confirmados.forEach(confir =>{
+                        if(element?.confirmados!==undefined){
+                            await element?.confirmados.forEach(confir =>{
                                 if(confir.confirmedByUserID === user?.id){
                                     takeToShare.push(element);
                                 }
@@ -79,7 +80,26 @@ export function useGetMyAgenda(){
                 }          
             });
         }
+
+        
         await setEventsAgenda(takeToShare)
+
+
+        let topAgenda:Evento[] = []
+
+        await eventsAgenda.forEach((ret)=>{
+            let t:Evento = undefined;
+            eventsAgenda.forEach((comp)=>{
+                if(moment(ret?.dataInicio).isBefore(comp?.dataInicio)){
+                    t = ret
+                }else{
+                    t = comp
+                }
+            })
+            topAgenda.push(t)
+        })
+
+        await setEventsAgendaTop(await topAgenda.slice(0,3));
         await segLoadingAgenda(false)
     }
 
@@ -121,5 +141,5 @@ export function useGetMyAgenda(){
         }
     },[user])
 
-    return{eventsAgenda, loadingAgenda}
+    return{eventsAgenda, eventsAgendaTop, loadingAgenda}
 }

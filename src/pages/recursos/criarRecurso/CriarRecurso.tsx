@@ -4,7 +4,6 @@ import { FormEvent, useState } from "react";
 
 import moment from "moment";
 
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
 import { database } from "../../../services/firebase";
@@ -12,7 +11,7 @@ import { Button } from '../../../components/button/Button';
 
 
 
-export function CriarEvento(){
+export function CriarRecurso(){
 
     const { user } = useAuth()
 
@@ -20,8 +19,9 @@ export function CriarEvento(){
 
     const [ titulo, setTitulo ] = useState('');
     const [ categoria, setCategoria ] = useState('');
-    const [dateS, setDateS] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
-    const [dateE, setDateE] = useState<string>(moment().format("YYYY-MM-DDThh:mm"));
+    const [ tipo, setTipo ] = useState('');
+    const [ dateS, setDateS ] = useState<string>(moment().format("YYYY-MM-DD"));
+    const [ dateE, setDateE ] = useState<string>(moment().format("YYYY-MM-DD"));
     const [ descricao, setDescricao ] = useState('');
     const [ estado, setEstado ] = useState('');
     const [ cidade, setCidade ] = useState('');
@@ -32,7 +32,7 @@ export function CriarEvento(){
     const [ link, setLink] = useState('');
 
 
-    async function handleCreateEvent(event: FormEvent) {
+    async function handleCreateRecurso(event: FormEvent) {
         event.preventDefault()
 
         if(titulo.trim().length < 5){
@@ -57,31 +57,38 @@ export function CriarEvento(){
         }else if(online === true && link === ''){
             alert("Você deve informar o link");
         }else{
+            try{
+                const recursosRef = database.ref('recursos'); //refering 'recursos' in DB.
 
-            const eventRef = database.ref('eventos'); //refering 'eventos' in DB.
+                const firebaseEvent = await recursosRef.push({
+                    author: {
+                        authorId: user?.id,
+                        authorName: user.name,
+                        authorAvatar: user.avatar 
+                    },
+                    title: titulo,
+                    type: tipo,
+                    category: categoria,
+                    startDate: dateS,
+                    endDate: dateE,
+                    description: descricao,
+                    canceled: false,
+                    online: online,
+                    presencial: presencial,
+                    state: estado,
+                    city: cidade,
+                    district: bairro,
+                    street: rua,
+                    url: link
+                });
 
-            const firebaseEvent = await eventRef.push({
-                author: {
-                    authorId: user?.id,
-                    authorName: user.name,
-                    authorAvatar: user.avatar 
-                },
-                title: titulo,
-                category: categoria,
-                startDate: dateS,
-                endDate: dateE,
-                description: descricao,
-                canceled: false,
-                online: online,
-                presencial: presencial,
-                state: estado,
-                city: cidade,
-                district: bairro,
-                street: rua,
-                url: link
-            });
+            navigate(`/recurso/${firebaseEvent.key}`)
 
-            navigate(`/Evento/${firebaseEvent.key}`)
+            }catch(e){
+                alert("Erro ao registrar: "+e)
+            }
+
+
         }   
     }
 
@@ -91,15 +98,26 @@ export function CriarEvento(){
         <div>
             <NavBar/>
                 <div className="m-5 d-flex flex-column">
-                            <form onSubmit={handleCreateEvent}>
-                                <label className="form-label">Título do Evento</label>
+                            <form onSubmit={handleCreateRecurso}>
+                                <label className="form-label">Título do Recurso</label>
                                     <input 
                                         type="text" 
                                         className="form-control" 
-                                        placeholder="Digite o título do evento..."
+                                        placeholder="Digite o título do Recurso..."
                                         onChange={event => setTitulo(event.target.value)}
                                         value={titulo}/>
                                 
+                                <label className="form-label mt-4">Tipo</label>
+                                    <select 
+                                        required
+                                        className="form-select"
+                                        onChange={event => setTipo(event.target.value)}
+                                        value={tipo}>
+                                        <option value="">Selecione...</option>
+                                        <option value="Disponibilizo">Disponibilizo</option>
+                                        <option value="Procuro">Procuro</option>
+                                    </select>
+
                                 <label className="form-label mt-4">Categoria</label>
                                     <select 
                                         required
@@ -107,24 +125,25 @@ export function CriarEvento(){
                                         onChange={event => setCategoria(event.target.value)}
                                         value={categoria}>
                                         <option value="">Selecione...</option>
-                                        <option value="Ação social racional com relação a fins">Ação social racional com relação a fins</option>
-                                        <option value="Ação social racional com relação a valores">Ação social racional com relação a valores</option>
-                                        <option value="Ação social afetiva">Ação social afetiva</option>
-                                        <option value="Ação social tradicional">Ação social tradicional</option>
+                                        <option value="Alimentos">Alimentos</option>
+                                        <option value="Mão de Obra">Mão de Obra</option>
+                                        <option value="Monetário">Monetário</option>
+                                        <option value="Roupas">Roupas</option>
+                                        <option value="Tempo">Tempo</option>
                                     </select>
 
-                                <label className="form-label mt-4">Selecione Data e Horario de Início</label>
+                                <label className="form-label mt-4">Selecione Inicial</label>
 
                                     <input 
-                                        type="datetime-local" 
+                                        type="date" 
                                         className="form-control"
                                         onChange={event => setDateS(event.target.value)}
                                         value={dateS}/>
 
-                                <label className="form-label mt-4">Selecione Data e Horario do Final</label>
+                                <label className="form-label mt-4">Selecione Data Final</label>
 
                                     <input 
-                                        type="datetime-local" 
+                                        type="date" 
                                         className="form-control"
                                         onChange={event => setDateE(event.target.value)}
                                         value={dateE}/>

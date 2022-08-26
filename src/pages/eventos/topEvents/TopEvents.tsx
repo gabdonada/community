@@ -1,10 +1,9 @@
 import moment from "moment";
 import { FormEvent, useState } from "react";
 import { EventCard } from "../../../components/EventCard/EventCard";
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
-import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
 import { Button } from "../../../components/button/Button";
+import { useGetTopEvents } from "../../../hooks/useGetTopEvents";
 
 import filter from '../../../assets/images/filter.svg'
 
@@ -12,7 +11,7 @@ import "./buscarStyle.scss"
 
 type Evento = {
     id: string,
-    author:{
+    author: {
         authorId: string,
         authorName: string,
         authorAvatar: string
@@ -27,14 +26,14 @@ type Evento = {
     url: string,
     confirmNumb: number
 }
-export function BuscarEvento(){
+export function TopEvents(){
     const [ dateFilter, setDateFilter ] = useState("")
     const [ categoria, setCategoria ] = useState("");
     const [ estado, setEstado ] = useState("");
     const [ cidade, setCidade ] = useState("");
     const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues, setEventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, cancelado);
+    const { topEvents, setTopEvents } = useGetTopEvents(0, dateFilter, categoria, estado, cidade, cancelado);
 
     async function filterData(event: FormEvent) {
         event.preventDefault();
@@ -47,7 +46,7 @@ export function BuscarEvento(){
             var momentString = momentObj.format('DD/MM/YYYY')
             var compareDate = moment(momentString, 'DD/MM/YYYY');
 
-            await eventValues.forEach(element =>{
+            await topEvents.forEach(element =>{
                 if(compareDate.isBetween(element.dataInicio, element.dataFinal)){
                     takeToShare.push(element)
                 }    
@@ -95,7 +94,7 @@ export function BuscarEvento(){
         }else{
             if(categoria!=""){
                 let takingDataFiltered:Evento[] = []
-                await eventValues.forEach(element=>{
+                await topEvents.forEach(element=>{
                     if(element.categoria === categoria){
                         takingDataFiltered.push(element)
                     }
@@ -135,7 +134,7 @@ export function BuscarEvento(){
 
                 if(estado !=""){
                     let takingDataFiltered:Evento[] = []
-                    await eventValues.forEach(element=>{
+                    await topEvents.forEach(element=>{
                         if(element.estado.includes(estado)){
                             takingDataFiltered.push(element)
                         }
@@ -147,7 +146,7 @@ export function BuscarEvento(){
     
                 if(cidade !=""){
                     let takingDataFiltered:Evento[] = []
-                    await eventValues.forEach(element=>{
+                    await topEvents.forEach(element=>{
                         if(element.cidade.includes(cidade)){
                             takingDataFiltered.push(element)
                         }
@@ -165,7 +164,7 @@ export function BuscarEvento(){
         }
 
         if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
-            setEventValues(takeToShare)
+            setTopEvents(takeToShare)
         }else{
             alert("Nenhum filtro foi selecionado")
         }
@@ -175,10 +174,10 @@ export function BuscarEvento(){
     return(
         <div>
             <NavBar/>
-            <div className="m-2 min-vh-100 "> 
+            <div className="m-3 min-vh-100 "> 
                 <div className="d-flex m-3 w-100 justify-content-between">
                     <div className="rounded-pill p-3" style={{color: "white", backgroundColor:"#002838"}}>
-                        {eventValues.length} Evento(s)
+                        {topEvents.length} Evento(s)
                     </div>
                     <div className="">
                         <button className="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img className="w-75" src={filter} alt="filtrar eventos" /></button>
@@ -240,14 +239,14 @@ export function BuscarEvento(){
                     </div>
                 </div>
                 <div className="d-flex flex-column">
-                    {eventValues.length > 0 ?
+                    {topEvents.length > 0 ?
                     (
-                        eventValues.map((eventoInfo)=>
+                        topEvents.map((eventoInfo)=>
                             <EventCard props={eventoInfo}/>
                         )                           
                     ) : (
                         <div>
-                            Não há eventos
+                            Não há TOP eventos
                         </div>
                     )}
                 

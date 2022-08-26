@@ -1,45 +1,47 @@
 import moment from "moment";
 import { FormEvent, useState } from "react";
-import { EventCard } from "../../../components/EventCard/EventCard";
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
-import { useGetAllEvents } from "../../../hooks/useGetAllEvents";
 import { Button } from "../../../components/button/Button";
 
 import filter from '../../../assets/images/filter.svg'
 
-import "./buscarStyle.scss"
+import "../buscarRecurso/buscarStyle.scss"
+import { useGetMyRecursos } from "../../../hooks/recursos/useGetMyRecursos";
+import { RecursoCard } from "../../../components/RecursoCard/RecursoCard";
 
-type Evento = {
+type Recurso = {
     id: string,
-    author:{
+    author: {
         authorId: string,
         authorName: string,
         authorAvatar: string
     },
     categoria: string,
+    tipo: string,
     dataInicio: string,
     dataFinal: string,
     titulo: string,
-    cancelado: boolean,
+    cancelado: string,
     estado: string,
     cidade: string,
+    bairro: string,
+    rua: string,
     url: string,
-    confirmNumb: number
 }
-export function BuscarEvento(){
-    const [ dateFilter, setDateFilter ] = useState("")
+export function GerenciarRecursos(){
+    const [ dateFilter, setDateFilter ] = useState(moment().format("DD/MM/YYYY"))
     const [ categoria, setCategoria ] = useState("");
+    const [ tipo, setTipo ] = useState("");
     const [ estado, setEstado ] = useState("");
     const [ cidade, setCidade ] = useState("");
     const [ cancelado, setCancelado ] = useState(true);
 
-    const {eventValues, setEventValues} = useGetAllEvents(dateFilter, categoria, estado, cidade, cancelado);
+    const { recursosMy, setRecursosMy} = useGetMyRecursos(dateFilter, categoria, tipo, estado, cidade, cancelado );
 
     async function filterData(event: FormEvent) {
         event.preventDefault();
 
-        let takeToShare:Evento[] = []
+        let takeToShare:Recurso[] = []
 
         if(dateFilter.length > 0){
             var dateObj = new Date(dateFilter);
@@ -47,7 +49,7 @@ export function BuscarEvento(){
             var momentString = momentObj.format('DD/MM/YYYY')
             var compareDate = moment(momentString, 'DD/MM/YYYY');
 
-            await eventValues.forEach(element =>{
+            await recursosMy.forEach(element =>{
                 if(compareDate.isBetween(element.dataInicio, element.dataFinal)){
                     takeToShare.push(element)
                 }    
@@ -58,7 +60,7 @@ export function BuscarEvento(){
         if(takeToShare.length > 0){
             //in case that there is a category selected
             if(categoria!=""){
-                let takingDataFiltered:Evento[] = []
+                let takingDataFiltered:Recurso[] = []
                 await takeToShare.forEach(element=>{
                     if(element.categoria === categoria){
                         takingDataFiltered.push(element)
@@ -68,8 +70,19 @@ export function BuscarEvento(){
                 takeToShare = takingDataFiltered
             }
 
+            if(tipo!=""){
+                let takingDataFiltered:Recurso[] = []
+                await takeToShare.forEach(element=>{
+                    if(element.tipo === tipo){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
             if(estado !=""){
-                let takingDataFiltered:Evento[] = []
+                let takingDataFiltered:Recurso[] = []
                 await takeToShare.forEach(element=>{
                     if(element.estado.includes(estado)){
                         takingDataFiltered.push(element)
@@ -81,7 +94,7 @@ export function BuscarEvento(){
             }
 
             if(cidade !=""){
-                let takingDataFiltered:Evento[] = []
+                let takingDataFiltered:Recurso[] = []
                 await takeToShare.forEach(element=>{
                     if(element.cidade.includes(cidade)){
                         takingDataFiltered.push(element)
@@ -94,9 +107,20 @@ export function BuscarEvento(){
             }
         }else{
             if(categoria!=""){
-                let takingDataFiltered:Evento[] = []
-                await eventValues.forEach(element=>{
+                let takingDataFiltered:Recurso[] = []
+                await recursosMy.forEach(element=>{
                     if(element.categoria === categoria){
+                        takingDataFiltered.push(element)
+                    }
+                })
+                //in case that any element represents that category
+                takeToShare = takingDataFiltered
+            }
+
+            if(tipo!=""){
+                let takingDataFiltered:Recurso[] = []
+                await recursosMy.forEach(element=>{
+                    if(element.tipo === tipo){
                         takingDataFiltered.push(element)
                     }
                 })
@@ -107,7 +131,7 @@ export function BuscarEvento(){
             if(takeToShare.length > 0){
 
                 if(estado !=""){
-                    let takingDataFiltered:Evento[] = []
+                    let takingDataFiltered:Recurso[] = []
                     await takeToShare.forEach(element=>{
                         if(element.estado.includes(estado)){
                             takingDataFiltered.push(element)
@@ -119,7 +143,7 @@ export function BuscarEvento(){
                 }
     
                 if(cidade !=""){
-                    let takingDataFiltered:Evento[] = []
+                    let takingDataFiltered:Recurso[] = []
                     await takeToShare.forEach(element=>{
                         if(element.cidade.includes(cidade)){
                             takingDataFiltered.push(element)
@@ -134,8 +158,8 @@ export function BuscarEvento(){
             }else{
 
                 if(estado !=""){
-                    let takingDataFiltered:Evento[] = []
-                    await eventValues.forEach(element=>{
+                    let takingDataFiltered:Recurso[] = []
+                    await recursosMy.forEach(element=>{
                         if(element.estado.includes(estado)){
                             takingDataFiltered.push(element)
                         }
@@ -146,8 +170,8 @@ export function BuscarEvento(){
                 }
     
                 if(cidade !=""){
-                    let takingDataFiltered:Evento[] = []
-                    await eventValues.forEach(element=>{
+                    let takingDataFiltered:Recurso[] = []
+                    await recursosMy.forEach(element=>{
                         if(element.cidade.includes(cidade)){
                             takingDataFiltered.push(element)
                         }
@@ -158,14 +182,15 @@ export function BuscarEvento(){
                     }
                 }
             }
-
+            
             let t = document.getElementById('closeModalFilter')
             await t?.click();           
+
             
         }
 
         if(dateFilter.length > 0 || categoria != "" || estado != "" || cidade!=""){
-            setEventValues(takeToShare)
+            setRecursosMy(takeToShare)
         }else{
             alert("Nenhum filtro foi selecionado")
         }
@@ -178,12 +203,13 @@ export function BuscarEvento(){
             <div className="m-2 min-vh-100 "> 
                 <div className="d-flex m-3 w-100 justify-content-between">
                     <div className="rounded-pill p-3" style={{color: "white", backgroundColor:"#002838"}}>
-                        {eventValues.length} Evento(s)
+                        {recursosMy.length} Recursos(s)
                     </div>
                     <div className="">
                         <button className="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><img className="w-75" src={filter} alt="filtrar eventos" /></button>
 
                         <div className="offcanvas offcanvas-end" tabIndex={-1} id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                            
                         <div className="offcanvas-header">
                             <h5 id="offcanvasRightLabel">Selecione Filtros</h5>
                             <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" id="closeModalFilter"></button>
@@ -205,14 +231,28 @@ export function BuscarEvento(){
                                         value={categoria}
                                         >
                                         <option value="">Selecione</option>
-                                        <option value="Ação social racional com relação a fins">Ação social racional com relação a fins</option>
-                                        <option value="Ação social racional com relação a valores">Ação social racional com relação a valores</option>
-                                        <option value="Ação social afetiva">Ação social afetiva</option>
-                                        <option value="Ação social tradicional">Ação social tradicional</option>
+                                        <option value="Alimentos">Alimentos</option>
+                                        <option value="Mão de Obra">Mão de Obra</option>
+                                        <option value="Monetário">Monetário</option>
+                                        <option value="Roupas">Roupas</option>
+                                        <option value="Tempo">Tempo</option>
                                     </select>
                                     
                                 </div>
-                                
+                                <div className="d-flex align-items-center justify-content-center gap-5">
+                                    <h3>Estou</h3>
+                                    <select 
+                                        className="form-select"
+                                        onChange={event => setTipo(event.target.value)}
+                                        value={tipo}
+                                        >
+                                        <option value="">Selecione</option>
+                                        <option value="Disponibilizo">Procurando</option>
+                                        <option value="Procuro">Disponibilizando</option>
+                                    </select>
+                                    
+                                </div>
+                                                                    
                                 <div className="d-flex align-items-center justify-content-center sptgap">
                                     <h3>Estado</h3>
                                     <input 
@@ -231,29 +271,29 @@ export function BuscarEvento(){
                                 </div>
                                 <div className="d-flex align-items-center justify-content-center gap-5">
                                     <form onSubmit={filterData}>
-                                        <Button type="submit">Filtrar</Button>
+                                        <Button type="submit" data-bs-dismiss="offcanvas">Filtrar</Button>
                                     </form>
                                 </div>
+                                
                             </div>
                         </div>
                         
                     </div>
                 </div>
                 <div className="d-flex flex-column">
-                    {eventValues.length > 0 ?
+                    {recursosMy.length > 0 ?
                     (
-                        eventValues.map((eventoInfo)=>
-                            <EventCard props={eventoInfo}/>
+                        recursosMy.map((eventoInfo)=>
+                            <RecursoCard props={eventoInfo}/>
                         )                           
                     ) : (
                         <div>
-                            Não há eventos
+                            Não há Recursos
                         </div>
                     )}
                 
                 </div>
             </div>
-
         </div>
     )
     

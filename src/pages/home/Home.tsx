@@ -1,31 +1,35 @@
-import { Footer } from "../../components/footer/Footer";
-import { NavBar } from "../../components/navBar/NavBar";
+import { useGetTopEvents } from "../../hooks/useGetTopEvents";
+import { useAuth } from "../../hooks/useAuth";
+import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
+import { useGetMatch } from "../../hooks/events/useGetMatch";
+import { useNavigate } from 'react-router-dom'
 import { FormEvent } from "react";
-import { Button } from "../../components/button/Button";
+import moment from "moment";
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import moment from "moment";
+import { NavBar } from "../../components/navBar/NavBar";
+import { Button } from "../../components/button/Button";
 import { BlueCard } from "../../components/blueCards/BlueCard";
 
 
 import './homestyle.scss'
-import { useGetTopEvents } from "../../hooks/useGetTopEvents";
-import { useGetUserProfile } from "../../hooks/user/useGetUserProfile";
-import { useAuth } from "../../hooks/useAuth";
-import { useGetMyAgenda } from "../../hooks/events/useGetMyAgenda";
-import { useGetMatch } from "../../hooks/events/useGetMatch";
 
 
 
 
 export function Home(){
     const { user } = useAuth()
-    const { loading, topEventsSelected } = useGetTopEvents(4);
-    const { loadingUser, userDef} = useGetUserProfile(user?.id);
-    const { loadingMatch, eventsMatch} = useGetMatch();
+    const { loading, topEventsSelected } = useGetTopEvents(4, "","","","",false);
+    const { loadingMatch, eventsMatchThree} = useGetMatch("","","","",false);
     const { eventsAgenda, loadingAgenda } = useGetMyAgenda();
 
+    const navigate = useNavigate(); //use to navigate to other pages
+
+
     function openTopEvents(event: FormEvent) {
+        event.preventDefault();
+        navigate('/Evento/TopEventos');
         
     }
 
@@ -34,12 +38,18 @@ export function Home(){
     }
 
     function openMatchs(event: FormEvent){
-
+        event.preventDefault();
+        navigate('/Evento/Match');
     }
 
     return(
         <div className="d-flex flex-column min-vh-100">
             <NavBar/>
+
+            <div className="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Compartilhe sua opinião.</strong> Acesse a <a href="https://forms.gle/SjVEDVRWUgh5HURy8">pesquisa</a> e nos ajude a melhorar a plataforma.
+            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
                 
                 <div className="container">
                     <div className="row mt-4 mb-4 gap">
@@ -52,27 +62,20 @@ export function Home(){
                                         <h1>Carregando...</h1>
                                     ):(
                                         topEventsSelected.map((eventoInfo)=>
-                                            moment(eventoInfo.dataFinal).isBefore() || eventoInfo.cancelado === 'Y' ? 
-                                            (<></>):(
-                                                <BlueCard props={eventoInfo}/>
-                                            )
+                                            <BlueCard props={eventoInfo}/>
                                         )
                                     )}
 
-                                    {topEventsSelected.length <= 0 && loading===false?
-                                        (  
+                                    {topEventsSelected.length <= 0 && !loading ? (  
                                             <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
                                                 <h3>Não há TOP eventos</h3>
-                                                <div className="matchRegister">
+                                                <div className="matchRegister d-flex gap-1">
                                                     <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>busque</a><p>por eventos</p>
                                                 </div>
                                             </div>
                                             
                                         ):(
-                                            loading === false ?
-                                                (
-                                                    <Button onClick={openTopEvents} >Ver Mais</Button>
-                                                ):(<></>)       
+                                            <Button onClick={openTopEvents} >Ver Mais</Button>
                                         )
                                     }
                                 </div>
@@ -81,19 +84,19 @@ export function Home(){
 
                         <div className="col-md">
                             <div className="sizingt card">
-                                <div className="sizingt card-body d-flex flex-column align-items-center justify-content-center">
+                                <div className="sizingt card-body d-flex flex-column align-items-center">
                                     <h1>Deu Match</h1>
                                     {loadingMatch ? (
                                         <h1>Carregando...</h1>
                                     ):(
-                                        eventsMatch !== undefined ? (                                            
-                                            eventsMatch.map((matchResult)=>
+                                        eventsMatchThree !== undefined ? (                                            
+                                            eventsMatchThree.map((matchResult)=>
                                                 <BlueCard props={matchResult}/>
                                             )
                                         ):(<></>)
                                     )}
-                                    {eventsMatch.length <= 0 ? (
-                                        <div className="matchRegister">
+                                    {eventsMatchThree.length <= 0 ? (
+                                        <div className="d-flex matchRegister gap-1">
                                             <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
                                         </div>
                                     ):(
@@ -117,7 +120,7 @@ export function Home(){
                                         ):(<></>)
                                     )}
                                     {eventsAgenda.length <= 0 ? (
-                                        <div className="matchRegister">
+                                        <div className="matchRegister d-flex gap-1">
                                             <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
                                         </div>
                                     ):(

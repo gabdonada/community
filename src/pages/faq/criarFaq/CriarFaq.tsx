@@ -50,7 +50,7 @@ export function CriarFaq(){
         <div>
             <NavBar/>
             
-            <div className="card m-5 d-flex flex-column">
+            <div className="card m-4 d-flex flex-column">
                         <div className="m-3">
                             <form onSubmit={handleFAQCreation}>
                                 <label className="form-label">Título do FAQ</label>
