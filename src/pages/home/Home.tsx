@@ -45,6 +45,11 @@ export function Home(){
     return(
         <div className="d-flex flex-column min-vh-100">
             <NavBar/>
+
+            <div className="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Compartilhe sua opinião.</strong> Acesse a <a href="https://forms.gle/SjVEDVRWUgh5HURy8">pesquisa</a> e nos ajude a melhorar a plataforma.
+            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
                 
                 <div className="container">
                     <div className="row mt-4 mb-4 gap">
