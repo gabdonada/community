@@ -21,9 +21,9 @@ export function EditUserProfile(){
     const { loadingUser, userDef } = useGetUserProfile(userID);
 
     const [ description, setDescription ] = useState(userDef?.userDescription || "")
-    const [ phone, setPhone ] = useState(userDef?.userPhone)
-    const [ title, setTitle ] = useState(userDef?.userTitle)
-    const [ city, setCity ] = useState(userDef?.userCity)
+    const [ phone, setPhone ] = useState(userDef?.userPhone || "")
+    const [ title, setTitle ] = useState(userDef?.userTitle || "")
+    const [ city, setCity ] = useState(userDef?.userCity || "")
 
     const [ acRelacaoFins, setAcRelacaoFins ] = useState<boolean>(userDef?.userInterests.acRelacaoFins || false)
     const [ acRelacaoValores, setAcRelacaoValores ] = useState<boolean>(userDef?.userInterests.acRelacaoValores || false)
@@ -33,29 +33,36 @@ export function EditUserProfile(){
     async function handleUserPreferences(event: FormEvent) {
         event.preventDefault();
 
-        if(user !== undefined && userID === user.id){
-            const userRef = database.ref(`users/`); 
-            const firebaseEvent = await userRef.child(user.id).set({
-                userID: user?.id,
-                userName: user?.name,
-                userEmail: user?.userEmail,
-                userAvatar: user?.avatar,
-                userDescription: description,
-                userPhone: phone,
-                userTitle: title,
-                userInterests: {
-                    acRelacaoFins: acRelacaoFins,
-                    acRelacaoValores: acRelacaoValores,
-                    acAfetiva: acAfetiva,
-                    acTradi: acTradi
-                },
-                userCity: city
-            });
+        try{
 
-            navigate(`/home`)
-        }else{
-            alert("Você precisa estar logado e gerenciar o perfil em questão")
+            if(user !== undefined && userID === user.id){
+                const userRef = database.ref(`users/`); 
+                const firebaseEvent = await userRef.child(user.id).set({
+                    userID: user?.id,
+                    userName: user?.name,
+                    userEmail: user?.userEmail,
+                    userAvatar: user?.avatar,
+                    userDescription: description,
+                    userPhone: phone,
+                    userTitle: title,
+                    userInterests: {
+                        acRelacaoFins: acRelacaoFins,
+                        acRelacaoValores: acRelacaoValores,
+                        acAfetiva: acAfetiva,
+                        acTradi: acTradi
+                    },
+                    userCity: city
+                });
+    
+                navigate(`/home`)
+            }else{
+                alert("Você precisa estar logado e gerenciar o perfil em questão")
+            }
+        }catch(e){
+            console.log(e)
         }
+
+       
     }
 
 
