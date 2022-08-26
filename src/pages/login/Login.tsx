@@ -74,14 +74,6 @@ export function Login(){
                         <button type="submit"><strong>&rarr;</strong></button>
                     </form>
 
-                    <form action="" className="d-flex">
-                        <input 
-                            type="text" 
-                            placeholder='Digite o Código da Entidade/Pessoa'
-                        />
-                        <button type="submit">&rarr;</button>
-                    </form>
-
                 </div>
 
             </main>
