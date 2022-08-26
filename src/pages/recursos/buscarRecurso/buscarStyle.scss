@@ -1,0 +1,24 @@
+
+@media only screen and (min-width: 300px) {
+    .spgap { 
+        gap: 16.2%
+    }    
+    .sptgap{
+        gap: 10%
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .spgap { 
+        gap: 19%
+    }    
+    .sptgap{
+        gap: 11%
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    .spgap { 
+        gap: 4%
+    }    
+}

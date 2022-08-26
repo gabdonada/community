@@ -63,9 +63,9 @@ export function NavBar(){
                                         Recursos
                                     </a>
                                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a className="dropdown-item" href="#">Criar Recurso</a></li>
-                                        <li><a className="dropdown-item" href="#">Buscar Recursos</a></li>
-                                        <li><a className="dropdown-item" href="#">Gerenciar Recursos</a></li>
+                                        <li><a className="dropdown-item" href="/Recurso/Novo">Criar Recurso</a></li>
+                                        <li><a className="dropdown-item" href="/Recurso/Buscar">Buscar Recursos</a></li>
+                                        <li><a className="dropdown-item" href="/Recurso/Gerenciar">Gerenciar Recursos</a></li>
                                     </ul>
                                 </li>
                             </ul>
