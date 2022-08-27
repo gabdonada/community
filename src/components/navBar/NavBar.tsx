@@ -42,10 +42,11 @@ export function NavBar(){
                     </button>
                     <div className="collapse navbar-collapse w-100" id="navbarSupportedContent">
                         <ul className="d-flex d-flex align-items-center navbar-nav me-auto ms-5  mb-lg-0 container-fluid">
-                            <li className="nav-item">
-                                <a className="nav-link active text-white text-uppercase" aria-current="page" href="/home">Home</a>
-                            </li>
+                           
                             <ul className="navbar-nav me-auto  mb-2 mb-lg-0 ">
+                                <li className="nav-item">
+                                    <a className="nav-link active text-white text-uppercase" aria-current="page" href="/home">Home</a>
+                                </li>
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle text-white text-uppercase" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Eventos
