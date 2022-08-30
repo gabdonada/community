@@ -36,13 +36,13 @@ export function CriarEvento(){
         event.preventDefault()
 
         if(titulo.trim().length < 5){
-            alert("Titulo deve conter mais de 5 caracteries.");
+            alert("Titulo deve conter mais de 5 caracteres.");
         }else if(categoria === ''){
             alert("Você deve selecionar uma categoria valida.")
         }else if(moment(dateS).isAfter(dateE)){ 
             alert("Data inicial deve ser menor que a final.")
         }else if(descricao.length < 15){
-            alert("Descrição deve conter mais de 15 caracteries.");
+            alert("Descrição deve conter mais de 15 caracteres.");
         }else if(!user){
             alert("Você deve estar logado para executar a tarefa.");
 
@@ -113,7 +113,7 @@ export function CriarEvento(){
                                         <option value="Ação social tradicional">Ação social tradicional</option>
                                     </select>
 
-                                <label className="form-label mt-4">Selecione Data e Horario de Início</label>
+                                <label className="form-label mt-4">Selecione Data e Horário de Início</label>
 
                                     <input 
                                         type="datetime-local" 
@@ -121,7 +121,7 @@ export function CriarEvento(){
                                         onChange={event => setDateS(event.target.value)}
                                         value={dateS}/>
 
-                                <label className="form-label mt-4">Selecione Data e Horario do Final</label>
+                                <label className="form-label mt-4">Selecione Data e Horário do Final</label>
 
                                     <input 
                                         type="datetime-local" 
