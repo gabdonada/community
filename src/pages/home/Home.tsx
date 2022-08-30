@@ -96,7 +96,7 @@ export function Home(){
                                         ):(<></>)
                                     )}
                                     {eventsMatchThree.length <= 0 ? (
-                                        <div className="d-flex matchRegister gap-1">
+                                        <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
                                             <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
                                         </div>
                                     ):(
@@ -120,7 +120,7 @@ export function Home(){
                                         ):(<></>)
                                     )}
                                     {eventsAgenda.length <= 0 ? (
-                                        <div className="matchRegister d-flex gap-1">
+                                        <div className="matchRegister h-100 d-flex align-items-center gap-1">
                                             <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
                                         </div>
                                     ):(
