@@ -19,7 +19,7 @@ import './homestyle.scss'
 
 
 export function Home(){
-    const { user } = useAuth()
+    const { user, singIngWithGoogle } = useAuth()
     const { loading, topEventsSelected } = useGetTopEvents(4, "","","","",false);
     const { loadingMatch, eventsMatchThree} = useGetMatch("","","","",false);
     const { eventsAgenda, loadingAgenda } = useGetMyAgenda();
@@ -57,27 +57,35 @@ export function Home(){
                             <div className="card sizingt">
                                 <div className="sizingt d-flex card-body flex-column align-items-center">
                                     <h1>TOP Eventos</h1>
-                                    {loading ?
-                                    (   
-                                        <h1>Carregando...</h1>
+                                    {user === undefined ? (
+                                        <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
+                                            <a onClick={singIngWithGoogle} href='#'>Faça Login</a><p>e contre eventos para você</p>
+                                        </div>
                                     ):(
-                                        topEventsSelected.map((eventoInfo)=>
-                                            <BlueCard props={eventoInfo}/>
-                                        )
+                                        loading ?
+                                        (   
+                                            <h1>Carregando...</h1>
+                                        ):(
+                                            topEventsSelected.map((eventoInfo)=>
+                                                <BlueCard props={eventoInfo}/>
+                                            )
+                                        ),
+
+                                        topEventsSelected.length <= 0 && !loading ? (  
+                                                <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
+                                                    <h3>Não há TOP eventos</h3>
+                                                    <div className="matchRegister d-flex gap-1">
+                                                        <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>busque</a><p>por eventos</p>
+                                                    </div>
+                                                </div>
+                                                
+                                            ):(
+                                                <Button onClick={openTopEvents} >Ver Mais</Button>
+                                            )
                                     )}
 
-                                    {topEventsSelected.length <= 0 && !loading ? (  
-                                            <div className="h-100 d-flex flex-column align-items-center justify-content-center"> 
-                                                <h3>Não há TOP eventos</h3>
-                                                <div className="matchRegister d-flex gap-1">
-                                                    <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>busque</a><p>por eventos</p>
-                                                </div>
-                                            </div>
-                                            
-                                        ):(
-                                            <Button onClick={openTopEvents} >Ver Mais</Button>
-                                        )
-                                    }
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -86,22 +94,32 @@ export function Home(){
                             <div className="sizingt card">
                                 <div className="sizingt card-body d-flex flex-column align-items-center">
                                     <h1>Eventos Para Você</h1>
-                                    {loadingMatch ? (
-                                        <h1>Carregando...</h1>
-                                    ):(
-                                        eventsMatchThree !== undefined ? (                                            
-                                            eventsMatchThree.map((matchResult)=>
-                                                <BlueCard props={matchResult}/>
+                                    { user === undefined ? 
+                                        (
+                                            <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
+                                                <a onClick={singIngWithGoogle} href='#'>Faça Login</a><p>e contre eventos para você</p>
+                                            </div>
+                                            ):(
+                                            loadingMatch ? (
+                                                <h1>Carregando...</h1>
+                                            ):(
+                                                eventsMatchThree !== undefined ? (                                            
+                                                    eventsMatchThree.map((matchResult)=>
+                                                        <BlueCard props={matchResult}/>
+                                                    )
+                                                ):(<></>)
+                                            ),
+                                            eventsMatchThree.length <= 0 ? (
+                                                <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
+                                                    <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
+                                                </div>
+                                            ):(
+                                                <Button onClick={openMatchs}>Ver Mais</Button>
                                             )
-                                        ):(<></>)
-                                    )}
-                                    {eventsMatchThree.length <= 0 ? (
-                                        <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
-                                            <a href={`/Perfil/Editar/${user?.id}`}>Atualize</a><p>seu perfil e encontre Matchs</p>
-                                        </div>
-                                    ):(
-                                        <Button onClick={openMatchs}>Ver Mais</Button>
-                                    )}
+                                        
+                                        )
+                                    }
+                                    
                                 </div>
                             </div>
                         </div>
@@ -110,22 +128,30 @@ export function Home(){
                             <div className="card sizingt">
                                 <div className="sizingt d-flex card-body flex-column align-items-center">
                                     <h1>Sua Agenda</h1>
-                                    {loadingAgenda ? (
-                                        <h1>Carregando...</h1>
-                                    ):(
-                                        eventsAgenda !== undefined ? (                                            
-                                            eventsAgenda.map((agendaResult)=>
-                                                <BlueCard props={agendaResult}/>
-                                            )
-                                        ):(<></>)
-                                    )}
-                                    {eventsAgenda.length <= 0 ? (
-                                        <div className="matchRegister h-100 d-flex align-items-center gap-1">
-                                            <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
+                                    {user === undefined ? (
+                                        <div className="h-100 d-flex align-items-center justify-content-center matchRegister gap-1">
+                                            <a onClick={singIngWithGoogle} href='#'>Faça Login</a><p>e faça sua agenda</p>
                                         </div>
                                     ):(
-                                        <Button onClick={openMyAgenda}>Ver Mais</Button>
+                                        loadingAgenda ? (
+                                            <h1>Carregando...</h1>
+                                        ):(
+                                            eventsAgenda !== undefined ? (                                            
+                                                eventsAgenda.map((agendaResult)=>
+                                                    <BlueCard props={agendaResult}/>
+                                                )
+                                            ):(<></>)
+                                        ),
+                                        eventsAgenda.length <= 0 ? (
+                                            <div className="matchRegister h-100 d-flex align-items-center gap-1">
+                                                <a href={`/Evento/Novo`}>Crie</a><p>ou</p><a href={`/Evento/Buscar`}>participe</a><p>de eventos</p>
+                                            </div>
+                                        ):(
+                                            <Button onClick={openMyAgenda}>Ver Mais</Button>
+                                        )
+
                                     )}
+
                                 </div>
                             </div>
                         </div>
