@@ -46,6 +46,6 @@ export function useGetUserProfile(userid: string | undefined){
                 });
             })
         setLoadingUser(false);
-    },[userid])
+    },[userid, user])
     return{userDef, loadingUser}
 }
