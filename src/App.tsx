@@ -21,6 +21,7 @@ import { CriarRecurso } from './pages/recursos/criarRecurso/CriarRecurso';
 import { RecursoPage } from './pages/recursos/paginaRecurso/RecursoPage';
 import { BuscarRecurso } from './pages/recursos/buscarRecurso/BuscarRecurso';
 import { GerenciarRecursos } from './pages/recursos/gerenciarRecursos/GerenciarRecursos';
+import { EditarEvento } from './pages/eventos/editarEvento/EditarEvento';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
 
           <Route path="/Evento/Novo" element={<CriarEvento/>}/>
           <Route path="/Evento/:id" element={<EventoIndex/>}/>
+          <Route path="/Evento/Editar/:id" element={<EditarEvento/>}/>
           <Route path="/Evento/Buscar" element={<BuscarEvento/>}/>
           <Route path="/Evento/TopEventos" element={<TopEvents/>}/>
           <Route path="/Evento/Match" element={<DeuMatch/>}/>

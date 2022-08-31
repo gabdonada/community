@@ -1,13 +1,11 @@
 import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyCode } from "../../../components/copyCodeIcon/copyCode";
-import { Footer } from "../../../components/footer/Footer";
 import { NavBar } from "../../../components/navBar/NavBar";
 import { useAuth } from '../../../hooks/useAuth';
 import { database } from '../../../services/firebase';
 import moment from 'moment';
 import { Button } from '../../../components/button/Button';
-import { ButtonDanger } from '../../../components/button/ButtonDanger';
 import { Comments } from '../../../components/commentsCard/comments';
 import { useEvent } from '../../../hooks/useEvent';
 import { navigate } from '@reach/router';
@@ -218,7 +216,14 @@ export function EventoIndex(){
                                     <li><a className="dropdown-item" href="#"><CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} /></a></li>
                                     <li><a className="dropdown-item" href="#" onClick={handleDenounce}>Denunciar ou Relatar Problema</a></li>
                                     { user.id === evento?.author.authorId ? (
-                                        evento?.cancelado === false ?  <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Evento</a></li>
+                                        evento?.cancelado === false ?  
+                                        <li><a className="dropdown-item" href={`/Evento/Editar/${params.id}`}>Editar Evento</a></li>
+                                        : <></>
+
+                                    ):(<></>)}
+                                    { user.id === evento?.author.authorId ? (
+                                        evento?.cancelado === false ?  
+                                        <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Evento</a></li>
                                         : <></>
                                     ):(<></>)}
                                     
