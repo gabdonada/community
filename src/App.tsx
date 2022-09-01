@@ -22,6 +22,7 @@ import { RecursoPage } from './pages/recursos/paginaRecurso/RecursoPage';
 import { BuscarRecurso } from './pages/recursos/buscarRecurso/BuscarRecurso';
 import { GerenciarRecursos } from './pages/recursos/gerenciarRecursos/GerenciarRecursos';
 import { EditarEvento } from './pages/eventos/editarEvento/EditarEvento';
+import { EditarRecurso } from './pages/recursos/editarRecurso/EditarRecurso';
 
 
 function App() {
@@ -47,6 +48,8 @@ function App() {
           <Route path="/Recurso/:id" element={<RecursoPage/>}/>
           <Route path="/Recurso/Buscar" element={<BuscarRecurso/>}/>
           <Route path="/Recurso/Gerenciar" element={<GerenciarRecursos/>}/>
+          <Route path="/Recurso/Editar/:id" element={<EditarRecurso/>}/>
+
 
 
           <Route path="/FAQ/listar" element={<ListFaq/>}/>

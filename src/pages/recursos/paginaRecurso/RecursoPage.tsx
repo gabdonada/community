@@ -182,6 +182,12 @@ export function RecursoPage(){
                                     <li><a className="dropdown-item" href="#"><CopyCode id={params.id || 'No Code'} textBut={'Copiar ID'} /></a></li>
                                     <li><a className="dropdown-item" href="#" onClick={handleDenounce}>Denunciar ou Relatar Problema</a></li>
                                     { user.id === recurso?.author.authorId ? (
+                                        recurso?.cancelado === false ?  
+                                        <li><a className="dropdown-item" href={`/Recurso/Editar/${params.id}`}>Editar Recurso</a></li>
+                                        : <></>
+
+                                    ):(<></>)}
+                                    { user.id === recurso?.author.authorId ? (
                                         recurso?.cancelado === false ?  <li><a className="dropdown-item text-danger" href="#" onClick={handleEventCancelation}>Cancelar Recurso</a></li>
                                         : <></>
                                     ):(<></>)}
